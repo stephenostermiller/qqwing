@@ -1,6 +1,7 @@
 /*
  * qqwing - A Sudoku solver and generator
  * Copyright (C) 2006 Stephen Ostermiller
+ * http://ostermiller.org/qqwing/
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +23,9 @@
 #include <string>
 #include <vector>
 #include <stdlib.h>
-#include <sys/time.h>
+#if HAVE_GETTIMEOFDAY == 1
+    #include <sys/time.h>
+#endif
 
 using namespace std;
 class SuddokuBoard;
@@ -322,10 +325,12 @@ int main(int argc, char *argv[]){
                 printStats = true;
             } else if (!strcmp(argv[i],"--nostats")){
                 printStats = false;
-            } else if (!strcmp(argv[i],"--timer")){
-                timer = true;
-            } else if (!strcmp(argv[i],"--notimer")){
-                timer = false;
+            #if HAVE_GETTIMEOFDAY == 1
+                } else if (!strcmp(argv[i],"--timer")){
+                    timer = true;
+                } else if (!strcmp(argv[i],"--notimer")){
+                    timer = false;
+            #endif
             } else if (!strcmp(argv[i],"--count-solutions")){
                 countSolutions = true;
             } else if (!strcmp(argv[i],"--nocount-solutions")){
@@ -595,6 +600,7 @@ void printVersion(){
 void printAbout(){
     cout << PACKAGE_NAME << " - Sudoku solver and generator." << endl;
     cout << "Written by Stephen Ostermiller copyright 2006." << endl;
+    cout << "http://ostermiller.org/qqwing/" << endl;
     cout << "" << endl;
     cout << "This program is free software; you can redistribute it and/or modify" << endl;
     cout << "it under the terms of the GNU General Public License as published by" << endl;
@@ -622,8 +628,10 @@ void printHelp(char* programName){
     cout << "  --nosolution         Do not print the solution (default when generating)" << endl;
     cout << "  --stats              Print statistics about moves used to solve the puzzle" << endl;
     cout << "  --nostats            Do not print statistics (default)" << endl;
-    cout << "  --timer              Print time to generate or solve each puzzle" << endl;
-    cout << "  --notimer            Do not print solve or generation times (default)" << endl;
+    #if HAVE_GETTIMEOFDAY == 1
+        cout << "  --timer              Print time to generate or solve each puzzle" << endl;
+        cout << "  --notimer            Do not print solve or generation times (default)" << endl;
+    #endif
     cout << "  --count-solutions    Count the number of solutions to puzzles" << endl;
     cout << "  --nocount-solutions  Do not count the number of solutions (default)" << endl;
     cout << "  --history            Print trial and error used when solving" << endl;
@@ -2010,10 +2018,14 @@ int getLogCount(vector<LogItem*>* v, LogItem::LogType type){
 /**
  * Get the current time in microseconds.
  */
-long getMicroseconds(){
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec*1000000+tv.tv_usec;
+long getMicroseconds(){    
+    #if HAVE_GETTIMEOFDAY == 1
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec*1000000+tv.tv_usec;
+    #else
+        return 0;
+    #endif
 }
 
 /**
