@@ -2,22 +2,22 @@
  * qqwing - A Sudoku solver and generator
  * Copyright (C) 2006 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-    
+
 #include "config.h"
 #include <iostream>
 #include <string>
@@ -43,6 +43,13 @@ class SudokuBoard {
             READABLE,
             CSV,
         };
+        enum Difficulty {
+            UNKNOWN,
+            SIMPLE,
+            EASY,
+            INTERMEDIATE,
+            EXPERT,
+        };
         SudokuBoard();
         bool setPuzzle(int* initPuzzle);
         void printPuzzle();
@@ -66,6 +73,7 @@ class SudokuBoard {
         int getGuessCount();
         int getBacktrackCount();
         void printSolveInstructions();
+        SudokuBoard::Difficulty getDifficulty();
         ~SudokuBoard();
 
     private:
@@ -302,6 +310,7 @@ int main(int argc, char *argv[]){
         SudokuBoard::PrintStyle printStyle = SudokuBoard::READABLE;
         int numberToGenerate = 1;
         bool printStats = false;
+        SudokuBoard::Difficulty difficulty = SudokuBoard::UNKNOWN;
 
         // Read the arguments and set the options
         for (int i=1; i<argc; i++){
@@ -342,6 +351,23 @@ int main(int argc, char *argv[]){
                     numberToGenerate = atoi(argv[i+1]);
                     i++;
                 }
+            } else if (!strcmp(argv[i],"--difficulty")){
+                if (argc < i+1){
+                    cout << "Please specify a difficulty." << endl;
+                    return 1;
+                } else if (!strcmp(argv[i+1],"simple")){
+                    difficulty = SudokuBoard::SIMPLE;
+                } else if (!strcmp(argv[i+1],"easy")){
+                    difficulty = SudokuBoard::EASY;
+                } else if (!strcmp(argv[i+1],"intermediate")){
+                    difficulty = SudokuBoard::INTERMEDIATE;
+                } else if (!strcmp(argv[i+1],"expert")){
+                    difficulty = SudokuBoard::EXPERT;
+                } else {
+                    cout << "Difficulty expected to be simple, easy, intermediate, or expert, not " << argv[i+1] << endl;
+                    return 1;
+                }
+                i++;
             } else if (!strcmp(argv[i],"--solve")){
                 action = SOLVE;
                 printSolution = true;
@@ -399,14 +425,14 @@ int main(int argc, char *argv[]){
             if (printInstructions) cout << "Solve Instructions,";
             if (countSolutions) cout << "Solution Count,";
             if (timer) cout << "Time (milliseconds),";
-            if (printStats) cout << "Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks";
+            if (printStats) cout << "Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty";
             cout << "" << endl;
         }
 
         // Create a new puzzle board
         // and set the options
         SudokuBoard* ss = new SudokuBoard();
-        ss->setRecordHistory(printHistory || printInstructions || printStats);
+        ss->setRecordHistory(printHistory || printInstructions || printStats || difficulty!=SudokuBoard::UNKNOWN);
         ss->setLogHistory(logHistory);
         ss->setPrintStyle(printStyle);
 
@@ -428,20 +454,14 @@ int main(int argc, char *argv[]){
             if (action == GENERATE){
                 // Generate a puzzle
                 havePuzzle = ss->generatePuzzle();
-                if (havePuzzle){
-                    numberGenerated++;
-                    // Set loop to terminate if enough have been generated.
-                    if (numberGenerated >= numberToGenerate) done = true;
-                } else {
-                    if (printPuzzle){
-                        cout << "Could not generate puzzle.";
-                        if (printStyle==SudokuBoard::CSV){
-                            cout << ",";
-                        } else {
-                            cout << endl;
-                        }
-                        printedSomething = true;
+                if (!havePuzzle && printPuzzle){
+                    cout << "Could not generate puzzle.";
+                    if (printStyle==SudokuBoard::CSV){
+                        cout << ",";
+                    } else {
+                        cout << endl;
                     }
+                    printedSomething = true;
                 }
             } else {
                 // Read the next puzzle on STDIN
@@ -471,24 +491,39 @@ int main(int argc, char *argv[]){
                 delete puzzle;
             }
 
-            if (havePuzzle){
+           int solutions = 0;
 
-                // With a puzzle now in hand (either generated or given)
-                // solve the puzzle and print out the solution, stats, etc.
-                printedSomething = true;
+            if (havePuzzle){
 
                 // Count the solutions if requested.
                 // (Must be done before solving, as it would
                 // mess up the stats.)
-                int solutions = 0;
                 if (countSolutions){
                     solutions = ss->countSolutions();
                 }
 
                 // Solve the puzzle
-                if (printSolution || printHistory || printStats || printInstructions){
+                if (printSolution || printHistory || printStats || printInstructions || difficulty!=SudokuBoard::UNKNOWN){
                     ss->solve();
                 }
+
+                // Bail out if it didn't meet the difficulty standards for generation
+                if (action == GENERATE){
+                    if (difficulty!=SudokuBoard::UNKNOWN && difficulty!=ss->getDifficulty()){
+                        havePuzzle = false;
+                    } else {
+                        numberGenerated++;
+                        // Set loop to terminate if enough have been generated.
+                        if (numberGenerated >= numberToGenerate) done = true;
+                    }
+                }
+            }
+
+            if (havePuzzle){
+
+                // With a puzzle now in hand and possibly solved
+                // print out the solution, stats, etc.
+                printedSomething = true;
 
                 // Record the end time for the timer.
                 long puzzleDoneTime = getMicroseconds();
@@ -551,11 +586,13 @@ int main(int argc, char *argv[]){
                     int boxReductionCount = ss->getBoxLineReductionCount();
                     int guessCount = ss->getGuessCount();
                     int backtrackCount = ss->getBacktrackCount();
+                    char* difficultyString = "";
                     if (printStyle == SudokuBoard::CSV){
                         cout << givenCount << ","  << singleCount << "," << hiddenSingleCount
                                 << "," << nakedPairCount << "," << hiddenPairCount
                                 << ","  << pointingPairTripleCount  << ","  << boxReductionCount
-                                << "," << guessCount << ","<< backtrackCount << ",";
+                                << "," << guessCount << "," << backtrackCount
+                                << "," << difficultyString << ",";
                     } else {
                         cout << "Number of Givens: " << givenCount  << endl;
                         cout << "Number of Singles: " << singleCount << endl;
@@ -566,6 +603,7 @@ int main(int argc, char *argv[]){
                         cout << "Number of Box/Line Intersections: " << boxReductionCount  << endl;
                         cout << "Number of Guesses: " << guessCount  << endl;
                         cout << "Number of Backtracks: " << backtrackCount  << endl;
+                        cout << "Difficulty: " << difficultyString  << endl;
                     }
                 }
                 puzzleCount++;
@@ -622,6 +660,7 @@ void printHelp(char* programName){
     cout << "Sudoku solver and generator." << endl;
     cout << "  --generate <num>     Generate new puzzles" << endl;
     cout << "  --solve              Solve all the puzzles from standard input" << endl;
+    cout << "  --difficulty <diff>  Generate only simple,easy, intermediate, or expert" << endl;
     cout << "  --puzzle             Print the puzzle (default when generating)" << endl;
     cout << "  --nopuzzle           Do not print the puzzle (default when solving)" << endl;
     cout << "  --solution           Print the solution (default when solving)" << endl;
@@ -731,6 +770,20 @@ bool SudokuBoard::reset(){
     }
 
     return true;
+}
+
+/**
+ * Get the difficulty rating.
+ */
+SudokuBoard::Difficulty SudokuBoard::getDifficulty(){
+    if (getGuessCount() > 0) return SudokuBoard::EXPERT;
+    if (getBoxLineReductionCount() > 0) return SudokuBoard::INTERMEDIATE;
+    if (getPointingPairTripleCount() > 0) return SudokuBoard::INTERMEDIATE;
+    if (getHiddenPairCount() > 0) return SudokuBoard::INTERMEDIATE;
+    if (getNakedPairCount() > 0) return SudokuBoard::INTERMEDIATE;
+    if (getHiddenSingleCount() > 0) return SudokuBoard::EASY;
+    if (getSingleCount() > 0) return SudokuBoard::SIMPLE;
+    return SudokuBoard::UNKNOWN;
 }
 
 /**
@@ -2018,7 +2071,7 @@ int getLogCount(vector<LogItem*>* v, LogItem::LogType type){
 /**
  * Get the current time in microseconds.
  */
-long getMicroseconds(){    
+long getMicroseconds(){
     #if HAVE_GETTIMEOFDAY == 1
         struct timeval tv;
         gettimeofday(&tv, NULL);
