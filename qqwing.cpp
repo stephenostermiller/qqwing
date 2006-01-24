@@ -1019,7 +1019,11 @@ void SudokuBoard::printHistory(vector<LogItem*>* v){
 }
 
 void SudokuBoard::printSolveInstructions(){
-    printHistory(solveInstructions);
+    if (isSolved()){
+        printHistory(solveInstructions);
+    } else {
+        cout << "No solve instructions - Puzzle is not possible to solve." << endl;
+    }
 }
 
 void SudokuBoard::printSolveHistory(){
