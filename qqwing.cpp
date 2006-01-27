@@ -74,6 +74,7 @@ class SudokuBoard {
         int getBacktrackCount();
         void printSolveInstructions();
         SudokuBoard::Difficulty getDifficulty();
+        char* getDifficultyAsString();
         ~SudokuBoard();
 
     private:
@@ -586,7 +587,7 @@ int main(int argc, char *argv[]){
                     int boxReductionCount = ss->getBoxLineReductionCount();
                     int guessCount = ss->getGuessCount();
                     int backtrackCount = ss->getBacktrackCount();
-                    char* difficultyString = "";
+                    char* difficultyString = ss->getDifficultyAsString();
                     if (printStyle == SudokuBoard::CSV){
                         cout << givenCount << ","  << singleCount << "," << hiddenSingleCount
                                 << "," << nakedPairCount << "," << hiddenPairCount
@@ -784,6 +785,20 @@ SudokuBoard::Difficulty SudokuBoard::getDifficulty(){
     if (getHiddenSingleCount() > 0) return SudokuBoard::EASY;
     if (getSingleCount() > 0) return SudokuBoard::SIMPLE;
     return SudokuBoard::UNKNOWN;
+}
+
+/**
+ * Get the difficulty rating.
+ */
+char* SudokuBoard::getDifficultyAsString(){
+    SudokuBoard::Difficulty difficulty = getDifficulty();
+    switch (difficulty){
+        case SudokuBoard::EXPERT: return "Expert"; break;
+        case SudokuBoard::INTERMEDIATE: return "Intermediate"; break;
+        case SudokuBoard::EASY: return "Easy"; break;
+        case SudokuBoard::SIMPLE: return "Simple"; break;
+        default: return "Unknown"; break;
+    }
 }
 
 /**
