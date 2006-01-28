@@ -1,9 +1,8 @@
-qqwing is a Sudoku puzzle solver or generator written in C++.
-
 ./qqwing <options>
 Sudoku solver and generator.
   --generate <num>     Generate new puzzles
   --solve              Solve all the puzzles from standard input
+  --difficulty <diff>  Generate only simple,easy, intermediate, or expert
   --puzzle             Print the puzzle (default when generating)
   --nopuzzle           Do not print the puzzle (default when solving)
   --solution           Print the solution (default when solving)
