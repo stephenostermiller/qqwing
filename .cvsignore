@@ -13,7 +13,6 @@ depcomp
 INSTALL
 install-sh
 Makefile
-Makefile.in
 missing
 qqwing
 qqwing.o
