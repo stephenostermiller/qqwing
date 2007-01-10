@@ -2,6 +2,7 @@
  * qqwing - A Sudoku solver and generator
  * Copyright (C) 2006 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
+ * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +26,8 @@
 #include <stdlib.h>
 #if HAVE_GETTIMEOFDAY == 1
     #include <sys/time.h>
+#else
+    #include <time.h>
 #endif
 
 using namespace std;
@@ -314,7 +317,7 @@ int main(int argc, char *argv[]){
         SudokuBoard::Difficulty difficulty = SudokuBoard::UNKNOWN;
 
         // Read the arguments and set the options
-        for (int i=1; i<argc; i++){
+        {for (int i=1; i<argc; i++){
             if (!strcmp(argv[i],"--puzzle")){
                 printPuzzle = true;
             } else if (!strcmp(argv[i],"--nopuzzle")){
@@ -406,7 +409,7 @@ int main(int argc, char *argv[]){
                 printHelp(argv[0]);
                 return 1;
             }
-        }
+        }}
 
         if (action == NONE){
             cout << "Either --solve or --generate must be specified." << endl;
@@ -703,12 +706,12 @@ SudokuBoard::SudokuBoard(){
     randomPossibilityArray = new int[NUM_POSS];
     solveHistory = new vector<LogItem*>();
     solveInstructions = new vector<LogItem*>();
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         randomBoardArray[i] = i;
-    }
-    for (int i=0; i<NUM_POSS; i++){
+    }}
+    {for (int i=0; i<NUM_POSS; i++){
         randomPossibilityArray[i] = i;
-    }
+    }}
 }
 
 /**
@@ -718,9 +721,9 @@ SudokuBoard::SudokuBoard(){
  */
 int SudokuBoard::getGivenCount(){
     int count = 0;
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         if (puzzle[i] != 0) count++;
-    }
+    }}
     return count;
 }
 
@@ -729,9 +732,9 @@ int SudokuBoard::getGivenCount(){
  * The given puzzle must be an array of 81 integers.
  */
 bool SudokuBoard::setPuzzle(int* initPuzzle){
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         puzzle[i] = (initPuzzle==NULL)?0:initPuzzle[i];
-    }
+    }}
     return reset();
 }
 
@@ -742,19 +745,19 @@ bool SudokuBoard::setPuzzle(int* initPuzzle){
  * and clears any history messages.
  */
 bool SudokuBoard::reset(){
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         solution[i] = 0;
-    }
-    for (int i=0; i<BOARD_SIZE; i++){
+    }}
+    {for (int i=0; i<BOARD_SIZE; i++){
         solutionRound[i] = 0;
-    }
-    for (int i=0; i<POSSIBILITY_SIZE; i++){
+    }}
+    {for (int i=0; i<POSSIBILITY_SIZE; i++){
         possibilities[i] = 0;
-    }
+    }}
 
-    for (int i=0;i<solveHistory->size();i++){
+    {for (int i=0;i<solveHistory->size();i++){
         delete solveHistory->at(i);
-    }
+    }}
     solveHistory->clear();
     solveInstructions->clear();
 
@@ -875,14 +878,14 @@ int SudokuBoard::getBacktrackCount(){
 
 void SudokuBoard::markRandomPossibility(int round){
     int remainingPossibilities = 0;
-    for (int i=0; i<POSSIBILITY_SIZE; i++){
+    {for (int i=0; i<POSSIBILITY_SIZE; i++){
         if (possibilities[i] == 0) remainingPossibilities++;
-    }
+    }}
 
     int randomPossibility = rand()%remainingPossibilities;
 
     int possibilityToMark = 0;
-    for (int i=0; i<POSSIBILITY_SIZE; i++){
+    {for (int i=0; i<POSSIBILITY_SIZE; i++){
         if (possibilities[i] == 0){
             if (possibilityToMark == randomPossibility){
                 int position = i/NUM_POSS;
@@ -892,7 +895,7 @@ void SudokuBoard::markRandomPossibility(int round){
             }
             possibilityToMark++;
         }
-    }
+    }}
 }
 
 void SudokuBoard::shuffleRandomArrays(){
@@ -902,9 +905,9 @@ void SudokuBoard::shuffleRandomArrays(){
 
 void SudokuBoard::clearPuzzle(){
     // Clear any existing puzzle
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         puzzle[i] = 0;
-    }
+    }}
     reset();
 }
 
@@ -936,9 +939,9 @@ bool SudokuBoard::generatePuzzle(){
 
     // Record all marked squares as the puzzle so
     // that we can call countSolutions without losing it.
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         puzzle[i] = solution[i];
-    }
+    }}
 
     // Rerandomize everything so that we test squares
     // in a different order than they were added.
@@ -948,7 +951,7 @@ bool SudokuBoard::generatePuzzle(){
     // the puzzle still has only one solution.
     // If it does, leave it0 out the point because
     // it is not needed.
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         // check all the positions, but in shuffled order
         int position = randomBoardArray[i];
         if (puzzle[position] > 0){
@@ -962,7 +965,7 @@ bool SudokuBoard::generatePuzzle(){
                 puzzle[position] = savedValue;
             }
         }
-    }
+    }}
 
     // Clear all solution info, leaving just the puzzle.
     reset();
@@ -978,9 +981,9 @@ bool SudokuBoard::generatePuzzle(){
 void SudokuBoard::rollbackNonGuesses(){
     // Guesses are odd rounds
     // Non-guesses are even rounds
-    for (int i=2; i<=lastSolveRound; i+=2){
+    {for (int i=2; i<=lastSolveRound; i+=2){
         rollbackRound(i);
-    }
+    }}
 }
 
 void SudokuBoard::setPrintStyle(PrintStyle ps){
@@ -1017,7 +1020,7 @@ void SudokuBoard::printHistory(vector<LogItem*>* v){
             cout << endl;
         }
     }
-    for (int i=0;i<v->size();i++){
+    {for (int i=0;i<v->size();i++){
         cout << i+1 << ". ";
         v->at(i)->print();
         if (printStyle == CSV){
@@ -1025,7 +1028,7 @@ void SudokuBoard::printHistory(vector<LogItem*>* v){
         } else {
             cout << endl;
         }
-    }
+    }}
     if (printStyle == CSV){
         cout << ",";
     } else {
@@ -1116,17 +1119,17 @@ int SudokuBoard::countSolutions(int round, bool limitToTwo){
 
 void SudokuBoard::rollbackRound(int round){
     if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::ROLLBACK));
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         if (solutionRound[i] == round){
             solutionRound[i] = 0;
             solution[i] = 0;
         }
-    }
-    for (int i=0; i<POSSIBILITY_SIZE; i++){
+    }}
+    {for (int i=0; i<POSSIBILITY_SIZE; i++){
         if (possibilities[i] == round){
             possibilities[i] = 0;
         }
-    }
+    }}
 
     while(solveInstructions->size() > 0 && solveInstructions->back()->getRound() == round){
          solveInstructions->pop_back();
@@ -1134,11 +1137,11 @@ void SudokuBoard::rollbackRound(int round){
 }
 
 bool SudokuBoard::isSolved(){
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         if (solution[i] == 0){
             return false;
         }
-    }
+    }}
     return true;
 }
 
@@ -1161,7 +1164,7 @@ bool SudokuBoard::isImpossible(){
 int SudokuBoard::findPositionWithFewestPossibilities(){
     int minPossibilities = 10;
     int bestPosition = 0;
-    for (int i=0; i<BOARD_SIZE; i++){
+    {for (int i=0; i<BOARD_SIZE; i++){
         int position = randomBoardArray[i];
         if (solution[position] == 0){
             int count = 0;
@@ -1174,14 +1177,14 @@ int SudokuBoard::findPositionWithFewestPossibilities(){
                 bestPosition = position;
             }
         }
-    }
+    }}
     return bestPosition;
 }
 
 bool SudokuBoard::guess(int round, int guessNumber){
     int localGuessCount = 0;
     int position = findPositionWithFewestPossibilities();
-    for (int i=0; i<NUM_POSS; i++){
+    {for (int i=0; i<NUM_POSS; i++){
         int valIndex = randomPossibilityArray[i];
         int valPos = getPossibilityIndex(valIndex,position);
         if (possibilities[valPos] == 0){
@@ -1193,7 +1196,7 @@ bool SudokuBoard::guess(int round, int guessNumber){
             }
             localGuessCount++;
         }
-    }
+    }}
     return false;
 }
 
@@ -1219,7 +1222,7 @@ bool SudokuBoard::colBoxReduction(int round){
             int colStart = columnToFirstCell(col);
             bool inOneBox = true;
             int colBox = -1;
-            for (int i=0; i<3; i++){
+            {for (int i=0; i<3; i++){
                 for (int j=0; j<3; j++){
                     int row = i*3+j;
                     int position = rowColumnToCell(row, col);
@@ -1233,14 +1236,14 @@ bool SudokuBoard::colBoxReduction(int round){
                     }
 
                 }
-            }
+            }}
             if (inOneBox && colBox != -1){
                 bool doneSomething = false;
                 int row = 3*colBox;
                 int secStart = cellToSectionStartCell(rowColumnToCell(row, col));
                 int secStartRow = cellToRow(secStart);
                 int secStartCol = cellToColumn(secStart);
-                for (int i=0; i<3; i++){
+                {for (int i=0; i<3; i++){
                     for (int j=0; j<3; j++){
                         int row2 = secStartRow+i;
                         int col2 = secStartCol+j;
@@ -1251,7 +1254,7 @@ bool SudokuBoard::colBoxReduction(int round){
                             doneSomething = true;
                         }
                     }
-                }
+                }}
                 if (doneSomething){
                     if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::COLUMN_BOX, valIndex+1, colStart));
                     return true;
@@ -1268,7 +1271,7 @@ bool SudokuBoard::rowBoxReduction(int round){
             int rowStart = rowToFirstCell(row);
             bool inOneBox = true;
             int rowBox = -1;
-            for (int i=0; i<3; i++){
+            {for (int i=0; i<3; i++){
                 for (int j=0; j<3; j++){
                     int column = i*3+j;
                     int position = rowColumnToCell(row, column);
@@ -1282,14 +1285,14 @@ bool SudokuBoard::rowBoxReduction(int round){
                     }
 
                 }
-            }
+            }}
             if (inOneBox && rowBox != -1){
                 bool doneSomething = false;
                 int column = 3*rowBox;
                 int secStart = cellToSectionStartCell(rowColumnToCell(row, column));
                 int secStartRow = cellToRow(secStart);
                 int secStartCol = cellToColumn(secStart);
-                for (int i=0; i<3; i++){
+                {for (int i=0; i<3; i++){
                     for (int j=0; j<3; j++){
                         int row2 = secStartRow+i;
                         int col2 = secStartCol+j;
@@ -1300,7 +1303,7 @@ bool SudokuBoard::rowBoxReduction(int round){
                             doneSomething = true;
                         }
                     }
-                }
+                }}
                 if (doneSomething){
                     if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::ROW_BOX, valIndex+1, rowStart));
                     return true;
@@ -1318,7 +1321,7 @@ bool SudokuBoard::pointingRowReduction(int round){
             bool inOneRow = true;
             int boxRow = -1;
             for (int j=0; j<3; j++){
-                for (int i=0; i<3; i++){
+                {for (int i=0; i<3; i++){
                     int secVal=secStart+i+(9*j);
                     int valPos = getPossibilityIndex(valIndex,secVal);
                     if(possibilities[valPos] == 0){
@@ -1328,14 +1331,14 @@ bool SudokuBoard::pointingRowReduction(int round){
                             inOneRow = false;
                         }
                     }
-                }
+                }}
             }
             if (inOneRow && boxRow != -1){
                 bool doneSomething = false;
                 int row = cellToRow(secStart) + boxRow;
                 int rowStart = rowToFirstCell(row);
 
-                for (int i=0; i<9; i++){
+                {for (int i=0; i<9; i++){
                     int position = rowStart+i;
                     int section2 = cellToSection(position);
                     int valPos = getPossibilityIndex(valIndex,position);
@@ -1343,7 +1346,7 @@ bool SudokuBoard::pointingRowReduction(int round){
                         possibilities[valPos] = round;
                         doneSomething = true;
                     }
-                }
+                }}
                 if (doneSomething){
                     if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::POINTING_PAIR_TRIPLE_ROW, valIndex+1, rowStart));
                     return true;
@@ -1360,7 +1363,7 @@ bool SudokuBoard::pointingColumnReduction(int round){
             int secStart = sectionToFirstCell(section);
             bool inOneCol = true;
             int boxCol = -1;
-            for (int i=0; i<3; i++){
+            {for (int i=0; i<3; i++){
                 for (int j=0; j<3; j++){
                     int secVal=secStart+i+(9*j);
                     int valPos = getPossibilityIndex(valIndex,secVal);
@@ -1372,13 +1375,13 @@ bool SudokuBoard::pointingColumnReduction(int round){
                         }
                     }
                 }
-            }
+            }}
             if (inOneCol && boxCol != -1){
                 bool doneSomething = false;
                 int col = cellToColumn(secStart) + boxCol;
                 int colStart = columnToFirstCell(col);
 
-                for (int i=0; i<9; i++){
+                {for (int i=0; i<9; i++){
                     int position = colStart+(9*i);
                     int section2 = cellToSection(position);
                     int valPos = getPossibilityIndex(valIndex,position);
@@ -1386,7 +1389,7 @@ bool SudokuBoard::pointingColumnReduction(int round){
                         possibilities[valPos] = round;
                         doneSomething = true;
                     }
-                }
+                }}
                 if (doneSomething){
                     if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::POINTING_PAIR_TRIPLE_COLUMN, valIndex+1, colStart));
                     return true;
@@ -1665,14 +1668,14 @@ bool SudokuBoard::handleNakedPairs(int round){
                         if (section == cellToSectionStartCell(position2)){
                             bool doneSomething = false;
                             int secStart = cellToSectionStartCell(position);
-                            for (int i=0; i<3; i++){
+                            {for (int i=0; i<3; i++){
                                 for (int j=0; j<3; j++){
                                     int position3=secStart+i+(9*j);
                                     if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
                                         doneSomething = true;
                                     }
                                 }
-                            }
+                            }}
                             if (doneSomething){
                                 if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::NAKED_PAIR_SECTION, 0, position));
                                 return true;
@@ -1758,7 +1761,7 @@ bool SudokuBoard::onlyValueInSection(int round){
         for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
             int count = 0;
             int lastPosition = 0;
-            for (int i=0; i<3; i++){
+            {for (int i=0; i<3; i++){
                 for (int j=0; j<3; j++){
                     int position = secPos + i + 9*j;
                     int valPos = getPossibilityIndex(valIndex,position);
@@ -1767,7 +1770,7 @@ bool SudokuBoard::onlyValueInSection(int round){
                         lastPosition = position;
                     }
                 }
-            }
+            }}
             if (count == 1){
                 int value = valIndex+1;
                 if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::HIDDEN_SINGLE_SECTION, value, lastPosition));
@@ -1838,18 +1841,18 @@ void SudokuBoard::mark(int position, int round, int value){
 
     // Take this value out of the possibilities for everything in the column
     int colStart = cellToColumn(position);
-    for (int i=0; i<9; i++){
+    {for (int i=0; i<9; i++){
         int colVal=colStart+(9*i);
         int valPos = getPossibilityIndex(valIndex,colVal);
         //cout << "Col Start: " << colStart << " Col Value: " << colVal << " Value Position: " << valPos << endl;
         if (possibilities[valPos] == 0){
             possibilities[valPos] = round;
         }
-    }
+    }}
 
     // Take this value out of the possibilities for everything in section
     int secStart = cellToSectionStartCell(position);
-    for (int i=0; i<3; i++){
+    {for (int i=0; i<3; i++){
         for (int j=0; j<3; j++){
             int secVal=secStart+i+(9*j);
             int valPos = getPossibilityIndex(valIndex,secVal);
@@ -1858,15 +1861,15 @@ void SudokuBoard::mark(int position, int round, int value){
                 possibilities[valPos] = round;
             }
         }
-    }
+    }}
 
     //This position itself is determined, it should have possibilities.
-    for (int valIndex=0; valIndex<9; valIndex++){
+    {for (int valIndex=0; valIndex<9; valIndex++){
         int valPos = getPossibilityIndex(valIndex,position);
         if (possibilities[valPos] == 0){
             possibilities[valPos] = round;
         }
-    }
+    }}
 
     //cout << "Col Start: " << colStart << " Row Start: " << rowStart << " Section Start: " << secStart<< " Value: " << value << endl;
     //printPossibilities();
@@ -2081,9 +2084,9 @@ void LogItem::print(){
  */
 int getLogCount(vector<LogItem*>* v, LogItem::LogType type){
     int count = 0;
-    for (int i=0; i<v->size(); i++){
+    {for (int i=0; i<v->size(); i++){
         if(v->at(i)->getType() == type) count++;
-    }
+    }}
     return count;
 }
 
@@ -2104,13 +2107,13 @@ long getMicroseconds(){
  * Shuffle the values in an array of integers.
  */
 void shuffleArray(int* array, int size){
-    for (int i=0; i<size; i++){
+    {for (int i=0; i<size; i++){
         int tailSize = size-i;
         int randTailPos = rand()%tailSize+i;
         int temp = array[i];
         array[i] = array[randTailPos];
         array[randTailPos] = temp;
-    }
+    }}
 }
 
 /**
