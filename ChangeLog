@@ -1,0 +1,6 @@
+2007-01-09 Jacques Bensimon (jacques@ipm.com)
+     
+* allow original qqwing v1.0.0 source to compile natively under Microsoft's
+  Visual Studio C++ compiler (which, due to different scoping rules, flags the
+  in-line redeclaration of a "for" statement's loop variable as an error unless
+  the entire "for" loop is enclosed in an extra set of braces, i.e. made a block)
