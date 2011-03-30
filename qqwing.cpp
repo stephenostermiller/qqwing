@@ -1,6 +1,6 @@
 /*
  * qqwing - A Sudoku solver and generator
- * Copyright (C) 2006 Stephen Ostermiller
+ * Copyright (C) 2006-2011 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  *
@@ -21,9 +21,18 @@
 
 #include "config.h"
 #include <iostream>
-#include <string>
+#if HAVE_STRING_H == 1
+    #include <string.h>
+#else
+    #include <string>
+#endif
+#include <stdio.h>
 #include <vector>
-#include <stdlib.h>
+#if HAVE_STDLIB_H == 1
+    #include <stdlib.h>
+#else
+    #include <stdlib>
+#endif
 #if HAVE_GETTIMEOFDAY == 1
     #include <sys/time.h>
 #else
