@@ -1,7 +1,13 @@
 all: build jar
 
-build:
+version.txt: ../configure.ac
+	grep AC_INIT ../configure.ac | grep -oE '[0-9]+\.[0-9]+\.[0-9\.]+' > version.txt
+        
+version: version.txt
+	./ensure_version.sh
+
+build: version
 	javac *.java
 
-jar:
-	jar cvmf QQWing.mf ../qqwing.jar *.java *.class COPYING
+jar: build version.txt
+	jar cvmf QQWing.mf ../qqwing-`cat version.txt`.jar *.java *.class COPYING
