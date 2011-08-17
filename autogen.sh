@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 touch config.h.in
 aclocal
 automake -a -c

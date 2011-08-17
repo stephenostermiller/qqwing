@@ -10,6 +10,8 @@ RPM_BUILD_DIR=/usr/src/redhat
 RPM_BUILD_TARGET=`uname -m`
 #endif
 
+all-dist: dist rpm-dist
+
 rpm-dist:
 	if ! test -f $(srcdir)/$(PACKAGE).spec; then \
 		echo "RPM spec file '$(PACKAGE).spec' missing from '$(srcdir)' directory; aborting rpm build" 1>&2; \
