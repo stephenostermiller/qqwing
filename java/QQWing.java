@@ -32,6 +32,8 @@ import java.util.ArrayList;
  * methods for solving or generating sudoku puzzles.
  */
 public class QQWing {
+
+    private static final String QQWING_VERSION = "1.0.2";
     /**
      * PrintStyle
      */
@@ -1769,7 +1771,7 @@ public class QQWing {
     }
 
     static void printVersion(){
-        System.out.println("1.0.1");
+        System.out.println(QQWING_VERSION);
     }
 
     static void printAbout(){
