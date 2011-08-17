@@ -10,6 +10,8 @@ RPM_BUILD_DIR=/usr/src/redhat
 RPM_BUILD_TARGET=`uname -m`
 #endif
 
+all-dist: dist rpm-dist
+
 rpm-dist:
 	./rpmbuild.sh $(srcdir) $(PACKAGE) $(RPM_BUILD_DIR) $(VERSION) $(RPM_BUILD_TARGET) $(MAKE)
 
