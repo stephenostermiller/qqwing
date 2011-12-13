@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(qqwing, 1.0.2, http://ostermiller.org/qqwing/)
+AC_INIT(qqwing, 1.0.3, http://ostermiller.org/qqwing/)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])

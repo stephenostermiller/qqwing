@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class QQWing {
 
-    private static final String QQWING_VERSION = "1.0.2";
+    private static final String QQWING_VERSION = "1.0.3";
     /**
      * PrintStyle
      */
@@ -1493,16 +1493,16 @@ public class QQWing {
                         i++;
                     }
                 } else if (argv[i].equals("--difficulty")){
-                    if (argv.length < i+1){
+                    if (argv.length <= i+1){
                         System.out.println("Please specify a difficulty.");
                         System.exit(1);
-                    } else if (!argv[i+1].equalsIgnoreCase("simple")){
+                    } else if (argv[i+1].equalsIgnoreCase("simple")){
                         difficulty = SIMPLE;
-                    } else if (!argv[i+1].equalsIgnoreCase("easy")){
+                    } else if (argv[i+1].equalsIgnoreCase("easy")){
                         difficulty = EASY;
-                    } else if (!argv[i+1].equalsIgnoreCase("intermediate")){
+                    } else if (argv[i+1].equalsIgnoreCase("intermediate")){
                         difficulty = INTERMEDIATE;
-                    } else if (!argv[i+1].equalsIgnoreCase("expert")){
+                    } else if (argv[i+1].equalsIgnoreCase("expert")){
                         difficulty = EXPERT;
                     } else {
                         System.out.println("Difficulty expected to be simple, easy, intermediate, or expert, not "+argv[i+1]);

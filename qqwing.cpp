@@ -365,7 +365,7 @@ int main(int argc, char *argv[]){
                     i++;
                 }
             } else if (!strcmp(argv[i],"--difficulty")){
-                if (argc < i+1){
+                if (argc <= i+1){
                     cout << "Please specify a difficulty." << endl;
                     return 1;
                 } else if (!strcmp(argv[i+1],"simple")){
