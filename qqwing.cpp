@@ -199,7 +199,6 @@ class SudokuBoard {
         int countPossibilities(int position);
         bool arePossibilitiesSame(int position1, int position2);
         void addHistoryItem(LogItem* l);
-        void markRandomPossibility(int round);
         void shuffleRandomArrays();
         void print(int* sudoku);
         void rollbackNonGuesses();
@@ -884,28 +883,6 @@ int SudokuBoard::getGuessCount(){
  */
 int SudokuBoard::getBacktrackCount(){
     return getLogCount(solveHistory, LogItem::ROLLBACK);
-}
-
-void SudokuBoard::markRandomPossibility(int round){
-    int remainingPossibilities = 0;
-    {for (int i=0; i<POSSIBILITY_SIZE; i++){
-        if (possibilities[i] == 0) remainingPossibilities++;
-    }}
-
-    int randomPossibility = rand()%remainingPossibilities;
-
-    int possibilityToMark = 0;
-    {for (int i=0; i<POSSIBILITY_SIZE; i++){
-        if (possibilities[i] == 0){
-            if (possibilityToMark == randomPossibility){
-                int position = i/NUM_POSS;
-                int value = i%NUM_POSS+1;
-                mark(position, round, value);
-                return;
-            }
-            possibilityToMark++;
-        }
-    }}
 }
 
 void SudokuBoard::shuffleRandomArrays(){
