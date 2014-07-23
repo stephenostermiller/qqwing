@@ -1,9 +1,20 @@
 #!/bin/sh
-
 set -e
 
-mkdir -p target/jar
 version=`build/version.sh`
+jar="qqwing-$version.jar"
+
+if [ -e target/$jar ]
+then
+    newer=`find target/classes/ doc/COPYING java/ -type f -newer target/$jar`
+    if [ "z$newer" = "z" ]
+    then
+        exit
+    fi
+fi
+
+mkdir -p target/jar
+echo "Creating jar file: target/$jar"
 cp target/classes/* doc/COPYING java/*.java target/jar
 cd target/jar
-jar cvmf ../../build/QQWing.mf ../qqwing-$version.jar *
+jar cmf ../../build/QQWing.mf ../$jar *
