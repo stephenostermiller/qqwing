@@ -12,6 +12,7 @@ fi
 
 echo "Building target/qqwing"
 cp cpp/*.cpp target/automake
+cp cpp/*.hpp target/automake
 cd target/automake
 make
 cd ../..
