@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 public class QQWing {
 
-	private static final String QQWING_VERSION = "1.0.3";
+	private static final String QQWING_VERSION = "1.1.0";
 
 	private enum PrintStyle {
 		ONE_LINE,
@@ -447,16 +447,16 @@ public class QQWing {
 				int positionsym3 = -1;
 				switch (symmetry){
 					case ROTATE90:
-						positionsym2 = rowColumnToCell(8-cellToColumn(position),cellToRow(position));
-						positionsym3 = rowColumnToCell(cellToColumn(position),8-cellToRow(position));
+						positionsym2 = rowColumnToCell(COL_HEIGHT-1-cellToColumn(position),cellToRow(position));
+						positionsym3 = rowColumnToCell(cellToColumn(position),ROW_LENGTH-1-cellToRow(position));
 					case ROTATE180:
-						positionsym1 = rowColumnToCell(8-cellToRow(position),8-cellToColumn(position));
+						positionsym1 = rowColumnToCell(ROW_LENGTH-1-cellToRow(position),COL_HEIGHT-1-cellToColumn(position));
 					break;
 					case MIRROR:
-						positionsym1 = rowColumnToCell(cellToRow(position),8-cellToColumn(position));
+						positionsym1 = rowColumnToCell(cellToRow(position),COL_HEIGHT-1-cellToColumn(position));
 					break;
 					case FLIP:
-						positionsym1 = rowColumnToCell(8-cellToRow(position),cellToColumn(position));
+						positionsym1 = rowColumnToCell(ROW_LENGTH-1-cellToRow(position),cellToColumn(position));
 					break;
 				}
 				// try backing out the value and
