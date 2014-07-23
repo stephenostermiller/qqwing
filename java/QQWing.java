@@ -1,6 +1,6 @@
 /*
  * qqwing - A Sudoku solver and generator
- * Copyright (C) 2006-2007 Stephen Ostermiller
+ * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  * Copyright (C) 2007 Joel Yarde (joel.yarde - gmail.com)
@@ -19,7 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
