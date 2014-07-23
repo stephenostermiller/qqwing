@@ -9,4 +9,4 @@ Package: qqwing
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: can solve or generate Sudoku puzzles
-  It is fast, uses logic, rates puzzles, and prints instructions.
+	It is fast, uses logic, rates puzzles, and prints instructions.

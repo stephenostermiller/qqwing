@@ -19,7 +19,7 @@ http://ostermiller.org/qqwing/
 
 %build
 ./configure --prefix=$RPM_BUILD_ROOT/%{_prefix}
-make 
+make
 
 %install
 make install
