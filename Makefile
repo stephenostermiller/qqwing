@@ -1,38 +1,49 @@
 .PHONY: all
-all: jar
-        
+all: dist
+
+.PHONY: dist
+dist: jar tgz rpm
+	@build/show_dist.sh
+
+.PHONY: compile
+compile: javacompile cppcompile
+
 .PHONY: javaversion
-javaversion:
-	build/java_version.sh
+javaversion: notroot
+	@build/java_version.sh
 
 .PHONY: javacompile
 javacompile: javaversion
-	build/java_compile.sh
+	@build/java_compile.sh
 
 .PHONY: jar
 jar: javacompile
-	build/jar_build.sh
-
-.PHONY: cppautomake
-cppautomake:
-	build/cpp_automake.sh
+	@build/jar_build.sh
 
 .PHONY: cppconfigure
-cppconfigure: cppautomake
-	build/cpp_configure.sh
+cppconfigure: notroot
+	@build/cpp_configure.sh
 
 .PHONY: cppcompile
-	build/cpp_compile.sh
-        
-.PHONY: cppdist
-cppdist:
-	build/cpp_dist.sh
-     
+cppcompile: cppconfigure
+	@build/cpp_compile.sh
+
+.PHONY: tgz
+tgz: cppcompile
+	@build/cpp_dist.sh
+
+.PHONY: rpm
+rpm: tgz
+	@build/rpm_build.sh
+
+.PHONY: install
+install: cppcompile
+	@build/cpp_install.sh
+
+.PHONY: notroot
+notroot:
+	@build/not_root_check.sh
+
 .PHONY: clean
 clean:
 	rm -rf target/
-
-.PHONY: rpm-dist
-rpm-dist:
-	build/rpm_build.sh
-

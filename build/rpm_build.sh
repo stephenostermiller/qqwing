@@ -1,9 +1,20 @@
 #/bin/sh
-
 set -e
 
 export PACKAGE=`grep AC_INIT build/configure.ac | sed 's|AC_INIT(||g' | sed 's|,.*||g'`
 export VERSION=`build/version.sh`
+tgz=qqwing-$VERSION.tar.gz
+SRPM=$PACKAGE-$VERSION-1.src.rpm
+
+if [ -e target/$SRPM ]
+then
+    newer=`find build/qqwing.spec target/$tgz -type f -newer target/$SRPM`
+    if [ "z$newer" = "z" ]
+    then
+        exit 0
+    fi
+fi
+
 export RPM_BUILD_TARGET=`uname -m`
 
 mkdir -p target/rpm
@@ -21,9 +32,9 @@ cat build/$PACKAGE.spec | sed s/VERSION/$VERSION/g > $RPM_BUILD_DIR/SPECS/$PACKA
 cp -f target/$PACKAGE-$VERSION.tar.gz $RPM_BUILD_DIR/SOURCES/$PACKAGE-$VERSION.tar.gz 
 rpmbuild -ba --target $RPM_BUILD_TARGET -v $RPM_BUILD_DIR/SPECS/$PACKAGE.spec
 cp -f $RPM_BUILD_DIR/RPMS/$RPM_BUILD_TARGET/$PACKAGE-$VERSION-1.$RPM_BUILD_TARGET.rpm target/
-cp -f $RPM_BUILD_DIR/SRPMS/$PACKAGE-$VERSION-1.src.rpm target/
+cp -f $RPM_BUILD_DIR/SRPMS/$SRPM target/
 rm -f $RPM_BUILD_DIR/RPMS/$RPM_BUILD_TARGET/$PACKAGE-$VERSION-1.$RPM_BUILD_TARGET.rpm 
-rm -f $RPM_BUILD_DIR/SRPMS/$PACKAGE-$VERSION-1.src.rpm 
+rm -f $RPM_BUILD_DIR/SRPMS/$SRPM 
 rm -f $RPM_BUILD_DIR/SPECS/$PACKAGE.spec 
 rm -f $RPM_BUILD_DIR/SOURCES/$PACKAGE-$VERSION.tar.gz 
 rm -rf $RPM_BUILD_DIR/BUILD/$PACKAGE-$VERSION
