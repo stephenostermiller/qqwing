@@ -34,22 +34,30 @@ import java.util.ArrayList;
 public class QQWing {
 
     private static final String QQWING_VERSION = "1.0.3";
-    /**
-     * PrintStyle
-     */
-    public static final int ONE_LINE = 1; 
-    public static final int COMPACT = 2;
-    public static final int READABLE = 3;
-    public static final int CSV = 4;
+    
+    private enum PrintStyle {
+        ONE_LINE,
+        COMPACT,
+        READABLE,
+        CSV
+    };
 
-    /**
-     * Difficulty
-     */
-    public static final int UNKNOWN = 1;
-    public static final int SIMPLE = 2;
-    public static final int EASY = 3;
-    public static final int INTERMEDIATE = 4;
-    public static final int EXPERT = 5;
+    private enum Difficulty {
+        UNKNOWN,
+        SIMPLE,
+        EASY,
+        INTERMEDIATE,
+        EXPERT
+    }
+
+    private enum Symmetry {
+        NONE,
+        ROTATE90,
+        ROTATE180,
+        MIRROR,
+        FLIP,
+        RANDOM
+    };
 
     public static final int GRID_SIZE = 3;
     public static final int ROW_LENGTH = (GRID_SIZE*GRID_SIZE);
@@ -149,7 +157,7 @@ public class QQWing {
     /**
      * The style with which to print puzzles and solutions
      */
-    int printStyle;
+    PrintStyle printStyle;
 
     /**
      * Create a new Sudoku board
@@ -160,7 +168,7 @@ public class QQWing {
         solutionRound = new int[BOARD_SIZE];
         possibilities = new int[POSSIBILITY_SIZE];
         recordHistory = false;
-        printStyle = READABLE;
+        printStyle = PrintStyle.READABLE;
         randomBoardArray = new int[BOARD_SIZE];
         randomPossibilityArray = new int[NUM_POSS];
         solveHistory = new ArrayList<LogItem>();
@@ -240,22 +248,22 @@ public class QQWing {
     /**
      * Get the difficulty rating.
      */
-    int getDifficulty(){
-        if (getGuessCount() > 0) return EXPERT;
-        if (getBoxLineReductionCount() > 0) return INTERMEDIATE;
-        if (getPointingPairTripleCount() > 0) return INTERMEDIATE;
-        if (getHiddenPairCount() > 0) return INTERMEDIATE;
-        if (getNakedPairCount() > 0) return INTERMEDIATE;
-        if (getHiddenSingleCount() > 0) return EASY;
-        if (getSingleCount() > 0) return SIMPLE;
-        return UNKNOWN;
+    private Difficulty getDifficulty(){
+        if (getGuessCount() > 0) return Difficulty.EXPERT;
+        if (getBoxLineReductionCount() > 0) return Difficulty.INTERMEDIATE;
+        if (getPointingPairTripleCount() > 0) return Difficulty.INTERMEDIATE;
+        if (getHiddenPairCount() > 0) return Difficulty.INTERMEDIATE;
+        if (getNakedPairCount() > 0) return Difficulty.INTERMEDIATE;
+        if (getHiddenSingleCount() > 0) return Difficulty.EASY;
+        if (getSingleCount() > 0) return Difficulty.SIMPLE;
+        return Difficulty.UNKNOWN;
     }
 
     /**
      * Get the difficulty rating.
      */
     String getDifficultyAsString(){
-        int difficulty = getDifficulty();
+        Difficulty difficulty = getDifficulty();
         switch (difficulty){
             case EXPERT: return "Expert";
             case INTERMEDIATE: return "Intermediate";
@@ -383,6 +391,12 @@ public class QQWing {
     }
 
     boolean generatePuzzle() throws Exception {
+        return generatePuzzleSymmetry(Symmetry.NONE);
+    }
+
+    boolean generatePuzzleSymmetry(Symmetry symmetry) throws Exception {
+    
+        if (symmetry ==  Symmetry.RANDOM) symmetry = getRandomSymmetry();
 
         // Don't record history while generating.
         boolean recHistory = recordHistory;
@@ -402,11 +416,13 @@ public class QQWing {
         // Even when starting from an empty grid
         solve();
 
-        // Rollback any square for which it is obvious that
-        // the square doesn't contribute to a unique solution
-        // (ie, squares that were filled by logic rather
-        // than by guess)
-        rollbackNonGuesses();
+        if (symmetry == Symmetry.NONE){
+            // Rollback any square for which it is obvious that
+            // the square doesn't contribute to a unique solution
+            // (ie, squares that were filled by logic rather
+            // than by guess)
+            rollbackNonGuesses();
+        }
 
         // Record all marked squares as the puzzle so
         // that we can call countSolutions without losing it.
@@ -426,14 +442,49 @@ public class QQWing {
             // check all the positions, but in shuffled order
             int position = randomBoardArray[i];
             if (puzzle[position] > 0){
+                int positionsym1 = -1;
+                int positionsym2 = -1;
+                int positionsym3 = -1;
+                switch (symmetry){
+                    case ROTATE90:
+                        positionsym2 = rowColumnToCell(8-cellToColumn(position),cellToRow(position));
+                        positionsym3 = rowColumnToCell(cellToColumn(position),8-cellToRow(position));
+                    case ROTATE180:
+                        positionsym1 = rowColumnToCell(8-cellToRow(position),8-cellToColumn(position));
+                    break;
+                    case MIRROR:
+                        positionsym1 = rowColumnToCell(cellToRow(position),8-cellToColumn(position));
+                    break;
+                    case FLIP:
+                        positionsym1 = rowColumnToCell(8-cellToRow(position),cellToColumn(position));
+                    break;
+                }
                 // try backing out the value and
                 // counting solutions to the puzzle
                 int savedValue = puzzle[position];
                 puzzle[position] = 0;
+                int savedSym1 = 0;
+                if (positionsym1 >= 0){
+                    savedSym1 = puzzle[positionsym1];
+                    puzzle[positionsym1] = 0;
+                }
+                int savedSym2 = 0;
+                if (positionsym2 >= 0){
+                    savedSym2 = puzzle[positionsym2];
+                    puzzle[positionsym2] = 0;
+                }
+                int savedSym3 = 0;
+                if (positionsym3 >= 0){
+                    savedSym3 = puzzle[positionsym3];
+                    puzzle[positionsym3] = 0;
+                }
                 reset();
                 if (countSolutions(2, true) > 1){
                     // Put it back in, it is needed
                     puzzle[position] = savedValue;
+                    if (positionsym1 >= 0) puzzle[positionsym1] = savedSym1;
+                    if (positionsym2 >= 0) puzzle[positionsym2] = savedSym2;
+                    if (positionsym3 >= 0) puzzle[positionsym3] = savedSym3;
                 }
             }
         }
@@ -456,7 +507,7 @@ public class QQWing {
         }
     }
 
-    void setPrintStyle(int ps){
+    void setPrintStyle(PrintStyle ps){
         printStyle = ps;
     }
 
@@ -484,7 +535,7 @@ public class QQWing {
     void printHistory(ArrayList<LogItem> v){
         if (!recordHistory){
             System.out.println("History was not recorded.");
-            if (printStyle == CSV){
+            if (printStyle == PrintStyle.CSV){
                 System.out.println(" -- ");
             } else {
                 System.out.println();
@@ -493,13 +544,13 @@ public class QQWing {
         for (int i=0;i<v.size();i++){
             System.out.println(i+1+". ");
             (v.get(i)).print();
-            if (printStyle == CSV){
+            if (printStyle == PrintStyle.CSV){
                 System.out.println(" -- ");
             } else {
                 System.out.println();
             }
         }
-        if (printStyle == CSV){
+        if (printStyle == PrintStyle.CSV){
             System.out.println(",");
         } else {
             System.out.println();
@@ -1381,7 +1432,7 @@ public class QQWing {
      */
     void print(int[] sudoku){
         for(int i=0; i<BOARD_SIZE; i++){
-            if (printStyle == READABLE){
+            if (printStyle == PrintStyle.READABLE){
                 System.out.print(" ");
             }
             if (sudoku[i]==0){
@@ -1390,25 +1441,25 @@ public class QQWing {
                 System.out.print(sudoku[i]);
             }
             if (i == BOARD_SIZE-1){
-                if (printStyle == CSV){
+                if (printStyle == PrintStyle.CSV){
                     System.out.print(",");
                 } else {
                     System.out.println();
                 }
-                if (printStyle == READABLE || printStyle == COMPACT){
+                if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
                     System.out.println();
                 }
             } else if (i%9==8){
-                if (printStyle == READABLE || printStyle == COMPACT){
+                if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
                     System.out.println();
                 }
                 if (i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
-                    if (printStyle == READABLE){
+                    if (printStyle == PrintStyle.READABLE){
                         System.out.println("-------|-------|-------");
                     }
                 }
             } else if (i%3==2){
-                if (printStyle == READABLE){
+                if (printStyle == PrintStyle.READABLE){
                     System.out.print(" |");
                 }
             }
@@ -1450,10 +1501,11 @@ public class QQWing {
             boolean countSolutions = false;
             int action = NONE;
             boolean logHistory = false;
-            int printStyle = READABLE;
+            PrintStyle printStyle = PrintStyle.READABLE;
             int numberToGenerate = 1;
             boolean printStats = false;
-            int difficulty = UNKNOWN;
+            Difficulty difficulty = Difficulty.UNKNOWN;
+            Symmetry symmetry = Symmetry.NONE;
 
             // Read the arguments and set the options
             for (int i=0; i<argv.length; i++){
@@ -1497,15 +1549,36 @@ public class QQWing {
                         System.out.println("Please specify a difficulty.");
                         System.exit(1);
                     } else if (argv[i+1].equalsIgnoreCase("simple")){
-                        difficulty = SIMPLE;
+                        difficulty = Difficulty.SIMPLE;
                     } else if (argv[i+1].equalsIgnoreCase("easy")){
-                        difficulty = EASY;
+                        difficulty = Difficulty.EASY;
                     } else if (argv[i+1].equalsIgnoreCase("intermediate")){
-                        difficulty = INTERMEDIATE;
+                        difficulty = Difficulty.INTERMEDIATE;
                     } else if (argv[i+1].equalsIgnoreCase("expert")){
-                        difficulty = EXPERT;
+                        difficulty = Difficulty.EXPERT;
                     } else {
                         System.out.println("Difficulty expected to be simple, easy, intermediate, or expert, not "+argv[i+1]);
+                        System.exit(1);
+                    }
+                    i++;
+                } else if (argv[i].equals("--symmetry")){
+                    if (argv.length <= i+1){
+                        System.out.println("Please specify a symmetry.");
+                        System.exit(1);
+                    } else if (argv[i+1].equals("none")){
+                        symmetry = Symmetry.NONE;
+                    } else if (argv[i+1].equals("rotate90")){
+                        symmetry = Symmetry.ROTATE90;
+                    } else if (argv[i+1].equals("rotate180")){
+                        symmetry = Symmetry.ROTATE180;
+                    } else if (argv[i+1].equals("mirror")){
+                        symmetry = Symmetry.MIRROR;
+                    } else if (argv[i+1].equals("flip")){
+                        symmetry = Symmetry.FLIP;
+                    } else if (argv[i+1].equals("random")){
+                        symmetry = Symmetry.RANDOM;
+                    } else {
+                        System.out.println("Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not " + argv[i+1]);
                         System.exit(1);
                     }
                     i++;
@@ -1517,13 +1590,13 @@ public class QQWing {
                 } else if (argv[i].equals("--nolog-history")){
                     logHistory = false;
                 } else if (argv[i].equals("--one-line")){
-                    printStyle=ONE_LINE;
+                    printStyle=PrintStyle.ONE_LINE;
                 } else if (argv[i].equals("--compact")){
-                    printStyle=COMPACT;
+                    printStyle=PrintStyle.COMPACT;
                 } else if (argv[i].equals("--readable")){
-                    printStyle=READABLE;
+                    printStyle=PrintStyle.READABLE;
                 } else if (argv[i].equals("--csv")){
-                    printStyle=CSV;
+                    printStyle=PrintStyle.CSV;
                 } else if (argv[i].equals("-n") || argv[i].equals("--number")){
                     if (i+1 < argv.length){
                         numberToGenerate = Integer.parseInt(argv[i+1]);
@@ -1559,7 +1632,7 @@ public class QQWing {
             QQWing.r = new Random(c.getTimeInMillis());
 
             // If printing out CSV, print a header
-            if (printStyle == CSV){
+            if (printStyle == PrintStyle.CSV){
                 if (printPuzzle) System.out.print("Puzzle,");
                 if (printSolution) System.out.print("Solution,");
                 if (printHistory) System.out.print("Solve History,");
@@ -1573,7 +1646,7 @@ public class QQWing {
             // Create a new puzzle board
             // and set the options
             QQWing ss = new QQWing();
-            ss.setRecordHistory(printHistory || printInstructions || printStats || difficulty!=UNKNOWN);
+            ss.setRecordHistory(printHistory || printInstructions || printStats || difficulty!=Difficulty.UNKNOWN);
             ss.setLogHistory(logHistory);
             ss.setPrintStyle(printStyle);
 
@@ -1594,10 +1667,10 @@ public class QQWing {
                 boolean havePuzzle = false;
                 if (action == GENERATE){
                     // Generate a puzzle
-                    havePuzzle = ss.generatePuzzle();
+                    havePuzzle = ss.generatePuzzleSymmetry(symmetry);
                     if (!havePuzzle && printPuzzle){
                         System.out.print("Could not generate puzzle.");
-                        if (printStyle==CSV){
+                        if (printStyle==PrintStyle.CSV){
                             System.out.println(",");
                         } else {
                             System.out.println();
@@ -1616,7 +1689,7 @@ public class QQWing {
                             }
                             if (printSolution) {
                                 System.out.print("Puzzle is not possible.");
-                                if (printStyle==CSV){
+                                if (printStyle==PrintStyle.CSV){
                                     System.out.print(",");
                                 } else {
                                     System.out.println();
@@ -1644,13 +1717,13 @@ public class QQWing {
                     }
 
                     // Solve the puzzle
-                    if (printSolution || printHistory || printStats || printInstructions || difficulty!=UNKNOWN){
+                    if (printSolution || printHistory || printStats || printInstructions || difficulty!=Difficulty.UNKNOWN){
                         ss.solve();
                     }
 
                     // Bail out if it didn't meet the difficulty standards for generation
                     if (action == GENERATE){
-                        if (difficulty!=UNKNOWN && difficulty!=ss.getDifficulty()){
+                        if (difficulty!=Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
                             havePuzzle = false;
                         } else {
                             numberGenerated++;
@@ -1678,7 +1751,7 @@ public class QQWing {
                             ss.printSolution();
                         } else {
                             System.out.print("Puzzle has no solution.");
-                            if (printStyle==CSV){
+                            if (printStyle==PrintStyle.CSV){
                                 System.out.print(",");
                             } else {
                                 System.out.println();
@@ -1693,7 +1766,7 @@ public class QQWing {
 
                     // Print the number of solutions to the puzzle.
                     if (countSolutions){
-                        if (printStyle == CSV){
+                        if (printStyle == PrintStyle.CSV){
                             System.out.print(solutions+",");
                         } else {
                             if (solutions == 0){
@@ -1709,7 +1782,7 @@ public class QQWing {
                     // Print out the time it took to solve the puzzle.
                     if (timer){
                         double t = ((double)(puzzleDoneTime - puzzleStartTime))/1000.0;
-                        if (printStyle == CSV){
+                        if (printStyle == PrintStyle.CSV){
                             System.out.print(t+",");
                         } else {
                             System.out.println("Time: "+t +" milliseconds");
@@ -1728,7 +1801,7 @@ public class QQWing {
                         int guessCount = ss.getGuessCount();
                         int backtrackCount = ss.getBacktrackCount();
                         String difficultyString = ss.getDifficultyAsString();
-                        if (printStyle == CSV){
+                        if (printStyle == PrintStyle.CSV){
                             System.out.println(givenCount+"," +singleCount+","+hiddenSingleCount
                                     +","+nakedPairCount+","+hiddenPairCount
                                     +"," +pointingPairTripleCount +"," +boxReductionCount
@@ -1749,7 +1822,7 @@ public class QQWing {
                     }
                     puzzleCount++;
                 }
-                if (printedSomething && printStyle == CSV){
+                if (printedSomething && printStyle == PrintStyle.CSV){
                     System.out.println();
                 }
             }
@@ -1800,6 +1873,7 @@ public class QQWing {
         System.out.println("  --generate <num>     Generate new puzzles");
         System.out.println("  --solve              Solve all the puzzles from standard input");
         System.out.println("  --difficulty <diff>  Generate only simple,easy, intermediate, or expert");
+        System.out.println("  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random");
         System.out.println("  --puzzle             Print the puzzle (default when generating)");
         System.out.println("  --nopuzzle           Do not print the puzzle (default when solving)");
         System.out.println("  --solution           Print the solution (default when solving)");
@@ -1858,6 +1932,17 @@ public class QQWing {
             array[i] = array[randTailPos];
             array[randTailPos] = temp;
         }
+    }
+    
+    static Symmetry getRandomSymmetry(){
+        int rand = Math.abs(r.nextInt())%4;
+        switch (rand){
+            case 0: return  Symmetry.ROTATE90;
+            case 1: return  Symmetry.ROTATE180;
+            case 2: return  Symmetry.MIRROR;
+            case 3: return  Symmetry.FLIP;
+        }
+        throw new UnsupportedOperationException("Unexpected random value: " + rand);
     }
 
     /**
