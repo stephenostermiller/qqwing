@@ -1,0 +1,12 @@
+Source: qqwing
+Maintainer: Stephen Ostermiller <debian@ostermiller.org>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9)
+
+Package: qqwing
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: can solve or generate Sudoku puzzles
+  It is fast, uses logic, rates puzzles, and prints instructions.
