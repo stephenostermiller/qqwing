@@ -6,12 +6,12 @@ tgz=qqwing-$version.tar.gz
 
 if ls target/*.deb &> /dev/null;
 then
-    file=`ls target/*.deb -1 | head -n 1`
-    newer=`find build/debian* target/$tgz -type f -newer $file`
-    if [ "z$newer" = "z" ]
-    then
-        exit 0
-    fi
+	file=`ls target/*.deb -1 | head -n 1`
+	newer=`find build/debian* target/$tgz -type f -newer $file`
+	if [ "z$newer" = "z" ]
+	then
+		exit 0
+	fi
 fi
 
 echo "Building debian package"
@@ -32,7 +32,7 @@ mkdir -p debian/source
 echo "3.0 (quilt)" > debian/source/format
 echo 9 > debian/compat
 
-debuild -us -uc 
+debuild -us -uc
 
 cd ../../..
 cp target/deb/qqwing*.deb target/

@@ -6,11 +6,11 @@ jar="qqwing-$version.jar"
 
 if [ -e target/$jar ]
 then
-    newer=`find target/classes/ doc/COPYING java/ -type f -newer target/$jar`
-    if [ "z$newer" = "z" ]
-    then
-        exit
-    fi
+	newer=`find target/classes/ doc/COPYING java/ -type f -newer target/$jar`
+	if [ "z$newer" = "z" ]
+	then
+		exit
+	fi
 fi
 
 mkdir -p target/jar

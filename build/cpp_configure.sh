@@ -3,11 +3,11 @@ set -e
 
 if [ -e target/cppconfigure ]
 then
-    newer=`find build/configure.ac build/Makefile.am doc/NEWS doc/README doc/AUTHORS doc/ChangeLog doc/COPYING -type f -newer target/cppconfigure`
-    if [ "z$newer" = "z" ]
-    then
-        exit 0
-    fi
+	newer=`find build/configure.ac build/Makefile.am doc/NEWS doc/README doc/AUTHORS doc/ChangeLog doc/COPYING -type f -newer target/cppconfigure`
+	if [ "z$newer" = "z" ]
+	then
+		exit 0
+	fi
 fi
 
 echo "Running automake and configure"
