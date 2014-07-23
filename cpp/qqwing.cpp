@@ -63,6 +63,14 @@ class SudokuBoard {
             INTERMEDIATE,
             EXPERT,
         };
+        enum Symmetry {
+            NONE,
+            ROTATE90,
+            ROTATE180,
+            MIRROR,
+            FLIP,
+            RANDOM,
+        };
         SudokuBoard();
         bool setPuzzle(int* initPuzzle);
         void printPuzzle();
@@ -76,6 +84,7 @@ class SudokuBoard {
         void setLogHistory(bool logHist);
         void setPrintStyle(PrintStyle ps);
         bool generatePuzzle();
+        bool generatePuzzleSymmetry(SudokuBoard::Symmetry symmetry);
         int getGivenCount();
         int getSingleCount();
         int getHiddenSingleCount();
@@ -270,6 +279,7 @@ class LogItem {
 string IntToString(int num);
 long getMicroseconds();
 void shuffleArray(int* array, int size);
+SudokuBoard::Symmetry getRandomSymmetry();
 bool readPuzzleFromStdIn(int* puzzle);
 int main(int argc, char *argv[]);
 void printHelp(char* programName);
@@ -324,6 +334,7 @@ int main(int argc, char *argv[]){
         int numberToGenerate = 1;
         bool printStats = false;
         SudokuBoard::Difficulty difficulty = SudokuBoard::UNKNOWN;
+        SudokuBoard::Symmetry symmetry = SudokuBoard::NONE;
 
         // Read the arguments and set the options
         {for (int i=1; i<argc; i++){
@@ -378,6 +389,27 @@ int main(int argc, char *argv[]){
                     difficulty = SudokuBoard::EXPERT;
                 } else {
                     cout << "Difficulty expected to be simple, easy, intermediate, or expert, not " << argv[i+1] << endl;
+                    return 1;
+                }
+                i++;
+            } else if (!strcmp(argv[i],"--symmetry")){
+                if (argc <= i+1){
+                    cout << "Please specify a symmetry." << endl;
+                    return 1;
+                } else if (!strcmp(argv[i+1],"none")){
+                    symmetry = SudokuBoard::NONE;
+                } else if (!strcmp(argv[i+1],"rotate90")){
+                    symmetry = SudokuBoard::ROTATE90;
+                } else if (!strcmp(argv[i+1],"rotate180")){
+                    symmetry = SudokuBoard::ROTATE180;
+                } else if (!strcmp(argv[i+1],"mirror")){
+                    symmetry = SudokuBoard::MIRROR;
+                } else if (!strcmp(argv[i+1],"flip")){
+                    symmetry = SudokuBoard::FLIP;
+                } else if (!strcmp(argv[i+1],"random")){
+                    symmetry = SudokuBoard::RANDOM;
+                } else {
+                    cout << "Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not " << argv[i+1] << endl;
                     return 1;
                 }
                 i++;
@@ -466,7 +498,7 @@ int main(int argc, char *argv[]){
             bool havePuzzle = false;
             if (action == GENERATE){
                 // Generate a puzzle
-                havePuzzle = ss->generatePuzzle();
+                havePuzzle = ss->generatePuzzleSymmetry(symmetry);
                 if (!havePuzzle && printPuzzle){
                     cout << "Could not generate puzzle.";
                     if (printStyle==SudokuBoard::CSV){
@@ -674,6 +706,7 @@ void printHelp(char* programName){
     cout << "  --generate <num>     Generate new puzzles" << endl;
     cout << "  --solve              Solve all the puzzles from standard input" << endl;
     cout << "  --difficulty <diff>  Generate only simple,easy, intermediate, or expert" << endl;
+    cout << "  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random" << endl;
     cout << "  --puzzle             Print the puzzle (default when generating)" << endl;
     cout << "  --nopuzzle           Do not print the puzzle (default when solving)" << endl;
     cout << "  --solution           Print the solution (default when solving)" << endl;
@@ -899,6 +932,12 @@ void SudokuBoard::clearPuzzle(){
 }
 
 bool SudokuBoard::generatePuzzle(){
+    return generatePuzzleSymmetry(SudokuBoard::NONE);
+}
+
+bool SudokuBoard::generatePuzzleSymmetry(SudokuBoard::Symmetry symmetry){
+
+    if (symmetry ==  SudokuBoard::RANDOM) symmetry = getRandomSymmetry();
 
     // Don't record history while generating.
     bool recHistory = recordHistory;
@@ -918,11 +957,13 @@ bool SudokuBoard::generatePuzzle(){
     // Even when starting from an empty grid
     solve();
 
-    // Rollback any square for which it is obvious that
-    // the square doesn't contribute to a unique solution
-    // (ie, squares that were filled by logic rather
-    // than by guess)
-    rollbackNonGuesses();
+    if (symmetry == SudokuBoard::NONE){
+        // Rollback any square for which it is obvious that
+        // the square doesn't contribute to a unique solution
+        // (ie, squares that were filled by logic rather
+        // than by guess)
+        rollbackNonGuesses();
+    }
 
     // Record all marked squares as the puzzle so
     // that we can call countSolutions without losing it.
@@ -942,14 +983,49 @@ bool SudokuBoard::generatePuzzle(){
         // check all the positions, but in shuffled order
         int position = randomBoardArray[i];
         if (puzzle[position] > 0){
+            int positionsym1 = -1;
+            int positionsym2 = -1;
+            int positionsym3 = -1;
+            switch (symmetry){
+                case ROTATE90:
+                    positionsym2 = rowColumnToCell(8-cellToColumn(position),cellToRow(position));
+                    positionsym3 = rowColumnToCell(cellToColumn(position),8-cellToRow(position));
+                case ROTATE180:
+                    positionsym1 = rowColumnToCell(8-cellToRow(position),8-cellToColumn(position));
+                break;
+                case MIRROR:
+                    positionsym1 = rowColumnToCell(cellToRow(position),8-cellToColumn(position));
+                break;
+                case FLIP:
+                    positionsym1 = rowColumnToCell(8-cellToRow(position),cellToColumn(position));
+                break;
+            }
             // try backing out the value and
             // counting solutions to the puzzle
             int savedValue = puzzle[position];
             puzzle[position] = 0;
+            int savedSym1 = 0;
+            if (positionsym1 >= 0){
+                savedSym1 = puzzle[positionsym1];
+                puzzle[positionsym1] = 0;
+            }
+            int savedSym2 = 0;
+            if (positionsym2 >= 0){
+                savedSym2 = puzzle[positionsym2];
+                puzzle[positionsym2] = 0;
+            }
+            int savedSym3 = 0;
+            if (positionsym3 >= 0){
+                savedSym3 = puzzle[positionsym3];
+                puzzle[positionsym3] = 0;
+            }
             reset();
             if (countSolutions(2, true) > 1){
                 // Put it back in, it is needed
                 puzzle[position] = savedValue;
+                if (positionsym1 >= 0) puzzle[positionsym1] = savedSym1;
+                if (positionsym2 >= 0) puzzle[positionsym2] = savedSym2;
+                if (positionsym3 >= 0) puzzle[positionsym3] = savedSym3;
             }
         }
     }}
@@ -2101,6 +2177,15 @@ void shuffleArray(int* array, int size){
         array[i] = array[randTailPos];
         array[randTailPos] = temp;
     }}
+}
+
+SudokuBoard::Symmetry getRandomSymmetry(){
+    switch (rand()%4){
+        case 0: return  SudokuBoard::ROTATE90;
+        case 1: return  SudokuBoard::ROTATE180;
+        case 2: return  SudokuBoard::MIRROR;
+        case 3: return  SudokuBoard::FLIP;
+    }
 }
 
 /**
