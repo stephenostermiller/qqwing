@@ -2,7 +2,7 @@
 all: dist
 
 .PHONY: dist
-dist: jar tgz rpm
+dist: jar tgz rpm deb
 	@build/show_dist.sh
 
 .PHONY: compile
@@ -35,6 +35,10 @@ tgz: cppcompile
 .PHONY: rpm
 rpm: tgz
 	@build/rpm_build.sh
+
+.PHONY: deb
+deb: tgz
+	@build/deb_build.sh
 
 .PHONY: install
 install: cppcompile
