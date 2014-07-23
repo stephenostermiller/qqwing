@@ -10,5 +10,6 @@ then
 	fi
 fi
 
+echo
 ls -1 target/qqwing*
 touch target/dist

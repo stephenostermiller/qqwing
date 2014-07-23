@@ -9,7 +9,7 @@ dist: jar tgz rpm deb
 compile: javacompile cppcompile
 
 .PHONY: javaversion
-javaversion: notroot
+javaversion: notroot neaten
 	@build/java_version.sh
 
 .PHONY: javacompile
@@ -21,7 +21,7 @@ jar: javacompile
 	@build/jar_build.sh
 
 .PHONY: cppconfigure
-cppconfigure: notroot
+cppconfigure: notroot neaten
 	@build/cpp_configure.sh
 
 .PHONY: cppcompile
@@ -47,6 +47,10 @@ install: cppcompile
 .PHONY: notroot
 notroot:
 	@build/not_root_check.sh
+
+.PHONY: neaten
+neaten:
+	@build/src_neaten.sh
 
 .PHONY: clean
 clean:
