@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111.1.17  USA
  */
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 public class QQWing {
 
-	private static final String QQWING_VERSION = "1.1.0";
+	private static final String QQWING_VERSION = "1.1.1";
 
 	private enum PrintStyle {
 		ONE_LINE,
@@ -1865,7 +1865,7 @@ public class QQWing {
 		System.out.println("");
 		System.out.println("You should have received a copy of the GNU General Public License");
 		System.out.println("along with this program; if not, write to the Free Software");
-		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA");
+		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111.1.17  USA");
 	}
 
 	static void printHelp(String programName){

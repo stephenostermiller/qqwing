@@ -1,10 +1,16 @@
-qqwing (1.1.0-1) UNRELEASED; urgency=medium
+qqwing (1.1.1-1) RELEASED; urgency=medium
+
+  * Split into a library and a main method
+
+ -- Stephen Ostermiller <debian@ostermiller.org>  Wed, 23 Jul 2014 08:36:57 -0400
+
+qqwing (1.1.0-1) RELEASED; urgency=medium
 
   * Added symmetry
 
  -- Stephen Ostermiller <debian@ostermiller.org>  Wed, 23 Jul 2014 08:36:57 -0400
 
-qqwing (1.0.3-1) UNRELEASED; urgency=medium
+qqwing (1.0.3-1) RELEASED; urgency=medium
 
   * Initial release
 
