@@ -1847,9 +1847,11 @@ public class QQWing {
 	}
 
 	static void printAbout(){
-		System.out.println(" - Sudoku solver and generator.");
-		System.out.println("Written by Stephen Ostermiller copyright 2006.");
+		System.out.println("A Sudoku solver and generator");
+		System.out.println("Copyright (C) 2006-2014 Stephen Ostermiller");
 		System.out.println("http://ostermiller.org/qqwing/");
+		System.out.println("Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)");
+		System.out.println("Copyright (C) 2007 Joel Yarde (joel.yarde - gmail.com)");
 		System.out.println("");
 		System.out.println("This program is free software; you can redistribute it and/or modify");
 		System.out.println("it under the terms of the GNU General Public License as published by");

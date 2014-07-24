@@ -4,6 +4,7 @@
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  * Copyright (C) 2011 Jean Guillerez (j.guillerez - orange.fr)
+ * Copyright (C) 2014 Michael Catanzaro (mcatanzaro@gnome.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-
 #include "config.h"
 
 #include <cstdio>
@@ -419,8 +419,11 @@ void printVersion(){
 
 void printAbout(){
 	cout << PACKAGE_NAME << " - Sudoku solver and generator." << endl;
-	cout << "Written by Stephen Ostermiller copyright 2006." << endl;
+	cout << "Copyright (C) 2006-2014 Stephen Ostermiller" << endl;
 	cout << "http://ostermiller.org/qqwing/" << endl;
+	cout << "Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)" << endl;
+	cout << "Copyright (C) 2011 Jean Guillerez (j.guillerez - orange.fr)" << endl;
+	cout << "Copyright (C) 2014 Michael Catanzaro (mcatanzaro@gnome.org)" << endl;
 	cout << "" << endl;
 	cout << "This program is free software; you can redistribute it and/or modify" << endl;
 	cout << "it under the terms of the GNU General Public License as published by" << endl;
