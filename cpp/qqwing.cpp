@@ -4,6 +4,7 @@
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  * Copyright (C) 2011 Jean Guillerez (j.guillerez - orange.fr)
+ * Copyright (C) 2014 Michael Catanzaro (mcatanzaro@gnome.org)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
