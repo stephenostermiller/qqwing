@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libqqwing
+Description: Sudoku generator and solver library
+Version: @VERSION@
+Libs: -L${libdir} -lqqwing
+Cflags: -I${includedir}
