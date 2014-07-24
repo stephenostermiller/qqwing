@@ -18,11 +18,12 @@ http://ostermiller.org/qqwing/
 %setup -q
 
 %build
-./configure --prefix=$RPM_BUILD_ROOT/%{_prefix}
+%configure
 make
 
 %install
-make install
+make install DESTDIR=$RPM_BUILD_ROOT
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -31,3 +32,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog NEWS README
 %{_bindir}/%{name}
+%{_includedir}/%{name}.hpp
+%{_libdir}/lib%{name}.so*
+%{_libdir}/pkgconfig/%{name}.pc
