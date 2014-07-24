@@ -30,7 +30,6 @@ namespace qqwing {
 
 	using namespace std;
 
-	class SuddokuBoard;
 	class LogItem;
 
 	const int GRID_SIZE = 3;
