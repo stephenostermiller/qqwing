@@ -124,8 +124,10 @@ int main(int argc, char *argv[]){
 					difficulty = SudokuBoard::INTERMEDIATE;
 				} else if (!strcmp(argv[i+1],"expert")){
 					difficulty = SudokuBoard::EXPERT;
+				} else if (!strcmp(argv[i+1],"any")){
+					difficulty = SudokuBoard::UNKNOWN;
 				} else {
-					cout << "Difficulty expected to be simple, easy, intermediate, or expert, not " << argv[i+1] << endl;
+					cout << "Difficulty expected to be simple, easy, intermediate, expert, or any, not " << argv[i+1] << endl;
 					return 1;
 				}
 				i++;
@@ -445,7 +447,7 @@ void printHelp(char* programName){
 	cout << "Sudoku solver and generator." << endl;
 	cout << "  --generate <num>     Generate new puzzles" << endl;
 	cout << "  --solve              Solve all the puzzles from standard input" << endl;
-	cout << "  --difficulty <diff>  Generate only simple,easy, intermediate, or expert" << endl;
+	cout << "  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any" << endl;
 	cout << "  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random" << endl;
 	cout << "  --puzzle             Print the puzzle (default when generating)" << endl;
 	cout << "  --nopuzzle           Do not print the puzzle (default when solving)" << endl;
