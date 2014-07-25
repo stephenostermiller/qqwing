@@ -1,3 +1,9 @@
+qqwing (1.1.2-1) RELEASED; urgency=medium
+
+  * Add "any" for difficulty command line option
+
+ -- Stephen Ostermiller <debian@ostermiller.org>  Wed, 23 Jul 2014 08:36:57 -0400
+
 qqwing (1.1.1-1) RELEASED; urgency=medium
 
   * Split into a library and a main method
