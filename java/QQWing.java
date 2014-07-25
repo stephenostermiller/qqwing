@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111.1.17  USA
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA
  */
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 public class QQWing {
 
-	private static final String QQWING_VERSION = "1.1.1";
+	private static final String QQWING_VERSION = "1.1.2";
 
 	private enum PrintStyle {
 		ONE_LINE,
@@ -1555,8 +1555,10 @@ public class QQWing {
 						difficulty = Difficulty.INTERMEDIATE;
 					} else if (argv[i+1].equalsIgnoreCase("expert")){
 						difficulty = Difficulty.EXPERT;
+					} else if (argv[i+1].equalsIgnoreCase("any")){
+						difficulty = Difficulty.UNKNOWN;
 					} else {
-						System.out.println("Difficulty expected to be simple, easy, intermediate, or expert, not "+argv[i+1]);
+						System.out.println("Difficulty expected to be simple, easy, intermediate, expert, or any, not "+argv[i+1]);
 						System.exit(1);
 					}
 					i++;
@@ -1865,7 +1867,7 @@ public class QQWing {
 		System.out.println("");
 		System.out.println("You should have received a copy of the GNU General Public License");
 		System.out.println("along with this program; if not, write to the Free Software");
-		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111.1.17  USA");
+		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA");
 	}
 
 	static void printHelp(String programName){
@@ -1873,7 +1875,7 @@ public class QQWing {
 		System.out.println("Sudoku solver and generator.");
 		System.out.println("  --generate <num>     Generate new puzzles");
 		System.out.println("  --solve              Solve all the puzzles from standard input");
-		System.out.println("  --difficulty <diff>  Generate only simple,easy, intermediate, or expert");
+		System.out.println("  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any");
 		System.out.println("  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random");
 		System.out.println("  --puzzle             Print the puzzle (default when generating)");
 		System.out.println("  --nopuzzle           Do not print the puzzle (default when solving)");
