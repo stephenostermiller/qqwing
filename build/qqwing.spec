@@ -30,7 +30,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog NEWS README
+%doc AUTHORS COPYING README
 %{_bindir}/%{name}
 %{_includedir}/%{name}.hpp
 %{_libdir}/lib%{name}.so*
