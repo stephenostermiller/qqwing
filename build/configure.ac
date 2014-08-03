@@ -5,11 +5,11 @@ AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
 # Increment on interface add, remove, or change.
-QQWING_CURRENT=0
+QQWING_CURRENT=1
 # Increment on source change. Reset when CURRENT changes.
 QQWING_REVISION=0
 # Increment on interface addition. Reset on removal.
-QQWING_AGE=0
+QQWING_AGE=1
 
 AC_SUBST([QQWING_CURRENT])
 AC_SUBST([QQWING_REVISION])
