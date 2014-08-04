@@ -19,10 +19,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -1607,7 +1605,7 @@ public class QQWing {
 						System.exit(1);
 					}
 				} else if (argv[i].equals("-h") || argv[i].equals("--help") || argv[i].equals("help") || argv[i].equals("?")){
-					printHelp("GameGenerator");
+					printHelp();
 					System.exit(0);
 				} else if (argv[i].equals("--version")){
 					printVersion();
@@ -1617,20 +1615,19 @@ public class QQWing {
 					System.exit(0);
 				} else {
 					System.out.println("Unknown argument: '"+argv[i]+"'");
-					printHelp("GameGenerator");
+					printHelp();
 					System.exit(0);
 				}
 			}
 
 			if (action == NONE){
 				System.out.println("Either --solve or --generate must be specified.");
-				printHelp("GameGenerator");
+				printHelp();
 				System.exit(1);
 			}
 
 			// Initialize the random number generator
-			Calendar c = Calendar.getInstance();
-			QQWing.r = new Random(c.getTimeInMillis());
+			QQWing.r = new Random(new Date().getTime());
 
 			// If printing out CSV, print a header
 			if (printStyle == PrintStyle.CSV){
@@ -1870,8 +1867,8 @@ public class QQWing {
 		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA");
 	}
 
-	static void printHelp(String programName){
-		System.out.println(programName+" <options>");
+	static void printHelp(){
+		System.out.println("qqwing <options>");
 		System.out.println("Sudoku solver and generator.");
 		System.out.println("  --generate <num>     Generate new puzzles");
 		System.out.println("  --solve              Solve all the puzzles from standard input");
@@ -1918,8 +1915,7 @@ public class QQWing {
 	 * Get the current time in microseconds.
 	 */
 	static long getMicroseconds(){
-		Calendar c = Calendar.getInstance();
-		return c.getTimeInMillis()*1000;
+		return new Date().getTime()*1000;
 	}
 
 	/**
