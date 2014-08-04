@@ -150,6 +150,20 @@ namespace qqwing {
 	}
 
 	/**
+	 * Retrieves the puzzle as an unmodifiable array of 81 integers.
+	 */
+	const int* SudokuBoard::getPuzzle(){
+		return puzzle;
+	}
+
+	/**
+	 * Retrieves the puzzle's solution as an unmodifiable array of 81 integers.
+	 */
+	const int* SudokuBoard::getSolution(){
+		return solution;
+	}
+
+	/**
 	 * Reset the board to its initial state with
 	 * only the givens.
 	 * This method clears any solution, resets statistics,
@@ -183,7 +197,6 @@ namespace qqwing {
 				if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItem::GIVEN, value, position));
 			}
 		}
-
 		return true;
 	}
 
