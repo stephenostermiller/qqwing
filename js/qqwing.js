@@ -1,0 +1,754 @@
+function qqwing () {
+	var GRID_SIZE = 3;
+	var ROW_LENGTH = GRID_SIZE*GRID_SIZE;
+	var COL_HEIGHT = GRID_SIZE*GRID_SIZE;
+	var SEC_SIZE = GRID_SIZE*GRID_SIZE;
+	var SEC_COUNT = GRID_SIZE*GRID_SIZE;
+	var SEC_GROUP_SIZE = SEC_SIZE*GRID_SIZE;
+	var NUM_POSS = GRID_SIZE*GRID_SIZE;
+	var BOARD_SIZE = ROW_LENGTH*COL_HEIGHT;
+	var POSSIBILITY_SIZE = BOARD_SIZE*NUM_POSS;
+
+	this.PrintStyle = {
+		ONE_LINE: 0,
+		COMPACT: 1,
+		READABLE: 2,
+		CSV: 3
+	};
+	this.Difficulty = {
+		UNKNOWN: 0,
+		SIMPLE: 1,
+		EASY: 2,
+		INTERMEDIATE: 3,
+		EXPERT: 4
+	};
+	this.Symmetry = {
+		NONE: 0,
+		ROTATE90: 1,
+		ROTATE180: 2,
+		MIRROR: 3,
+		FLIP: 4,
+		RANDOM: 5
+	};
+
+	/**
+	 * The 81 integers that make up a sudoku puzzle.
+	 * Givens are 1-9, unknows are 0.
+	 * Once initialized, this puzzle remains as is.
+	 * The answer is worked out in "solution".
+	 */
+	var puzzle = new Array(BOARD_SIZE);
+
+	/**
+	 * The 81 integers that make up a sudoku puzzle.
+	 * The solution is built here, after completion
+	 * all will be 1-9.
+	 */
+	var solution = new Array(BOARD_SIZE);
+
+	/**
+	 * Recursion depth at which each of the numbers
+	 * in the solution were placed.  Useful for backing
+	 * out solve branches that don't lead to a solution.
+	 */
+	var solutionRound = new Array(BOARD_SIZE);
+
+	/**
+	 * The 729 integers that make up a the possible
+	 * values for a suduko puzzle. (9 possibilities
+	 * for each of 81 squares).  If possibilities[i]
+	 * is zero, then the possibility could still be
+	 * filled in according to the sudoku rules.  When
+	 * a possibility is eliminated, possibilities[i]
+	 * is assigned the round (level) at
+	 * which it was determined that it could not be
+	 * a possibility.
+	 */
+	var possibilities = new Array(POSSIBILITY_SIZE);
+
+	/**
+	 * An array the size of the board (81) containing each
+	 * of the numbers 0-n exactly once.  This array may
+	 * be shuffled so that operations that need to
+	 * look at each cell can do so in a random order.
+	 */
+	var randomBoardArray = new Array(BOARD_SIZE);
+
+	for (var i=0; i<BOARD_SIZE; i++){
+		randomBoardArray[i] = i;
+	}
+
+	/**
+	 * An array with one element for each position (9), in
+	 * some random order to be used when trying each
+	 * position in turn during guesses.
+	 */
+	var randomPossibilityArray = new Array(NUM_POSS);
+
+	for (var i=0; i<NUM_POSS; i++){
+		randomPossibilityArray[i] = i;
+	}
+
+	/**
+	 * Whether or not to record history
+	 */
+	var recordHistory = false;
+
+	/**
+	 * Whether or not to print history as it happens
+	 */
+	var logHistory = false;
+
+	/**
+	 * A list of moves used to solve the puzzle.
+	 * This list contains all moves, on solve
+	 * branches that did not lead to a solution.
+	 */
+	var solveHistory = [];
+
+	/**
+	 * A list of moves used to solve the puzzle.
+	 * This list contains only the moves needed
+	 * to solve the puzzle, doesn't contain
+	 * information about bad guesses.
+	 */
+	var solveInstructions = [];
+
+	/**
+	 * The style with which to print puzzles and solutions
+	 */
+	var printStyle = this.PrintStyle.READABLE;
+
+	/**
+	 * The last round of solving
+	 */
+	var lastSolveRound = 0;
+
+	/**
+	 * Reset the board to its initial state with
+	 * only the givens.
+	 * This method clears any solution, resets statistics,
+	 * and clears any history messages.
+	 */
+	var reset = function(){
+		for (var i=0; i<BOARD_SIZE; i++){
+			solution[i] = 0;
+		}
+		for (var i=0; i<BOARD_SIZE; i++){
+			solutionRound[i] = 0;
+		}
+		for (var i=0; i<POSSIBILITY_SIZE; i++){
+			possibilities[i] = 0;
+		}
+		solveHistory = [];
+		solveInstructions = [];
+
+		var round = 1;
+		for (var position=0; position<BOARD_SIZE; position++){
+			if (puzzle[position] > 0){
+				var valIndex = puzzle[position]-1;
+				var valPos = getPossibilityIndex(valIndex,position);
+				var value = puzzle[position];
+				if (possibilities[valPos] != 0) return false;
+				mark.call(this,position,round,value);
+				if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.GIVEN, value, position));
+			}
+		}
+	};
+
+	var singleSolveMove = function(round){
+		if (onlyPossibilityForCell.call(this, round)) return true;
+		if (onlyValueInSection.call(this, round)) return true;
+		if (onlyValueInRow.call(this, round)) return true;
+		if (onlyValueInColumn.call(this, round)) return true;
+		if (handleNakedPairs.call(this, round)) return true;
+		if (pointingRowReduction.call(this, round)) return true;
+		if (pointingColumnReduction.call(this, round)) return true;
+		if (rowBoxReduction.call(this, round)) return true;
+		if (colBoxReduction.call(this, round)) return true;
+		if (hiddenPairInRow.call(this, round)) return true;
+		if (hiddenPairInColumn.call(this, round)) return true;
+		if (hiddenPairInSection.call(this, round)) return true;
+		return false;
+	};
+
+	/**
+	 * Mark exactly one cell that has a single possibility, if such a cell exists.
+	 * This method will look for a cell that has only one possibility.  This type
+	 * of cell is often called a "single"
+	 */
+	var onlyPossibilityForCell = function(round){
+		for (var position=0; position<BOARD_SIZE; position++){
+			if (solution[position] == 0){
+				var count = 0;
+				var lastValue = 0;
+				for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (possibilities[valPos] == 0){
+						count++;
+						lastValue=valIndex+1;
+					}
+				}
+				if (count == 1){
+					mark.call(this, position, round, lastValue);
+					if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.SINGLE, lastValue, position));
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+	var onlyValueInRow = function(round){
+		/* TODO */
+	};
+	var onlyValueInColumn = function(round){
+		/* TODO */
+	};
+	var onlyValueInSection = function(round){
+		/* TODO */
+	};
+	var countSolutions = function(round, limitToTwo){
+		/* TODO */
+	};
+
+	var guess = function(round, guessNumber){
+        console.log("Guess: " + round + " " + guessNumber);
+		var localGuessCount = 0;
+		var position = findPositionWithFewestPossibilities.call(this);
+		for (var i=0; i<NUM_POSS; i++){
+			var valIndex = randomPossibilityArray[i];
+			var valPos = getPossibilityIndex(valIndex,position);
+			if (possibilities[valPos] == 0){
+				if (localGuessCount == guessNumber){
+					var value = valIndex+1;
+					if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.GUESS, value, position));
+					mark.call(this, position, round, value);
+					return true;
+				}
+				localGuessCount++;
+			}
+		}
+		return false;
+	};
+
+	var isImpossible = function(){
+		for (var position=0; position<BOARD_SIZE; position++){
+			if (solution[position] == 0){
+				var count = 0;
+				for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (possibilities[valPos] == 0) count++;
+				}
+				if (count == 0) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+
+	var rollbackRound = function(round){
+        console.log("Rollback round: " + round);
+		if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.ROLLBACK));
+		for (var i=0; i<BOARD_SIZE; i++){
+			if (solutionRound[i] == round){
+				solutionRound[i] = 0;
+				solution[i] = 0;
+			}
+		}
+		{for (var i=0; i<POSSIBILITY_SIZE; i++){
+			if (possibilities[i] == round){
+				possibilities[i] = 0;
+			}
+		}}
+
+		while(solveInstructions.length > 0 && solveInstructions[solveInstructions.length-1] == round){
+			solveInstructions.pop();
+		}
+	};
+
+	var pointingRowReduction = function(round){
+		/* TODO */
+	};
+	var rowBoxReduction = function(round){
+		/* TODO */
+	};
+	var colBoxReduction = function(round){
+		/* TODO */
+	};
+	var pointingColumnReduction = function(round){
+		/* TODO */
+	};
+	var hiddenPairInRow = function(round){
+		/* TODO */
+	};
+	var hiddenPairInColumn = function(round){
+		/* TODO */
+	};
+	var hiddenPairInSection = function(round){
+		/* TODO */
+	};
+
+	/**
+	 * Mark the given value at the given position.  Go through
+	 * the row, column, and section for the position and remove
+	 * the value from the possibilities.
+	 *
+	 * @param position Position into the board (0-80)
+	 * @param round Round to mark for rollback purposes
+	 * @param value The value to go in the square at the given position
+	 */
+	var mark = function(position, round, value){
+    	if (solution[position] != 0) throw ("Marking position that already has been marked.");
+		if (solutionRound[position] !=0) throw ("Marking position that was marked another round.");
+		var valIndex = value-1;
+		solution[position] = value;
+
+		var possInd = getPossibilityIndex(valIndex,position);
+		if (possibilities[possInd] != 0) throw ("Marking impossible position.");
+
+		// Take this value out of the possibilities for everything in the row
+		solutionRound[position] = round;
+		var rowStart = cellToRow(position)*9;
+		for (var col=0; col<COL_HEIGHT; col++){
+			var rowVal=rowStart+col;
+			var valPos = getPossibilityIndex(valIndex,rowVal);
+			if (possibilities[valPos] == 0){
+				possibilities[valPos] = round;
+			}
+		}
+
+		// Take this value out of the possibilities for everything in the column
+		var colStart = cellToColumn(position);
+		for (var i=0; i<9; i++){
+			var colVal=colStart+(9*i);
+			var valPos = getPossibilityIndex(valIndex,colVal);
+			if (possibilities[valPos] == 0){
+				possibilities[valPos] = round;
+			}
+		}
+
+		// Take this value out of the possibilities for everything in section
+		var secStart = cellToSectionStartCell(position);
+		for (var i=0; i<3; i++){
+			for (var j=0; j<3; j++){
+				var secVal=secStart+i+(9*j);
+				var valPos = getPossibilityIndex(valIndex,secVal);
+				if (possibilities[valPos] == 0){
+					possibilities[valPos] = round;
+				}
+			}
+		}
+
+		//This position itself is determined, it should have possibilities.
+		for (var valIndex=0; valIndex<9; valIndex++){
+			var valPos = getPossibilityIndex(valIndex,position);
+			if (possibilities[valPos] == 0){
+				possibilities[valPos] = round;
+			}
+		}
+	};
+
+	var findPositionWithFewestPossibilities = function(){
+		var minPossibilities = 10;
+		var bestPosition = 0;
+		for (var i=0; i<BOARD_SIZE; i++){
+			var position = randomBoardArray[i];
+			if (solution[position] == 0){
+				var count = 0;
+				for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (possibilities[valPos] == 0) count++;
+				}
+				if (count < minPossibilities){
+					minPossibilities = count;
+					bestPosition = position;
+				}
+			}
+		}
+		return bestPosition;
+	};
+
+	var handleNakedPairs = function(round){
+		/* TODO */
+	};
+	var countPossibilities = function(position){
+		/* TODO */
+	};
+	var arePossibilitiesSame = function(position1, position2){
+		/* TODO */
+	};
+
+	var addHistoryItem = function(l){
+		if (logHistory) console.log(l.print());
+		if (recordHistory){
+			solveHistory.push(l);
+			solveInstructions.push(l);
+		}
+	};
+
+	var shuffleRandomArrays = function(){
+		shuffleArray(randomBoardArray, BOARD_SIZE);
+		shuffleArray(randomPossibilityArray, NUM_POSS);
+	};
+
+	/**
+	 * print the given BOARD_SIZEd array of ints
+	 * as a sudoku puzzle.  Use print options from
+	 * member variables.
+	 */
+	var print = function(sudoku){
+		var s = "";
+		for(var i=0; i<BOARD_SIZE; i++){
+			if (printStyle == this.PrintStyle.READABLE){
+				s += " ";
+			}
+			if (sudoku[i]==0){
+				s += '.';
+			} else {
+				s += sudoku[i];
+			}
+			if (i == BOARD_SIZE-1){
+				if (printStyle == this.PrintStyle.CSV){
+					s += ",";
+				} else {
+					s += "\n";
+				}
+				if (printStyle == this.PrintStyle.READABLE || printStyle == this.PrintStyle.COMPACT){
+					s += "\n";
+				}
+			} else if (i%9==8){
+				if (printStyle == this.PrintStyle.READABLE || printStyle == this.PrintStyle.COMPACT){
+					s += "\n";
+				}
+				if (i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
+					if (printStyle == this.PrintStyle.READABLE){
+						s += "-------|-------|-------\n";
+					}
+				}
+			} else if (i%3==2){
+				if (printStyle == this.PrintStyle.READABLE){
+					s += " |";
+				}
+			}
+		}
+		return s;
+	};
+
+	var rollbackNonGuesses = function(){
+		/* TODO */
+	};
+	var clearPuzzle = function(){
+		/* TODO */
+	};
+	var printHistory = function(v){
+		/* TODO */
+	};
+	var removePossibilitiesInOneFromTwo = function(position1, position2, round){
+		/* TODO */
+	};
+	var IntToString = function(num){
+		/* TODO */
+	};
+
+	/**
+	 * Shuffle the values in an array of integers.
+	 */
+	var shuffleArray = function(array, size){
+		for (var i=0; i<size; i++){
+			var tailSize = size-i;
+			var randTailPos = Math.floor(Math.random() * tailSize) + i;
+			var temp = array[i];
+			array[i] = array[randTailPos];
+			array[randTailPos] = temp;
+		}
+	};
+
+	var getRandomSymmetry = function(){
+		/* TODO */
+	};
+	var getLogCount = function(v, type){
+		/* TODO */
+	};
+
+	/**
+	 * Given the index of a cell (0-80) calculate
+	 * the column (0-8) in which that cell resides.
+	 */
+	var cellToColumn = function(cell){
+		return cell%COL_HEIGHT;
+	};
+
+	/**
+	 * Given the index of a cell (0-80) calculate
+	 * the row (0-8) in which it resides.
+	 */
+	var cellToRow = function(cell){
+		return cell/ROW_LENGTH;
+	};
+
+	/**
+	 * Given the index of a cell (0-80) calculate
+	 * the cell (0-80) that is the upper left start
+	 * cell of that section.
+	 */
+	var cellToSectionStartCell = function(cell){
+		return (cell/SEC_GROUP_SIZE*SEC_GROUP_SIZE)
+				+ (cellToColumn(cell)/GRID_SIZE*GRID_SIZE);
+	};
+
+	/**
+	 * Given the index of a cell (0-80) calculate
+	 * the section (0-8) in which it resides.
+	 */
+	var cellToSection = function(cell){
+		return (cell/SEC_GROUP_SIZE*GRID_SIZE)
+				+ (cellToColumn(cell)/GRID_SIZE);
+	};
+
+	/**
+	 * Given a row (0-8) calculate the first cell (0-80)
+	 * of that row.
+	 */
+	var rowToFirstCell = function(row){
+		return 9*row;
+	};
+
+	/**
+	 * Given a column (0-8) calculate the first cell (0-80)
+	 * of that column.
+	 */
+	var columnToFirstCell = function(column){
+		return column;
+	};
+
+	/**
+	 * Given a section (0-8) calculate the first cell (0-80)
+	 * of that section.
+	 */
+	var sectionToFirstCell = function(section){
+		return (section%GRID_SIZE*GRID_SIZE) + (section/GRID_SIZE*SEC_GROUP_SIZE);
+	};
+
+	/**
+	 * Given a value for a cell (0-8) and a cell (0-80)
+	 * calculate the offset into the possibility array (0-728).
+	 */
+	var getPossibilityIndex = function(valueIndex, cell){
+		return valueIndex+(NUM_POSS*cell);
+	};
+
+	/**
+	 * Given a row (0-8) and a column (0-8) calculate the
+	 * cell (0-80).
+	 */
+	var rowColumnToCell = function(row, column){
+		return (row*COL_HEIGHT)+column;
+	};
+
+	/**
+	 * Given a section (0-8) and an offset into that section (0-8)
+	 * calculate the cell (0-80)
+	 */
+	var sectionToCell = function(section, offset){
+		return sectionToFirstCell(section)
+				+ ((offset/GRID_SIZE)*SEC_SIZE)
+				+ (offset%GRID_SIZE);
+	};
+
+	this.LogItem = function(r, t, v, p){
+		/**
+		 * The recursion level at which this item was gathered.
+		 * Used for backing out log items solve branches that
+		 * don't lead to a solution.
+		 */
+		var round = r;
+
+		/**
+		 * The type of log message that will determine the
+		 * message printed.
+		 */
+		var type = t;
+
+		/**
+		 * Value that was set by the operation (or zero for no value)
+		 */
+		var value = v;
+
+		/**
+		 * position on the board at which the value (if any) was set.
+		 */
+		var position = p;
+
+		this.LogType = {
+			GIVEN: 0,
+			SINGLE: 1,
+			HIDDEN_SINGLE_ROW: 2,
+			HIDDEN_SINGLE_COLUMN: 3,
+			HIDDEN_SINGLE_SECTION: 4,
+			GUESS: 5,
+			ROLLBACK: 6,
+			NAKED_PAIR_ROW: 7,
+			NAKED_PAIR_COLUMN: 8,
+			NAKED_PAIR_SECTION: 9,
+			POINTING_PAIR_TRIPLE_ROW: 10,
+			POINTING_PAIR_TRIPLE_COLUMN: 11,
+			ROW_BOX: 12,
+			COLUMN_BOX: 13,
+			HIDDEN_PAIR_ROW: 14,
+			HIDDEN_PAIR_COLUMN: 15,
+			HIDDEN_PAIR_SECTION: 16
+		};
+
+		this.getRound = function (){
+			/* TODO */
+		};
+
+		this.print = function(){
+			/* TODO */
+		};
+
+		this.getType =function(){
+			/* TODO */
+		};
+	}
+
+	/**
+	 * Set the board to the given puzzle.
+	 * The given puzzle must be an array of 81 integers.
+	 */
+	this.setPuzzle = function(initPuzzle){
+		for (var i=0; i<BOARD_SIZE; i++){
+			puzzle[i] = initPuzzle[i];
+		}
+		reset();
+	}
+
+	/**
+	 * Print the sudoku puzzle.
+	 */
+	this.printPuzzle = function(){
+		return print.call(this, puzzle);
+	}
+
+	/**
+	 * Print the sudoku solution.
+	 */
+	this.printSolution = function(){
+		return print.call(this, solution);
+	}
+
+	this.solve = function(round){
+        //console.log("solve round: " + round);
+		if (!round || round <= 1){
+            reset.call(this);
+		    shuffleRandomArrays();
+		    return this.solve(2);
+        }
+
+		lastSolveRound = round;
+
+		while (singleSolveMove.call(this, round)){
+			if (this.isSolved()) return true;
+			if (isImpossible.call(this)) return false;
+		}
+
+		var nextGuessRound = round+1;
+		var nextRound = round+2;
+		for (var guessNumber=0; guess.call(this, nextGuessRound, guessNumber); guessNumber++){
+			if (isImpossible.call(this) || !this.solve(nextRound)){
+				rollbackRound.call(this, nextRound);
+				rollbackRound.call(this, nextGuessRound);
+			} else {
+				return true;
+			}
+		}
+		return false;
+	};
+
+
+	this.countSolutions = function(){
+		/* TODO */
+	};
+	this.printPossibilities = function(){
+		/* TODO */
+	};
+
+	this.isSolved = function(){
+		for (var i=0; i<BOARD_SIZE; i++){
+			if (solution[i] == 0){
+				return false;
+			}
+		}
+		return true;
+	};
+
+	this.printSolveHistory = function(){
+		/* TODO */
+	};
+	this.setRecordHistory = function(recHistory){
+		/* TODO */
+	};
+	this.setLogHistory = function(logHist){
+		/* TODO */
+	};
+	this.setPrintStyle = function(printstyle){
+		/* TODO */
+	};
+	this.generatePuzzle = function(){
+		/* TODO */
+	};
+	this.generatePuzzleSymmetry = function(symmetry){
+		/* TODO */
+	};
+	this.getGivenCount = function(){
+		/* TODO */
+	};
+	this.getSingleCount = function(){
+		/* TODO */
+	};
+	this.getHiddenSingleCount = function(){
+		/* TODO */
+	};
+	this.getNakedPairCount = function(){
+		/* TODO */
+	};
+	this.getHiddenPairCount = function(){
+		/* TODO */
+	};
+	this.getBoxLineReductionCount = function(){
+		/* TODO */
+	};
+	this.getPointingPairTripleCount = function(){
+		/* TODO */
+	};
+	this.getGuessCount = function(){
+		/* TODO */
+	};
+	this.getBacktrackCount = function(){
+		/* TODO */
+	};
+	this.printSolveInstructions = function(){
+		/* TODO */
+	};
+	this.getDifficulty = function(){
+		if (this.getGuessCount() > 0) return this.Difficulty.EXPERT;
+		if (this.getBoxLineReductionCount() > 0) return this.Difficulty.INTERMEDIATE;
+		if (this.getPointingPairTripleCount() > 0) return this.Difficulty.INTERMEDIATE;
+		if (this.getHiddenPairCount() > 0) return this.Difficulty.INTERMEDIATE;
+		if (this.getNakedPairCount() > 0) return this.Difficulty.INTERMEDIATE;
+		if (this.getHiddenSingleCount() > 0) return this.Difficulty.EASY;
+		if (this.getSingleCount() > 0) return this.Difficulty.SIMPLE;
+		return this.Difficulty.UNKNOWN;
+	};
+	this.getDifficultyAsString = function(){
+		var difficulty = this.getDifficulty();
+		switch (difficulty){
+			case this.Difficulty.EXPERT: return "Expert";
+			case this.Difficulty.INTERMEDIATE: return "Intermediate";
+			case this.Difficulty.EASY: return "Easy";
+			case this.Difficulty.SIMPLE: return "Simple";
+			default: return "Unknown";
+		}
+	};
+}
