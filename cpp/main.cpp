@@ -40,7 +40,7 @@ using namespace std;
 
 long getMicroseconds();
 bool readPuzzleFromStdIn(int* puzzle);
-void printHelp(char* programName);
+void printHelp();
 void printVersion();
 void printAbout();
 
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]){
 					return 1;
 				}
 			} else if (!strcmp(argv[i],"-h") || !strcmp(argv[i],"--help") || !strcmp(argv[i],"help") || !strcmp(argv[i],"?")){
-				printHelp(argv[0]);
+				printHelp();
 				return 0;
 			} else if (!strcmp(argv[i],"--version")){
 				printVersion();
@@ -186,14 +186,14 @@ int main(int argc, char *argv[]){
 				return 0;
 			} else {
 				cout << "Unknown argument: '" << argv[i] << "'" << endl;
-				printHelp(argv[0]);
+				printHelp();
 				return 1;
 			}
 		}}
 
 		if (action == NONE){
 			cout << "Either --solve or --generate must be specified." << endl;
-			printHelp(argv[0]);
+			printHelp();
 			return 1;
 		}
 
@@ -442,8 +442,8 @@ void printAbout(){
 	cout << "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA" << endl;
 }
 
-void printHelp(char* programName){
-	cout << programName << " <options>" << endl;
+void printHelp(){
+	cout << "qqwing <options>" << endl;
 	cout << "Sudoku solver and generator." << endl;
 	cout << "  --generate <num>     Generate new puzzles" << endl;
 	cout << "  --solve              Solve all the puzzles from standard input" << endl;
