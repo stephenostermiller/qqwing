@@ -3,13 +3,17 @@
 set -e
 set -o pipefail
 
-puzzle="$1"
-solution="$2"
+test="$1"
+puzzle="$2"
+solution="$3"
 
 output=`echo "$puzzle" | $QQWING --solve --one-line`
 
 if [ "$solution" != "$output" ]
 then
+    echo
+    echo "Test: $test"
+    echo "qqwing: $QQWING"
     echo "Solving:  $puzzle"
     echo "Expected: $solution"
     echo "Actual:   $output"
