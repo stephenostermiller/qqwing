@@ -1842,7 +1842,7 @@ public class QQWing {
 	}
 
 	static void printVersion(){
-		System.out.println(QQWING_VERSION);
+		System.out.println("qqwing " + QQWING_VERSION);
 	}
 
 	static void printAbout(){
