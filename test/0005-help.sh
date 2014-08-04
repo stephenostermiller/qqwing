@@ -3,8 +3,7 @@
 set -e
 set -o pipefail
 
-help=`$QQWING --help`
-
+actual=`$QQWING --help`
 expected="qqwing <options>
 Sudoku solver and generator.
   --generate <num>     Generate new puzzles
@@ -35,11 +34,11 @@ Sudoku solver and generator.
   --about              Author and license information
   --version            Display current version number"
 
-if [ "$help" != "$expected" ]
+if [ "$actual" != "$expected" ]
 then
     actualfile=`mktemp /tmp/actual.XXXXXXXXX`
     expectedfile=`mktemp /tmp/expected.XXXXXXXX`
-    echo "$help" > "$actualfile"
+    echo "$actual" > "$actualfile"
     echo "$expected" > "$expectedfile"
     echo
     echo "Test: $0"

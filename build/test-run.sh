@@ -7,10 +7,14 @@ version=`build/version.sh`
 
 case $1 in
 	"java")
+		export QQWINGTESTYPE=java
 		export QQWING="java -jar target/qqwing-$version.jar"
+		export QQWINGSRCWITHCOPYRIGHT=java/QQWing.java
 		;;
 	"cpp")
+		export QQWINGTESTYPE=cpp
 		export QQWING="target/qqwing"
+		export QQWINGSRCWITHCOPYRIGHT=cpp/qqwing.cpp
 		;;
 	*)
 		echo "Expected java or cpp as argument"
@@ -18,7 +22,7 @@ case $1 in
 		;;
 esac
 
-echo "Running tests for $1:"
+echo "Running tests for $QQWINGTESTTYPE:"
 
 for test in test/*.sh
 do

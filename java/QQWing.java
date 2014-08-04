@@ -1,5 +1,5 @@
 /*
- * qqwing - A Sudoku solver and generator
+ * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
@@ -1834,7 +1834,6 @@ public class QQWing {
 				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==GENERATE?"generated":"solved")+" in "+t+" seconds.");
 			}
 		} catch (Exception e){
-			//System.out.println(e);
 			e.printStackTrace(System.out);
 			System.exit(1);
 		}
@@ -1846,7 +1845,7 @@ public class QQWing {
 	}
 
 	static void printAbout(){
-		System.out.println("A Sudoku solver and generator");
+		System.out.println("qqwing - Sudoku solver and generator");
 		System.out.println("Copyright (C) 2006-2014 Stephen Ostermiller");
 		System.out.println("http://ostermiller.org/qqwing/");
 		System.out.println("Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)");
@@ -1862,9 +1861,9 @@ public class QQWing {
 		System.out.println("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
 		System.out.println("GNU General Public License for more details.");
 		System.out.println("");
-		System.out.println("You should have received a copy of the GNU General Public License");
-		System.out.println("along with this program; if not, write to the Free Software");
-		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA");
+		System.out.println("You should have received a copy of the GNU General Public License along");
+		System.out.println("with this program; if not, write to the Free Software Foundation, Inc.,");
+		System.out.println("51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.");
 	}
 
 	static void printHelp(){
