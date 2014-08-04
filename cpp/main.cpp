@@ -108,7 +108,7 @@ int main(int argc, char *argv[]){
 			} else if (!strcmp(argv[i],"--generate")){
 				action = GENERATE;
 				printPuzzle = true;
-				if (i+1 < argc && argv[i+1][0] >= '1' && argv[i+1][0] <= '9'){
+				if (i+1 < argc && argv[i+1][0] != '-'){
 					numberToGenerate = atoi(argv[i+1]);
 					i++;
 				}

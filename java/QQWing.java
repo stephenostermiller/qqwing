@@ -1537,7 +1537,7 @@ public class QQWing {
 				} else if (argv[i].equals("--generate")){
 					action = GENERATE;
 					printPuzzle = true;
-					if (i+1 < argv.length){
+					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
 						numberToGenerate = Integer.parseInt(argv[i+1]);
 						i++;
 					}
