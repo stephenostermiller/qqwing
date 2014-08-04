@@ -1957,51 +1957,18 @@ public class QQWing {
 	 */
 	static boolean readPuzzleFromStdIn(int[] puzzle) throws IOException {
 		int read = 0;
-		char c; //= getchar();
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String input = "";
-		StringBuffer buffer = new StringBuffer();
-		int inputLoops = 0;
-		while(true){
-				inputLoops++;
-				if (inputLoops == 1)
-						System.out.print("PUZZLE: ");
-				else
-						System.out.print("  MORE: ");
-			//As easy as that. Just readline, and receive a string with
-			//the LF/CR stripped away.
-			input = in.readLine();
-			//Is a faster alternative to: if (input == null || input.equals(""))
-			//The implementation of equals method inside String checks for
-			// nulls before making any reference to the object.
-			// Also the operator instance of returns false if the left-hand operand is null
-			if ("".equals(input)){
-				break;
-			} else {
-				//Output in uppercase
-				buffer.append(input);
-				if (buffer.length() < BOARD_SIZE)
-						continue;
-				else
-						break;
+		while (read < BOARD_SIZE){
+			int c = System.in.read();
+			if (c < 0) return false;
+			if (c >= '1' && c <= '9'){
+				puzzle[read] = c-'0';
+				read++;
+			}
+			if (c == '.' || c == '0'){
+				puzzle[read] = 0;
+				read++;
 			}
 		}
-		System.out.print("  DONE! ");
-		/**
-		 * load buffer into puzzle
-		 */
-		for (int i=0;i<buffer.length(); i++) {
-				c = buffer.charAt(i);
-				if (c >= '1' && c <='9'){
-						puzzle[read] = c-'0';
-						read++;
-				}
-				if (c == '.' || c == '0'){
-						puzzle[read] = 0;
-						read++;
-				}
-		}
-
 		return true;
 	}
 
