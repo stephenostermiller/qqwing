@@ -4,11 +4,15 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
 
-# Increment on interface add, remove, or change.
+# Before making a release, the LT_VERSION string should be modified.
+# The string is of the form C:R:A.
+# - If interfaces have been changed or added, but binary compatibility has
+#   been preserved, change to C+1:0:A+1
+# - If binary compatibility has been broken (eg removed or changed interfaces)
+#   change to C+1:0:0
+# - If the interface is the same as the previous version, change to C:R+1:A
 QQWING_CURRENT=1
-# Increment on source change. Reset when CURRENT changes.
 QQWING_REVISION=0
-# Increment on interface addition. Reset on removal.
 QQWING_AGE=1
 
 AC_SUBST([QQWING_CURRENT])
