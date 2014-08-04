@@ -306,7 +306,7 @@ namespace qqwing {
 
 	bool SudokuBoard::generatePuzzleSymmetry(SudokuBoard::Symmetry symmetry){
 
-		if (symmetry ==  SudokuBoard::RANDOM) symmetry = getRandomSymmetry();
+		if (symmetry == SudokuBoard::RANDOM) symmetry = getRandomSymmetry();
 
 		// Don't record history while generating.
 		bool recHistory = recordHistory;
@@ -1505,7 +1505,7 @@ namespace qqwing {
 				cout << "Value: " << value;
 				printed = true;
 			}
-			cout  << ")";
+			cout << ")";
 		}
 	}
 
@@ -1536,10 +1536,10 @@ namespace qqwing {
 
 	SudokuBoard::Symmetry getRandomSymmetry(){
 		switch (rand()%4){
-			case 0: return  SudokuBoard::ROTATE90;
-			case 1: return  SudokuBoard::ROTATE180;
-			case 2: return  SudokuBoard::MIRROR;
-			case 3: return  SudokuBoard::FLIP;
+			case 0: return SudokuBoard::ROTATE90;
+			case 1: return SudokuBoard::ROTATE180;
+			case 2: return SudokuBoard::MIRROR;
+			case 3: return SudokuBoard::FLIP;
 		}
 	}
 
