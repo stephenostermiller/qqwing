@@ -71,6 +71,8 @@ namespace qqwing {
 			};
 			SudokuBoard();
 			bool setPuzzle(int* initPuzzle);
+			const int* getPuzzle();
+			const int* getSolution();
 			void printPuzzle();
 			void printSolution();
 			bool solve();
