@@ -12,3 +12,5 @@ qqwing_LDADD = $(top_builddir)/libqqwing.la
 
 pkgconfigdir = $(libdir)/pkgconfig
 dist_pkgconfig_DATA = qqwing.pc
+
+dist_man_MANS = qqwing.1
