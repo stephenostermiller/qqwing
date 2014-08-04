@@ -18,7 +18,12 @@ case $1 in
 		;;
 esac
 
+echo "Running tests for $1:"
+
 for test in test/*.sh
 do
+	echo -n '.'
 	$test
 done
+
+echo
