@@ -35,3 +35,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/%{name}.hpp
 %{_libdir}/lib%{name}.so*
 %{_libdir}/pkgconfig/%{name}.pc
+%{_mandir}/man1/%{name}.1*
