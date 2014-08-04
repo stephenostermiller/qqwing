@@ -1866,8 +1866,8 @@ public class QQWing {
 		System.out.println("GNU General Public License for more details.");
 		System.out.println("");
 		System.out.println("You should have received a copy of the GNU General Public License");
-		System.out.println("along with this program; if not, write to the Free Software");
-		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA");
+		System.out.println("along with this program; if not, write to the Free Software Foundation, Inc.,");
+		System.out.println("51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.");
 	}
 
 	static void printHelp(String programName){
