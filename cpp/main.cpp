@@ -1,5 +1,5 @@
 /*
- * qqwing - A Sudoku solver and generator
+ * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
@@ -420,7 +420,7 @@ void printVersion(){
 }
 
 void printAbout(){
-	cout << PACKAGE_NAME << " - Sudoku solver and generator." << endl;
+	cout << "qqwing - Sudoku solver and generator" << endl;
 	cout << "Copyright (C) 2006-2014 Stephen Ostermiller" << endl;
 	cout << "http://ostermiller.org/qqwing/" << endl;
 	cout << "Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)" << endl;
@@ -437,9 +437,9 @@ void printAbout(){
 	cout << "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" << endl;
 	cout << "GNU General Public License for more details." << endl;
 	cout << "" << endl;
-	cout << "You should have received a copy of the GNU General Public License" << endl;
-	cout << "along with this program; if not, write to the Free Software" << endl;
-	cout << "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA" << endl;
+	cout << "You should have received a copy of the GNU General Public License along" << endl;
+	cout << "with this program; if not, write to the Free Software Foundation, Inc.," << endl;
+	cout << "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA." << endl;
 }
 
 void printHelp(){

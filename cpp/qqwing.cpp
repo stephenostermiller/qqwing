@@ -1,5 +1,5 @@
 /*
- * qqwing - A Sudoku solver and generator
+ * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
