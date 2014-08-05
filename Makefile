@@ -1,5 +1,5 @@
 .PHONY: all
-all: dist
+all: dist test
 
 .PHONY: dist
 dist: jar tgz rpm deb
@@ -51,6 +51,17 @@ notroot:
 .PHONY: neaten
 neaten:
 	@build/src_neaten.sh
+
+.PHONY: test
+test: testcpp testjava
+
+.PHONY: testjava
+testjava: jar
+	@build/test-run.sh java
+
+.PHONY: testcpp
+testcpp: cppcompile
+	@build/test-run.sh cpp
 
 .PHONY: clean
 clean:

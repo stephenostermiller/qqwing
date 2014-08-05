@@ -1,0 +1,110 @@
+.TH "QQWING" "1" "2014\-08\-03"
+.SH "NAME"
+qqwing \- A tool for generating and solving Sudoku puzzles
+
+.SH "SYNOPSIS"
+.PP
+\fBqqwing\fR --generate [\fIOPTIONS...\fP]
+.br
+\fBqqwing\fR --solve [\fIOPTIONS...\fP]
+
+.SH "DESCRIPTION"
+.PP
+\fBqqwing\fR is a Sudoku puzzle generator and solver. It offers the following features:
+.TP
+\(bu Fast. It can solve 1000 puzzles in 1 second and generate 1000 puzzles in 25 seconds.
+.TP
+\(bu Uses logic. Uses as many solve techniques as possible when solving puzzles rather than guessing.
+.TP
+\(bu Rates puzzles. Most generators don't give an indication of the difficulty of a Sudoku puzzle. QQwing does.
+.TP
+\(bu Can print solve instructions. Tells steps that need to be taken to solve any puzzle.
+.TP
+\(bu Customizable output style, including a CSV style that is easy to import into a database.
+
+.SH "OPTIONS"
+.TP
+.BR \-\-generate\ <num>
+Generate new puzzles
+.TP
+.BR \-\-solve
+Solve all the puzzles from standard input
+.TP
+.BR \-\-difficulty
+Generate only simple, easy, intermediate, expert, or any
+.TP
+.BR \-\-symmetry\ <sym>
+Symmetry: none, rotate90, rotate180, mirror, flip, or random
+.TP
+.BR \-\-puzzle
+Print the puzzle (default when generating)
+.TP
+.BR \-\-nopuzzle
+Do not print the puzzle (default when solving)
+.TP
+.BR \-\-solution
+Print the solution (default when solving)
+.TP
+.BR \-\-nosolution
+Do not print the solution (default when generating)
+.TP
+.BR \-\-stats
+Print statistics about moves used to solve the puzzle
+.TP
+.BR \-\-nostats
+Do not print statistics (default)
+.TP
+.BR \-\-timer
+Print time to generate or solve each puzzle
+.TP
+.BR \-\-notimer
+Do not print solve or generation times (default)
+.TP
+.BR \-\-count\-solutions
+Count the number of solutions to puzzles
+.TP
+.BR \-\-nocount\-solutions
+Do not count the number of solutions (default)
+.TP
+.BR \-\-history
+Print trial and error used when solving
+.TP
+.BR \-\-nohistory
+Do not print trial and error to solve (default)
+.TP
+.BR \-\-instructions
+Print the steps (at least 81) needed to solve the puzzle
+.TP
+.BR \-\-noinstructions
+Do not print steps to solve (default)
+.TP
+.BR \-\-log\-history
+Print trial and error to solve as it happens
+.TP
+.BR \-\-nolog\-history
+Do not print trial and error  to solve as it happens
+.TP
+.BR \-\-one\-line
+Print puzzles on one line of 81 characters
+.TP
+.BR \-\-compact
+Print puzzles on 9 lines of 9 characters
+.TP
+.BR \-\-readable
+Print puzzles in human readable form (default)
+.TP
+.BR \-\-csv
+Ouput CSV format with one line puzzles
+.TP
+.BR \-h ,\  \-\-help
+Display help message
+.TP
+.BR \-\-about
+Display author and license information
+.TP
+.BR \-\-version
+Display version number
+
+.SH "SEE ALSO"
+.PP
+http://ostermiller.org/qqwing/

@@ -1,5 +1,5 @@
 /*
- * qqwing - A Sudoku solver and generator
+ * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
@@ -40,7 +40,7 @@ using namespace std;
 
 long getMicroseconds();
 bool readPuzzleFromStdIn(int* puzzle);
-void printHelp(char* programName);
+void printHelp();
 void printVersion();
 void printAbout();
 
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]){
 			} else if (!strcmp(argv[i],"--generate")){
 				action = GENERATE;
 				printPuzzle = true;
-				if (i+1 < argc && argv[i+1][0] >= '1' && argv[i+1][0] <= '9'){
+				if (i+1 < argc && argv[i+1][0] != '-'){
 					numberToGenerate = atoi(argv[i+1]);
 					i++;
 				}
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]){
 					return 1;
 				}
 			} else if (!strcmp(argv[i],"-h") || !strcmp(argv[i],"--help") || !strcmp(argv[i],"help") || !strcmp(argv[i],"?")){
-				printHelp(argv[0]);
+				printHelp();
 				return 0;
 			} else if (!strcmp(argv[i],"--version")){
 				printVersion();
@@ -186,14 +186,14 @@ int main(int argc, char *argv[]){
 				return 0;
 			} else {
 				cout << "Unknown argument: '" << argv[i] << "'" << endl;
-				printHelp(argv[0]);
+				printHelp();
 				return 1;
 			}
 		}}
 
 		if (action == NONE){
 			cout << "Either --solve or --generate must be specified." << endl;
-			printHelp(argv[0]);
+			printHelp();
 			return 1;
 		}
 
@@ -420,7 +420,7 @@ void printVersion(){
 }
 
 void printAbout(){
-	cout << PACKAGE_NAME << " - Sudoku solver and generator." << endl;
+	cout << "qqwing - Sudoku solver and generator" << endl;
 	cout << "Copyright (C) 2006-2014 Stephen Ostermiller" << endl;
 	cout << "http://ostermiller.org/qqwing/" << endl;
 	cout << "Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)" << endl;
@@ -437,13 +437,13 @@ void printAbout(){
 	cout << "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" << endl;
 	cout << "GNU General Public License for more details." << endl;
 	cout << "" << endl;
-	cout << "You should have received a copy of the GNU General Public License" << endl;
-	cout << "along with this program; if not, write to the Free Software" << endl;
-	cout << "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA" << endl;
+	cout << "You should have received a copy of the GNU General Public License along" << endl;
+	cout << "with this program; if not, write to the Free Software Foundation, Inc.," << endl;
+	cout << "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA." << endl;
 }
 
-void printHelp(char* programName){
-	cout << programName << " <options>" << endl;
+void printHelp(){
+	cout << "qqwing <options>" << endl;
 	cout << "Sudoku solver and generator." << endl;
 	cout << "  --generate <num>     Generate new puzzles" << endl;
 	cout << "  --solve              Solve all the puzzles from standard input" << endl;

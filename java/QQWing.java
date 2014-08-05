@@ -1,5 +1,5 @@
 /*
- * qqwing - A Sudoku solver and generator
+ * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller
  * http://ostermiller.org/qqwing/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
@@ -19,10 +19,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -1539,7 +1537,7 @@ public class QQWing {
 				} else if (argv[i].equals("--generate")){
 					action = GENERATE;
 					printPuzzle = true;
-					if (i+1 < argv.length){
+					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
 						numberToGenerate = Integer.parseInt(argv[i+1]);
 						i++;
 					}
@@ -1607,7 +1605,7 @@ public class QQWing {
 						System.exit(1);
 					}
 				} else if (argv[i].equals("-h") || argv[i].equals("--help") || argv[i].equals("help") || argv[i].equals("?")){
-					printHelp("GameGenerator");
+					printHelp();
 					System.exit(0);
 				} else if (argv[i].equals("--version")){
 					printVersion();
@@ -1617,20 +1615,19 @@ public class QQWing {
 					System.exit(0);
 				} else {
 					System.out.println("Unknown argument: '"+argv[i]+"'");
-					printHelp("GameGenerator");
+					printHelp();
 					System.exit(0);
 				}
 			}
 
 			if (action == NONE){
 				System.out.println("Either --solve or --generate must be specified.");
-				printHelp("GameGenerator");
+				printHelp();
 				System.exit(1);
 			}
 
 			// Initialize the random number generator
-			Calendar c = Calendar.getInstance();
-			QQWing.r = new Random(c.getTimeInMillis());
+			QQWing.r = new Random(new Date().getTime());
 
 			// If printing out CSV, print a header
 			if (printStyle == PrintStyle.CSV){
@@ -1837,7 +1834,6 @@ public class QQWing {
 				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==GENERATE?"generated":"solved")+" in "+t+" seconds.");
 			}
 		} catch (Exception e){
-			//System.out.println(e);
 			e.printStackTrace(System.out);
 			System.exit(1);
 		}
@@ -1845,11 +1841,11 @@ public class QQWing {
 	}
 
 	static void printVersion(){
-		System.out.println(QQWING_VERSION);
+		System.out.println("qqwing " + QQWING_VERSION);
 	}
 
 	static void printAbout(){
-		System.out.println("A Sudoku solver and generator");
+		System.out.println("qqwing - Sudoku solver and generator");
 		System.out.println("Copyright (C) 2006-2014 Stephen Ostermiller");
 		System.out.println("http://ostermiller.org/qqwing/");
 		System.out.println("Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)");
@@ -1865,13 +1861,13 @@ public class QQWing {
 		System.out.println("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
 		System.out.println("GNU General Public License for more details.");
 		System.out.println("");
-		System.out.println("You should have received a copy of the GNU General Public License");
-		System.out.println("along with this program; if not, write to the Free Software");
-		System.out.println("Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  021.1.2.17  USA");
+		System.out.println("You should have received a copy of the GNU General Public License along");
+		System.out.println("with this program; if not, write to the Free Software Foundation, Inc.,");
+		System.out.println("51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.");
 	}
 
-	static void printHelp(String programName){
-		System.out.println(programName+" <options>");
+	static void printHelp(){
+		System.out.println("qqwing <options>");
 		System.out.println("Sudoku solver and generator.");
 		System.out.println("  --generate <num>     Generate new puzzles");
 		System.out.println("  --solve              Solve all the puzzles from standard input");
@@ -1918,8 +1914,7 @@ public class QQWing {
 	 * Get the current time in microseconds.
 	 */
 	static long getMicroseconds(){
-		Calendar c = Calendar.getInstance();
-		return c.getTimeInMillis()*1000;
+		return new Date().getTime()*1000;
 	}
 
 	/**
@@ -1957,51 +1952,18 @@ public class QQWing {
 	 */
 	static boolean readPuzzleFromStdIn(int[] puzzle) throws IOException {
 		int read = 0;
-		char c; //= getchar();
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String input = "";
-		StringBuffer buffer = new StringBuffer();
-		int inputLoops = 0;
-		while(true){
-				inputLoops++;
-				if (inputLoops == 1)
-						System.out.print("PUZZLE: ");
-				else
-						System.out.print("  MORE: ");
-			//As easy as that. Just readline, and receive a string with
-			//the LF/CR stripped away.
-			input = in.readLine();
-			//Is a faster alternative to: if (input == null || input.equals(""))
-			//The implementation of equals method inside String checks for
-			// nulls before making any reference to the object.
-			// Also the operator instance of returns false if the left-hand operand is null
-			if ("".equals(input)){
-				break;
-			} else {
-				//Output in uppercase
-				buffer.append(input);
-				if (buffer.length() < BOARD_SIZE)
-						continue;
-				else
-						break;
+		while (read < BOARD_SIZE){
+			int c = System.in.read();
+			if (c < 0) return false;
+			if (c >= '1' && c <= '9'){
+				puzzle[read] = c-'0';
+				read++;
+			}
+			if (c == '.' || c == '0'){
+				puzzle[read] = 0;
+				read++;
 			}
 		}
-		System.out.print("  DONE! ");
-		/**
-		 * load buffer into puzzle
-		 */
-		for (int i=0;i<buffer.length(); i++) {
-				c = buffer.charAt(i);
-				if (c >= '1' && c <='9'){
-						puzzle[read] = c-'0';
-						read++;
-				}
-				if (c == '.' || c == '0'){
-						puzzle[read] = 0;
-						read++;
-				}
-		}
-
 		return true;
 	}
 
