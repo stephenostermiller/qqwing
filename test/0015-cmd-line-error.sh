@@ -3,10 +3,10 @@
 set -e
 set -o pipefail
 
-expected=`build/version.sh`
-expected="qqwing $expected"
-actual=`$QQWING --version`
+actual=`$QQWING --xyzzy | head -n 1 || true`
 
+expected="Unknown argument: '--xyzzy'"
+ 
 if [ "$expected" != "$actual" ]
 then
     echo
@@ -16,4 +16,3 @@ then
     echo "Actual:   $actual"    
     exit 1
 fi
- 
