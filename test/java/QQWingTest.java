@@ -16,11 +16,82 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import java.util.*;
+
 public class QQWingTest {
 
-    public static void main(String [] args){
-        System.out.println("hello world");
-        QQWing q = new QQWing();
-    
-    }
+	/* Range is inclusive */
+	private static final void assertRange(int actual, int min, int max){
+		if (actual < min || actual > max) throw new RuntimeException (actual + " is outside range " + min + "-" + max);
+		System.out.print(".");
+	}
+
+	private static final void assertUnique(int actual, HashSet<Integer> values){
+		Integer i = actual;
+		if (values.contains(i)) throw new RuntimeException (actual + " is not unique");
+		values.add(i);
+		System.out.print(".");
+	}
+
+	private static final void assertEqual(int actual, int expected){
+		if (actual != expected) throw new RuntimeException (actual + " is expected " + expected);
+		System.out.print(".");
+	}
+
+	private static QQWing q = new QQWing();
+
+	public static void main(String [] args){
+		try {
+			sectionCellConversion();
+			rowColumnCellConversion();
+			possibilityConversion();
+		} catch (Exception x){
+			System.out.println();
+			x.printStackTrace(System.err);
+			System.exit(1);
+		}
+		System.out.println();
+		System.exit(0);
+
+	}
+
+	private static void sectionCellConversion(){
+		HashSet<Integer> set = new HashSet<>();
+		for (int section=0; section<QQWing.SEC_SIZE; section++){
+			int sectionStartCell = -1;
+			for (int offset=0; offset<QQWing.SEC_SIZE; offset++){
+				int cell = QQWing.sectionToCell(section,offset);
+				if (offset == 0) sectionStartCell = cell;
+				assertRange(cell,0,QQWing.BOARD_SIZE);
+				assertUnique(cell, set);
+				assertEqual(section, QQWing.cellToSection(cell));
+				assertEqual(sectionStartCell, QQWing.cellToSectionStartCell(cell));
+				assertEqual(sectionStartCell, QQWing.sectionToFirstCell(section));
+			}
+		}
+	}
+
+	private static void rowColumnCellConversion(){
+		HashSet<Integer> set = new HashSet<>();
+		for (int row=0; row<QQWing.ROW_LENGTH; row++){
+			for (int col=0; col<QQWing.COL_HEIGHT; col++){
+				int cell = QQWing.rowColumnToCell(row,col);
+				assertRange(cell,0,QQWing.BOARD_SIZE);
+				assertUnique(cell, set);
+				assertEqual(row, QQWing.cellToRow(cell));
+				assertEqual(col, QQWing.cellToColumn(cell));
+				assertEqual(QQWing.rowColumnToCell(0,col), QQWing.columnToFirstCell(col));
+			}
+			assertEqual(QQWing.rowColumnToCell(row,0), QQWing.rowToFirstCell(row));
+		}
+	}
+
+	private static void possibilityConversion(){
+		HashSet<Integer> set = new HashSet<>();
+		for (int value=0; value<QQWing.SEC_SIZE; value++){
+			for (int cell=0; cell<QQWing.BOARD_SIZE; cell++){
+				assertUnique(QQWing.getPossibilityIndex(value, cell), set);
+			}
+		}
+	}
 }

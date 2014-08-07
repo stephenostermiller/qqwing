@@ -2034,7 +2034,7 @@ public class QQWing {
 	}
 
 	/**
-	 * Given a value for a cell (0-8) and a cell (0-80)
+	 * Given a value for a cell (0-8) and a cell number (0-80)
 	 * calculate the offset into the possibility array (0-728).
 	 */
 	static int getPossibilityIndex(int valueIndex, int cell){
