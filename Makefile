@@ -96,3 +96,65 @@ testjsapp: jscompile
 .PHONY: clean
 clean:
 	rm -rf target/
+
+# Target aliases
+
+.PHONY: versionjava
+versionjava: javaversion
+
+.PHONY: compilejs
+compilejs: jscompile
+
+.PHONY: minjs
+minjs: jsmin
+
+.PHONY: compilejava
+compilejava: javacompile
+
+.PHONY: configurecpp
+configurecpp: cppconfigure
+
+.PHONY: compilecpp
+compilecpp: cppcompile
+
+.PHONY: unittest
+unittest: testunit
+
+.PHONY: javaunittest
+javaunittest: testjavaunit
+
+.PHONY: jsunittest
+jsunittest: testjsunit
+
+.PHONY: testcompilejava
+testcompilejava: javatestcompile
+
+.PHONY: apptest
+apptest: testapp
+
+.PHONY: javaapptest
+javaapptest: testjavaapp
+
+.PHONY: cppapptest
+cppapptest: testcppapp
+
+.PHONY: jsapptest
+jsapptest: testjsapp
+
+.PHONY: unittestjava
+unittestjava: javaunittest
+
+PHONY: unittestjs
+unittestjs: jsunittest
+
+.PHONY: compilejavatest
+compilejavatest: testcompilejava
+
+.PHONY: apptestjava
+apptestjava: javaapptest
+
+.PHONY: apptestcpp
+apptestcpp: cppapptest
+
+.PHONY: apptestjs
+apptestjs: jsapptest
