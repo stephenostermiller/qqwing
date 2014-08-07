@@ -3,7 +3,7 @@ set -e
 
 if [ -e target/qqwing ]
 then
-	newer=`find cpp/ target/automake/Makefile -type f -newer target/qqwing`
+	newer=`find src/cpp/ target/automake/Makefile -type f -newer target/qqwing`
 	if [ "z$newer" = "z" ]
 	then
 		exit 0
@@ -11,8 +11,8 @@ then
 fi
 
 echo "Building target/qqwing"
-cp cpp/*.cpp target/automake
-cp cpp/*.hpp target/automake
+cp src/cpp/*.cpp target/automake
+cp src/cpp/*.hpp target/automake
 cd target/automake
 make
 cd ../..

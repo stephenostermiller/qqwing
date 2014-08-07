@@ -3,5 +3,5 @@
 set -e
 set -o pipefail
 
-./test/helper/generate.sh $0 ""
+./test/app/helper/generate.sh $0 ""
  
