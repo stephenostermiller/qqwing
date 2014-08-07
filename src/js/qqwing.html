@@ -1,17 +1,17 @@
- <!DOCTYPE html>
- <html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
 <script src="qqwing.js"></script>
 <script>
 function doOnLoad(){
-    var q = new qqwing(); 
-    q.setPuzzle([0,0,0,1,0,0,0,0,5,0,0,8,0,3,0,0,0,0,0,4,0,0,6,0,2,0,0,0,0,4,0,5,0,0,0,0,0,9,6,0,0,2,0,0,4,0,0,0,3,0,0,0,1,0,0,0,5,0,0,0,8,0,0,0,6,0,0,0,0,4,0,2,8,2,1,0,0,0,6,5,0]); 
-    q.setRecordHistory(true); 
-    q.solve(); 
-    document.getElementById('puzzle').innerHTML = q.getPuzzleString();
-    document.getElementById('solution').innerHTML = q.getSolutionString();
-    document.getElementById('history').innerHTML = q.getSolveHistory();
+	var q = new qqwing();
+	q.setPuzzle([0,0,0,1,0,0,0,0,5,0,0,8,0,3,0,0,0,0,0,4,0,0,6,0,2,0,0,0,0,4,0,5,0,0,0,0,0,9,6,0,0,2,0,0,4,0,0,0,3,0,0,0,1,0,0,0,5,0,0,0,8,0,0,0,6,0,0,0,0,4,0,2,8,2,1,0,0,0,6,5,0]);
+	q.setRecordHistory(true);
+	q.solve();
+	document.getElementById('puzzle').innerHTML = q.getPuzzleString();
+	document.getElementById('solution').innerHTML = q.getSolutionString();
+	document.getElementById('history').innerHTML = q.getSolveHistory();
 }
 </script>
 <head>
