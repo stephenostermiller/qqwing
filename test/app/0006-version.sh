@@ -9,11 +9,11 @@ actual=`$QQWING --version`
 
 if [ "$expected" != "$actual" ]
 then
-    echo
-    echo "Test: $0"
-    echo "qqwing: $QQWING"
-    echo "Expected: $expected"
-    echo "Actual:   $actual"    
-    exit 1
+	echo
+	echo "Test: $0"
+	echo "qqwing: $QQWING"
+	echo "Expected: $expected"
+	echo "Actual:   $actual"
+	exit 1
 fi
- 
+

@@ -11,12 +11,12 @@ actual=`echo "$puzzle" | $QQWING --solve --one-line`
 
 if [ "$expected" != "$actual" ]
 then
-    echo
-    echo "Test: $test"
-    echo "qqwing: $QQWING"
-    echo "Solving:  $puzzle"
-    echo "Expected: $expected"
-    echo "Actual:   $actual"
-    exit 1
+	echo
+	echo "Test: $test"
+	echo "qqwing: $QQWING"
+	echo "Solving:  $puzzle"
+	echo "Expected: $expected"
+	echo "Actual:   $actual"
+	exit 1
 fi
- 
+

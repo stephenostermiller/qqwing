@@ -117,14 +117,14 @@ Round: 2 - Mark only possibility for cell (Row: 9 - Column: 3 - Value: 5)
 
 if [ "$actual" != "$expected" ]
 then
-    actualfile=`mktemp /tmp/actual.XXXXXXXXX`
-    expectedfile=`mktemp /tmp/expected.XXXXXXXX`
-    echo "$actual" > "$actualfile"
-    echo "$expected" > "$expectedfile"
-    echo
-    echo "Test: $0"
-    echo "qqwing: $QQWING"
-    diff -s "$actualfile" "$expectedfile"
-    exit 1
+	actualfile=`mktemp /tmp/actual.XXXXXXXXX`
+	expectedfile=`mktemp /tmp/expected.XXXXXXXX`
+	echo "$actual" > "$actualfile"
+	echo "$expected" > "$expectedfile"
+	echo
+	echo "Test: $0"
+	echo "qqwing: $QQWING"
+	diff -s "$actualfile" "$expectedfile"
+	exit 1
 fi
- 
+
