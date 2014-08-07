@@ -12,7 +12,8 @@ fi
 
 echo "Running automake and configure"
 mkdir -p target/automake
-cp build/configure.ac build/Makefile.am build/qqwing.pc.in build/qqwing.1 doc/README doc/AUTHORS doc/COPYING target/automake
+cp build/configure.ac build/Makefile.am build/qqwing.pc.in doc/README doc/AUTHORS doc/COPYING target/automake
+cp doc/qqwing.man target/automake/qqwing.1
 cd target/automake
 touch config.h.in
 autoreconf --force --install
