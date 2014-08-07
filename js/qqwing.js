@@ -9,27 +9,7 @@ function qqwing () {
 	var BOARD_SIZE = ROW_LENGTH*COL_HEIGHT;
 	var POSSIBILITY_SIZE = BOARD_SIZE*NUM_POSS;
 
-	this.PrintStyle = {
-		ONE_LINE: 0,
-		COMPACT: 1,
-		READABLE: 2,
-		CSV: 3
-	};
-	this.Difficulty = {
-		UNKNOWN: 0,
-		SIMPLE: 1,
-		EASY: 2,
-		INTERMEDIATE: 3,
-		EXPERT: 4
-	};
-	this.Symmetry = {
-		NONE: 0,
-		ROTATE90: 1,
-		ROTATE180: 2,
-		MIRROR: 3,
-		FLIP: 4,
-		RANDOM: 5
-	};
+
 
 	/**
 	 * The 81 integers that make up a sudoku puzzle.
@@ -117,7 +97,7 @@ function qqwing () {
 	/**
 	 * The style with which to print puzzles and solutions
 	 */
-	var printStyle = this.PrintStyle.READABLE;
+	var printStyle = qqwing.PrintStyle.READABLE;
 
 	/**
 	 * The last round of solving
@@ -151,8 +131,8 @@ function qqwing () {
 				var value = puzzle[position];
 				if (possibilities[valPos] != 0) return false;
 				mark.call(this,position,round,value);
-				if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.GIVEN, value, position));
-			}
+				if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.GIVEN, value, position));
+            }
 		}
 	};
 
@@ -191,7 +171,7 @@ function qqwing () {
 				}
 				if (count == 1){
 					mark.call(this, position, round, lastValue);
-					if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.SINGLE, lastValue, position));
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.SINGLE, lastValue, position));
 					return true;
 				}
 			}
@@ -212,7 +192,6 @@ function qqwing () {
 	};
 
 	var guess = function(round, guessNumber){
-        console.log("Guess: " + round + " " + guessNumber);
 		var localGuessCount = 0;
 		var position = findPositionWithFewestPossibilities.call(this);
 		for (var i=0; i<NUM_POSS; i++){
@@ -221,7 +200,7 @@ function qqwing () {
 			if (possibilities[valPos] == 0){
 				if (localGuessCount == guessNumber){
 					var value = valIndex+1;
-					if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.GUESS, value, position));
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.GUESS, value, position));
 					mark.call(this, position, round, value);
 					return true;
 				}
@@ -248,8 +227,7 @@ function qqwing () {
 	};
 
 	var rollbackRound = function(round){
-        console.log("Rollback round: " + round);
-		if (logHistory || recordHistory) addHistoryItem.call(this, new LogItem(round, LogItem.LogType.ROLLBACK));
+		if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.ROLLBACK));
 		for (var i=0; i<BOARD_SIZE; i++){
 			if (solutionRound[i] == round){
 				solutionRound[i] = 0;
@@ -380,7 +358,7 @@ function qqwing () {
 	};
 
 	var addHistoryItem = function(l){
-		if (logHistory) console.log(l.print());
+		//if (logHistory) l.print();
 		if (recordHistory){
 			solveHistory.push(l);
 			solveInstructions.push(l);
@@ -397,37 +375,41 @@ function qqwing () {
 	 * as a sudoku puzzle.  Use print options from
 	 * member variables.
 	 */
-	var print = function(sudoku){
+	var print = function(puz){
+        console.log(sudokuToString.call(this, puz));
+    };
+    
+    var sudokuToString = function(puz){
 		var s = "";
 		for(var i=0; i<BOARD_SIZE; i++){
-			if (printStyle == this.PrintStyle.READABLE){
+			if (printStyle == qqwing.PrintStyle.READABLE){
 				s += " ";
 			}
-			if (sudoku[i]==0){
+			if (puz[i]==0){
 				s += '.';
 			} else {
-				s += sudoku[i];
+				s += puz[i];
 			}
 			if (i == BOARD_SIZE-1){
-				if (printStyle == this.PrintStyle.CSV){
+				if (printStyle == qqwing.PrintStyle.CSV){
 					s += ",";
 				} else {
 					s += "\n";
 				}
-				if (printStyle == this.PrintStyle.READABLE || printStyle == this.PrintStyle.COMPACT){
+				if (printStyle == qqwing.PrintStyle.READABLE || printStyle == qqwing.PrintStyle.COMPACT){
 					s += "\n";
 				}
 			} else if (i%9==8){
-				if (printStyle == this.PrintStyle.READABLE || printStyle == this.PrintStyle.COMPACT){
+				if (printStyle == qqwing.PrintStyle.READABLE || printStyle == qqwing.PrintStyle.COMPACT){
 					s += "\n";
 				}
 				if (i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
-					if (printStyle == this.PrintStyle.READABLE){
+					if (printStyle == qqwing.PrintStyle.READABLE){
 						s += "-------|-------|-------\n";
 					}
 				}
 			} else if (i%3==2){
-				if (printStyle == this.PrintStyle.READABLE){
+				if (printStyle == qqwing.PrintStyle.READABLE){
 					s += " |";
 				}
 			}
@@ -441,9 +423,37 @@ function qqwing () {
 	var clearPuzzle = function(){
 		/* TODO */
 	};
+
 	var printHistory = function(v){
-		/* TODO */
+		console.log(getHistory(v));
 	};
+
+    var getHistory = function(v){
+        var s = "";
+		if (!recordHistory){
+			s += "History was not recorded.";
+			if (printStyle == qqwing.PrintStyle.CSV){
+				s += " -- ";
+			} else {
+				s += "\n";
+			}
+		}
+		for (var i=0;i<v.length;i++){
+			s += i+1 + ". " + v[i].toString();
+			if (printStyle == qqwing.PrintStyle.CSV){
+				s += " -- ";
+			} else {
+				s += "\n";
+			}
+		}
+		if (printStyle == qqwing.PrintStyle.CSV){
+			s += ",";
+		} else {
+			s += "\n";
+		}
+        return s;
+    };
+
 	var removePossibilitiesInOneFromTwo = function(position1, position2, round){
 		/* TODO */
 	};
@@ -484,7 +494,7 @@ function qqwing () {
 	 * the row (0-8) in which it resides.
 	 */
 	var cellToRow = function(cell){
-		return cell/ROW_LENGTH;
+		return Math.floor(cell/ROW_LENGTH);
 	};
 
 	/**
@@ -493,8 +503,8 @@ function qqwing () {
 	 * cell of that section.
 	 */
 	var cellToSectionStartCell = function(cell){
-		return (cell/SEC_GROUP_SIZE*SEC_GROUP_SIZE)
-				+ (cellToColumn(cell)/GRID_SIZE*GRID_SIZE);
+		return Math.floor(cell/SEC_GROUP_SIZE*SEC_GROUP_SIZE)
+				+ Math.floor(cellToColumn(cell)/GRID_SIZE*GRID_SIZE);
 	};
 
 	/**
@@ -502,8 +512,8 @@ function qqwing () {
 	 * the section (0-8) in which it resides.
 	 */
 	var cellToSection = function(cell){
-		return (cell/SEC_GROUP_SIZE*GRID_SIZE)
-				+ (cellToColumn(cell)/GRID_SIZE);
+		return Math.floor(cell/SEC_GROUP_SIZE*GRID_SIZE)
+				+ Math.floor(cellToColumn(cell)/GRID_SIZE);
 	};
 
 	/**
@@ -527,7 +537,7 @@ function qqwing () {
 	 * of that section.
 	 */
 	var sectionToFirstCell = function(section){
-		return (section%GRID_SIZE*GRID_SIZE) + (section/GRID_SIZE*SEC_GROUP_SIZE);
+		return (section%GRID_SIZE*GRID_SIZE) + Math.floor(section/GRID_SIZE*SEC_GROUP_SIZE);
 	};
 
 	/**
@@ -552,66 +562,122 @@ function qqwing () {
 	 */
 	var sectionToCell = function(section, offset){
 		return sectionToFirstCell(section)
-				+ ((offset/GRID_SIZE)*SEC_SIZE)
+				+ Math.floor((offset/GRID_SIZE)*SEC_SIZE)
 				+ (offset%GRID_SIZE);
 	};
 
-	this.LogItem = function(r, t, v, p){
-		/**
-		 * The recursion level at which this item was gathered.
-		 * Used for backing out log items solve branches that
-		 * don't lead to a solution.
-		 */
-		var round = r;
+    this.LogItem = function(r, t, v, p){
+	    /**
+	     * The recursion level at which this item was gathered.
+	     * Used for backing out log items solve branches that
+	     * don't lead to a solution.
+	     */
+	    var round = r;
 
-		/**
-		 * The type of log message that will determine the
-		 * message printed.
-		 */
-		var type = t;
+	    /**
+	     * The type of log message that will determine the
+	     * message printed.
+	     */
+	    var type = t;
 
-		/**
-		 * Value that was set by the operation (or zero for no value)
-		 */
-		var value = v;
+	    /**
+	     * Value that was set by the operation (or zero for no value)
+	     */
+	    var value = v;
 
-		/**
-		 * position on the board at which the value (if any) was set.
-		 */
-		var position = p;
+	    /**
+	     * position on the board at which the value (if any) was set.
+	     */
+	    var position = p;
 
-		this.LogType = {
-			GIVEN: 0,
-			SINGLE: 1,
-			HIDDEN_SINGLE_ROW: 2,
-			HIDDEN_SINGLE_COLUMN: 3,
-			HIDDEN_SINGLE_SECTION: 4,
-			GUESS: 5,
-			ROLLBACK: 6,
-			NAKED_PAIR_ROW: 7,
-			NAKED_PAIR_COLUMN: 8,
-			NAKED_PAIR_SECTION: 9,
-			POINTING_PAIR_TRIPLE_ROW: 10,
-			POINTING_PAIR_TRIPLE_COLUMN: 11,
-			ROW_BOX: 12,
-			COLUMN_BOX: 13,
-			HIDDEN_PAIR_ROW: 14,
-			HIDDEN_PAIR_COLUMN: 15,
-			HIDDEN_PAIR_SECTION: 16
-		};
+	    this.getRound = function (){
+    	    return round;
+	    };
 
-		this.getRound = function (){
-			/* TODO */
-		};
+	    this.print = function(){
+		    console.log(this.toString());
+	    };
 
-		this.print = function(){
-			/* TODO */
-		};
+	    this.getType =function(){
+            return type;
+	    };
 
-		this.getType =function(){
-			/* TODO */
-		};
-	}
+        this.toString = function(){
+		    var s = "Round: " + this.getRound() + " - ";
+		    switch(this.getType()){
+			    case qqwing.LogType.GIVEN:{
+				    s += "Mark given";
+			    } break;
+			    case qqwing.LogType.ROLLBACK:{
+				    s += "Roll back round";
+			    } break;
+			    case qqwing.LogType.GUESS:{
+				    s += "Mark guess (start round)";
+			    } break;
+			    case qqwing.LogType.HIDDEN_SINGLE_ROW:{
+				    s += "Mark single possibility for value in row";
+			    } break;
+			    case qqwing.LogType.HIDDEN_SINGLE_COLUMN:{
+				    s += "Mark single possibility for value in column";
+			    } break;
+			    case qqwing.LogType.HIDDEN_SINGLE_SECTION:{
+				    s += "Mark single possibility for value in section";
+			    } break;
+			    case qqwing.LogType.SINGLE:{
+				    s += "Mark only possibility for cell";
+			    } break;
+			    case qqwing.LogType.NAKED_PAIR_ROW:{
+				    s += "Remove possibilities for naked pair in row";
+			    } break;
+			    case qqwing.LogType.NAKED_PAIR_COLUMN:{
+				    s += "Remove possibilities for naked pair in column";
+			    } break;
+			    case qqwing.LogType.NAKED_PAIR_SECTION:{
+				    s += "Remove possibilities for naked pair in section";
+			    } break;
+			    case qqwing.LogType.POINTING_PAIR_TRIPLE_ROW: {
+				    s += "Remove possibilities for row because all values are in one section";
+			    } break;
+			    case qqwing.LogType.POINTING_PAIR_TRIPLE_COLUMN: {
+				    s += "Remove possibilities for column because all values are in one section";
+			    } break;
+			    case qqwing.LogType.ROW_BOX: {
+				    s += "Remove possibilities for section because all values are in one row";
+			    } break;
+			    case qqwing.LogType.COLUMN_BOX: {
+				    s += "Remove possibilities for section because all values are in one column";
+			    } break;
+			    case qqwing.LogType.HIDDEN_PAIR_ROW: {
+				    s += "Remove possibilities from hidden pair in row";
+			    } break;
+			    case qqwing.LogType.HIDDEN_PAIR_COLUMN: {
+				    s += "Remove possibilities from hidden pair in column";
+			    } break;
+			    case qqwing.LogType.HIDDEN_PAIR_SECTION: {
+				    s += "Remove possibilities from hidden pair in section";
+			    } break;
+			    default:{
+				    s += "!!! Performed unknown optimization !!!";
+			    } break;
+		    }
+		    if (value > 0 || position > -1){
+			    s += " (";
+			    var printed = false;
+			    if (position > -1){
+				    if (printed) s += " - ";
+				    s += "Row: " + cellToRow(position)+1 + " - Column: " + cellToColumn(position)+1;
+				    printed = true;
+			    }
+			    if (value > 0){
+				    if (printed) s += " - ";
+				    s += "Value: " + value;
+				    printed = true;
+			    }
+			    s += ")";
+		    }
+            return s;
+        }
+    };
 
 	/**
 	 * Set the board to the given puzzle.
@@ -632,14 +698,27 @@ function qqwing () {
 	}
 
 	/**
+	 * Get the sudoku puzzle as a String.
+	 */
+	this.getPuzzleString = function(){
+		return sudokuToString.call(this, puzzle);
+	}
+
+	/**
 	 * Print the sudoku solution.
 	 */
 	this.printSolution = function(){
 		return print.call(this, solution);
+	} 
+
+	/**
+	 * Get the sudoku puzzle as a String.
+	 */
+	this.getSolutionString = function(){
+		return sudokuToString.call(this, solution);
 	}
 
 	this.solve = function(round){
-        //console.log("solve round: " + round);
 		if (!round || round <= 1){
             reset.call(this);
 		    shuffleRandomArrays();
@@ -684,13 +763,17 @@ function qqwing () {
 	};
 
 	this.printSolveHistory = function(){
-		/* TODO */
+		printHistory.call(this, solveHistory);
 	};
+    this.getSolveHistory = function(){
+		return getHistory.call(this, solveHistory);
+    };
+
 	this.setRecordHistory = function(recHistory){
-		/* TODO */
+		recordHistory = recHistory;
 	};
 	this.setLogHistory = function(logHist){
-		/* TODO */
+		logHistory = logHist;
 	};
 	this.setPrintStyle = function(printstyle){
 		/* TODO */
@@ -732,23 +815,63 @@ function qqwing () {
 		/* TODO */
 	};
 	this.getDifficulty = function(){
-		if (this.getGuessCount() > 0) return this.Difficulty.EXPERT;
-		if (this.getBoxLineReductionCount() > 0) return this.Difficulty.INTERMEDIATE;
-		if (this.getPointingPairTripleCount() > 0) return this.Difficulty.INTERMEDIATE;
-		if (this.getHiddenPairCount() > 0) return this.Difficulty.INTERMEDIATE;
-		if (this.getNakedPairCount() > 0) return this.Difficulty.INTERMEDIATE;
-		if (this.getHiddenSingleCount() > 0) return this.Difficulty.EASY;
-		if (this.getSingleCount() > 0) return this.Difficulty.SIMPLE;
-		return this.Difficulty.UNKNOWN;
+		if (this.getGuessCount() > 0) return qqwing.Difficulty.EXPERT;
+		if (this.getBoxLineReductionCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
+		if (this.getPointingPairTripleCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
+		if (this.getHiddenPairCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
+		if (this.getNakedPairCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
+		if (this.getHiddenSingleCount() > 0) return qqwing.Difficulty.EASY;
+		if (this.getSingleCount() > 0) return qqwing.Difficulty.SIMPLE;
+		return qqwing.Difficulty.UNKNOWN;
 	};
 	this.getDifficultyAsString = function(){
 		var difficulty = this.getDifficulty();
 		switch (difficulty){
-			case this.Difficulty.EXPERT: return "Expert";
-			case this.Difficulty.INTERMEDIATE: return "Intermediate";
-			case this.Difficulty.EASY: return "Easy";
-			case this.Difficulty.SIMPLE: return "Simple";
+			case qqwing.Difficulty.EXPERT: return "Expert";
+			case qqwing.Difficulty.INTERMEDIATE: return "Intermediate";
+			case qqwing.Difficulty.EASY: return "Easy";
+			case qqwing.Difficulty.SIMPLE: return "Simple";
 			default: return "Unknown";
 		}
 	};
 }
+qqwing.PrintStyle = {
+	ONE_LINE: 0,
+	COMPACT: 1,
+	READABLE: 2,
+	CSV: 3
+};
+qqwing.Difficulty = {
+	UNKNOWN: 0,
+	SIMPLE: 1,
+	EASY: 2,
+	INTERMEDIATE: 3,
+	EXPERT: 4
+};
+qqwing.Symmetry = {
+	NONE: 0,
+	ROTATE90: 1,
+	ROTATE180: 2,
+	MIRROR: 3,
+	FLIP: 4,
+	RANDOM: 5
+};
+qqwing.LogType = {
+	GIVEN: 0,
+	SINGLE: 1,
+	HIDDEN_SINGLE_ROW: 2,
+	HIDDEN_SINGLE_COLUMN: 3,
+	HIDDEN_SINGLE_SECTION: 4,
+	GUESS: 5,
+	ROLLBACK: 6,
+	NAKED_PAIR_ROW: 7,
+	NAKED_PAIR_COLUMN: 8,
+	NAKED_PAIR_SECTION: 9,
+	POINTING_PAIR_TRIPLE_ROW: 10,
+	POINTING_PAIR_TRIPLE_COLUMN: 11,
+	ROW_BOX: 12,
+	COLUMN_BOX: 13,
+	HIDDEN_PAIR_ROW: 14,
+	HIDDEN_PAIR_COLUMN: 15,
+	HIDDEN_PAIR_SECTION: 16
+};
