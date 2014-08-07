@@ -46,7 +46,7 @@ for my $file (@ARGV){
 				}
 			}
 			if ($spacecount == 2 and $code =~ /^--/ and $file =~ /\.(sh)$/){
-				$line .= " ";
+				$line .= "  ";
 			} elsif ($spacecount == 1 and $code =~ /^\*/ and $file =~ /\.(java|cpp|hpp)$/){
 				$line .= " ";
 			} elsif ($spacecount != 0){
