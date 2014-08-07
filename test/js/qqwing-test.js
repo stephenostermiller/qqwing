@@ -42,40 +42,40 @@ console.log("");
 
 function sectionCellConversion(){
 	var set = {};
-	for (var section=0; section<qqwing.SEC_SIZE; section++){
+	for (var section=0; section<SEC_SIZE; section++){
 		var sectionStartCell = -1;
-		for (var offset=0; offset<qqwing.SEC_SIZE; offset++){
-			var cell = qqwing.sectionToCell(section,offset);
+		for (var offset=0; offset<SEC_SIZE; offset++){
+			var cell = sectionToCell(section,offset);
 			if (offset == 0) sectionStartCell = cell;
-			assertRange(cell,0,qqwing.BOARD_SIZE);
+			assertRange(cell,0,BOARD_SIZE);
 			assertUnique(cell, set);
-			assertEqual(section, qqwing.cellToSection(cell));
-			assertEqual(sectionStartCell, qqwing.cellToSectionStartCell(cell));
-			assertEqual(sectionStartCell, qqwing.sectionToFirstCell(section));
+			assertEqual(section, cellToSection(cell));
+			assertEqual(sectionStartCell, cellToSectionStartCell(cell));
+			assertEqual(sectionStartCell, sectionToFirstCell(section));
 		}
 	}
 }
 
 function rowColumnCellConversion(){
 	var set = {};
-	for (var row=0; row<qqwing.ROW_LENGTH; row++){
-		for (var col=0; col<qqwing.COL_HEIGHT; col++){
-			var cell = qqwing.rowColumnToCell(row,col);
-			assertRange(cell,0,qqwing.BOARD_SIZE);
+	for (var row=0; row<ROW_LENGTH; row++){
+		for (var col=0; col<COL_HEIGHT; col++){
+			var cell = rowColumnToCell(row,col);
+			assertRange(cell,0,BOARD_SIZE);
 			assertUnique(cell, set);
-			assertEqual(row, qqwing.cellToRow(cell));
-			assertEqual(col, qqwing.cellToColumn(cell));
-			assertEqual(qqwing.rowColumnToCell(0,col), qqwing.columnToFirstCell(col));
+			assertEqual(row, cellToRow(cell));
+			assertEqual(col, cellToColumn(cell));
+			assertEqual(rowColumnToCell(0,col), columnToFirstCell(col));
 		}
-		assertEqual(qqwing.rowColumnToCell(row,0), qqwing.rowToFirstCell(row));
+		assertEqual(rowColumnToCell(row,0), rowToFirstCell(row));
 	}
 }
 
 function possibilityConversion(){
 	var set = {};
-	for (var value=0; value<qqwing.SEC_SIZE; value++){
-		for (var cell=0; cell<qqwing.BOARD_SIZE; cell++){
-			assertUnique(qqwing.getPossibilityIndex(value, cell), set);
+	for (var value=0; value<SEC_SIZE; value++){
+		for (var cell=0; cell<BOARD_SIZE; cell++){
+			assertUnique(getPossibilityIndex(value, cell), set);
 		}
 	}
 }
