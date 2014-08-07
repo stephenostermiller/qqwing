@@ -11,33 +11,34 @@ then
 fi
 
 buildjs () {
-    output=""
-    first=""
-    for file in "$@"
-    do
-        if [ "z$output" == "z" ]
-        then
-            output=target/js/$file
-        else
-            if [ -f src/js/$file ]
-            then
-                file=src/js/$file
-            elif [ -f test/js/$file ]
-            then
-                file=test/js/$file
-            elif [ -f target/js/$file ]
-            then
-                file=target/js/$file
-            fi            
-            if [ "z$first" == "z" ]
-            then
-                sed -r '1s|\/\*|/*!|' $file > $output
-            else
-                cat $file >> $output
-            fi
-        fi        
-    done
-    echo -n ".";
+	output=""
+	first=""
+	for file in "$@"
+	do
+		if [ "z$output" == "z" ]
+		then
+			output=target/js/$file
+		else
+			if [ -f src/js/$file ]
+			then
+				file=src/js/$file
+			elif [ -f test/js/$file ]
+			then
+				file=test/js/$file
+			elif [ -f target/js/$file ]
+			then
+				file=target/js/$file
+			fi
+			if [ "z$first" == "z" ]
+			then
+				first=$file
+				sed -r '1s|\/\*|/*!|' $file > $output
+			else
+				cat $file >> $output
+			fi
+		fi
+	done
+	echo -n ".";
 }
 
 version=`build/version.sh`
