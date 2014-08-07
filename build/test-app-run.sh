@@ -16,8 +16,13 @@ case $1 in
 		export QQWING="target/qqwing"
 		export QQWINGSRCWITHCOPYRIGHT=src/cpp/qqwing.cpp
 		;;
+	"js")
+		export QQWINGTESTTYPE=js
+		export QQWING="node target/jsmin/qqwing-main-$version.min.js"
+		export QQWINGSRCWITHCOPYRIGHT=src/js/qqwing.js
+		;;
 	*)
-		echo "Expected java or cpp as argument"
+		echo "Expected java, cpp, or js as argument"
 		exit 1
 		;;
 esac
