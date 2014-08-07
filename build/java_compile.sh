@@ -3,7 +3,7 @@ set -e
 
 if [ -e target/javacompile ]
 then
-	newer=`find java/ -type f -newer target/javacompile`
+	newer=`find src/java/ -type f -newer target/javacompile`
 	if [ "z$newer" = "z" ]
 	then
 		exit 0
@@ -12,5 +12,5 @@ fi
 
 mkdir -p target/classes
 echo "Compiling java sources"
-javac -sourcepath java/ -d target/classes/ java/*.java
+javac -sourcepath src/java/ -d target/classes/ src/java/*.java
 touch target/javacompile

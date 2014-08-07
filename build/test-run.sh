@@ -9,12 +9,12 @@ case $1 in
 	"java")
 		export QQWINGTESTTYPE=java
 		export QQWING="java -jar target/qqwing-$version.jar"
-		export QQWINGSRCWITHCOPYRIGHT=java/QQWing.java
+		export QQWINGSRCWITHCOPYRIGHT=src/java/QQWing.java
 		;;
 	"cpp")
 		export QQWINGTESTTYPE=cpp
 		export QQWING="target/qqwing"
-		export QQWINGSRCWITHCOPYRIGHT=cpp/qqwing.cpp
+		export QQWINGSRCWITHCOPYRIGHT=src/cpp/qqwing.cpp
 		;;
 	*)
 		echo "Expected java or cpp as argument"
@@ -22,9 +22,9 @@ case $1 in
 		;;
 esac
 
-echo "Running tests for $QQWINGTESTTYPE:"
+echo "Running app tests for $QQWINGTESTTYPE ($QQWING):"
 
-for test in test/*.sh
+for test in test/app/*.sh
 do
 	echo -n '.'
 	$test
