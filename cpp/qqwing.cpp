@@ -29,6 +29,10 @@
 
 namespace qqwing {
 
+	string getVersion(){
+		return VERSION;
+	}
+
 	/**
 	 * While solving the puzzle, log steps taken in a log item.
 	 * This is useful for later printing out the solve history

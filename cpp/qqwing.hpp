@@ -43,6 +43,11 @@
 		const int POSSIBILITY_SIZE = BOARD_SIZE*NUM_POSS;
 
 		/**
+		 * The version of QQwing, e.g. 1.2.3
+		 */
+		string getVersion();
+
+		/**
 		 * The board containing all the memory structures and
 		 * methods for solving or generating sudoku puzzles.
 		 */
