@@ -32,7 +32,7 @@ buildjs () {
 			if [ "z$first" == "z" ]
 			then
 				first=$file
-				sed -r '1s|\/\*|/*!|' $file > $output
+				sed -r '1s|\/\*\!?|/*!|' $file > $output
 			else
 				cat $file >> $output
 			fi
