@@ -10,6 +10,6 @@ then
 	touch --date 1980-01-01 $neaten_time_file
 fi
 
-find build/ doc/ src/ Makefile -type f -newer $neaten_time_file | grep -vEi 'changelog|debian-copyright|COPYING|README' | xargs ./build/src_neaten.pl
+find build/ doc/ src/ test/ Makefile -type f -newer $neaten_time_file | grep -vEi 'changelog|debian-copyright|COPYING|README' | xargs ./build/src_neaten.pl
 
 touch $neaten_time_file

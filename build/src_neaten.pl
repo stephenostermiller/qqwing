@@ -45,7 +45,9 @@ for my $file (@ARGV){
 					}
 				}
 			}
-			if ($spacecount == 1 and $code =~ /^\*/ and $file =~ /\.(java|cpp|hpp)$/){
+			if ($spacecount == 2 and $code =~ /^--/ and $file =~ /\.(sh)$/){
+				$line .= " ";
+			} elsif ($spacecount == 1 and $code =~ /^\*/ and $file =~ /\.(java|cpp|hpp)$/){
 				$line .= " ";
 			} elsif ($spacecount != 0){
 				die "Line in $file has other than four space tabs: $code";
