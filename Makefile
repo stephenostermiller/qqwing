@@ -2,15 +2,23 @@
 all: dist test
 
 .PHONY: dist
-dist: jar tgz rpm deb
+dist: jar tgz rpm deb minjs
 	@build/show_dist.sh
 
 .PHONY: compile
-compile: javacompile cppcompile
+compile: javacompile cppcompile jscompile
 
 .PHONY: javaversion
 javaversion: notroot neaten
 	@build/java_version.sh
+
+.PHONY: jscompile
+jscompile:
+	@build/js_build.sh
+
+.PHONY: minjs
+minjs: jscompile
+	@build/js_minimize.sh
 
 .PHONY: javacompile
 javacompile: javaversion
@@ -56,11 +64,15 @@ neaten:
 test: testunit testapp
 
 .PHONY: testunit
-testunit: testjavaunit
+testunit: testjavaunit testjsunit
 
 .PHONY: testjavaunit
 testjavaunit: javacompile javatestcompile
-	@build/java_tests_run.sh
+	@build/java_unit_tests.sh
+
+.PHONY: testjsunit
+testjsunit: jscompile
+	@build/js_unit_tests.sh
 
 .PHONY: javatestcompile
 javatestcompile: javacompile
