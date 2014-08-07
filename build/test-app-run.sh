@@ -19,7 +19,7 @@ case $1 in
 	"js")
 		export QQWINGTESTTYPE=js
 		export QQWING="node target/jsmin/qqwing-main-$version.min.js"
-		export QQWINGSRCWITHCOPYRIGHT=src/js/qqwing.js
+		export QQWINGSRCWITHCOPYRIGHT=src/js/qqwing-main.js
 		;;
 	*)
 		echo "Expected java, cpp, or js as argument"

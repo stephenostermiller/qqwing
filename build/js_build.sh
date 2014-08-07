@@ -10,19 +10,46 @@ then
 	fi
 fi
 
+buildjs () {
+    output=""
+    first=""
+    for file in "$@"
+    do
+        if [ "z$output" == "z" ]
+        then
+            output=target/js/$file
+        else
+            if [ -f src/js/$file ]
+            then
+                file=src/js/$file
+            elif [ -f test/js/$file ]
+            then
+                file=test/js/$file
+            elif [ -f target/js/$file ]
+            then
+                file=target/js/$file
+            fi            
+            if [ "z$first" == "z" ]
+            then
+                sed -r '1s|\/\*|/*!|' $file > $output
+            else
+                cat $file >> $output
+            fi
+        fi        
+    done
+    echo -n ".";
+}
+
 version=`build/version.sh`
 
 mkdir -p target/js
 echo "Compiling js sources"
 
-cat src/js/qqwing-object-start.js src/js/qqwing-private-static.js src/js/qqwing-private-instance.js src/js/qqwing-object-end.js src/js/qqwing-public-static.js> target/js/qqwing-$version.js
-echo -n '.'
+buildjs qqwing-$version.js qqwing-object-start.js qqwing-private-static.js qqwing-private-instance.js qqwing-object-end.js qqwing-public-static.js
 
-cat target/js/qqwing-$version.js src/js/qqwing-main.js > target/js/qqwing-main-$version.js
-echo -n '.'
+buildjs qqwing-main-$version.js qqwing-$version.js qqwing-main.js
 
-cat src/js/qqwing-private-static.js test/js/qqwing-test.js > target/js/qqwing-test-$version.js
-echo -n '.'
+buildjs qqwing-test-$version.js qqwing-private-static.js qqwing-test.js
 
 echo
 touch target/jscompile
