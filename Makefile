@@ -2,7 +2,7 @@
 all: dist test
 
 .PHONY: dist
-dist: jar tgz rpm deb minjs
+dist: jar tgz rpm deb jsmin
 	@build/show_dist.sh
 
 .PHONY: compile
@@ -16,8 +16,8 @@ javaversion: notroot neaten
 jscompile:
 	@build/js_build.sh
 
-.PHONY: minjs
-minjs: jscompile
+.PHONY: jsmin
+jsmin: jscompile
 	@build/js_minimize.sh
 
 .PHONY: javacompile
