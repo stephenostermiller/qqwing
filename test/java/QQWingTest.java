@@ -1,5 +1,5 @@
 /*
- * qqwing - Sudoku solver and generator
+ * Unit tests for qqwing - Sudoku solver and generator
  * Copyright (C) 2014 Stephen Ostermiller
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,8 +37,6 @@ public class QQWingTest {
 		if (actual != expected) throw new RuntimeException (actual + " is expected " + expected);
 		System.out.print(".");
 	}
-
-	private static QQWing q = new QQWing();
 
 	public static void main(String [] args){
 		try {
