@@ -32,9 +32,11 @@ buildjs () {
 			if [ "z$first" == "z" ]
 			then
 				first=$file
+                # The put a ! in the license comment so it doesn't get removed during minimization
 				sed -r '1s|\/\*\!?|/*!|' $file > $output
 			else
-				cat $file >> $output
+                # Remove the license comment
+				perl -pe 'BEGIN{undef $/;} s/\/\*.*?\*\/\n?//s' $file >> $output
 			fi
 		fi
 	done
