@@ -79,7 +79,7 @@ javatestcompile: javacompile
 	@build/java_test_compile.sh
 
 .PHONY: testapp
-testapp: testcppapp testjavaapp
+testapp: testcppapp testjavaapp testjsapp
 
 .PHONY: testjavaapp
 testjavaapp: jar
@@ -88,6 +88,10 @@ testjavaapp: jar
 .PHONY: testcppapp
 testcppapp: cppcompile
 	@build/test-app-run.sh cpp
+
+.PHONY: testjsapp
+testjsapp: jscompile
+	@build/test-app-run.sh js
 
 .PHONY: clean
 clean:
