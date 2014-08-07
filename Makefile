@@ -53,15 +53,29 @@ neaten:
 	@build/src_neaten.sh
 
 .PHONY: test
-test: testcpp testjava
+test: testunit testapp
 
-.PHONY: testjava
-testjava: jar
-	@build/test-run.sh java
+.PHONY: testunit
+testunit: testjavaunit
 
-.PHONY: testcpp
-testcpp: cppcompile
-	@build/test-run.sh cpp
+.PHONY: testjavaunit
+testjavaunit: javacompile javatestcompile
+	@build/java_tests_run.sh
+
+.PHONY: javatestcompile
+javatestcompile: javacompile
+	@build/java_test_compile.sh
+
+.PHONY: testapp
+testapp: testcppapp testjavaapp
+
+.PHONY: testjavaapp
+testjavaapp: jar
+	@build/test-app-run.sh java
+
+.PHONY: testcppapp
+testcppapp: cppcompile
+	@build/test-app-run.sh cpp
 
 .PHONY: clean
 clean:
