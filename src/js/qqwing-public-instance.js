@@ -137,7 +137,7 @@ this.setPuzzle = function(initPuzzle){
 	for (var i=0; i<BOARD_SIZE; i++){
 		puzzle[i] = initPuzzle[i];
 	}
-	reset();
+	return reset.call(this);
 }
 
 /**
@@ -229,8 +229,8 @@ this.setLogHistory = function(logHist){
 	logHistory = logHist;
 };
 
-this.setPrintStyle = function(printstyle){
-	/* TODO */
+this.setPrintStyle = function(ps){
+	printStyle = ps;
 };
 
 this.generatePuzzle = function(){

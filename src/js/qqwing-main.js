@@ -18,7 +18,7 @@
  */
 try {
 	// Start time for the application for timing
-	var applicationStartTime = 0; //TODO getMicroseconds();
+	var applicationStartTime = getMicroseconds();
 
 	// The number of puzzles solved or generated.
 	var puzzleCount = 0;
@@ -30,13 +30,13 @@ try {
 	var printInstructions = false;
 	var timer = false;
 	var countSolutions = false;
-	var action = "NONE"; // TODO NONE
+	var action = "NONE";
 	var logHistory = false;
 	var printStyle = qqwing.PrintStyle.READABLE;
 	var numberToGenerate = 1;
 	var printStats = false;
-	var difficulty = "UNKNOWN"; //TODO Difficulty.UNKNOWN;
-	var symmetry = "NONE"; //TODO Symmetry.NONE;
+	var difficulty = qqwing.Difficulty.UNKNOWN;
+	var symmetry = qqwing.Symmetry.NONE;
 	var argv = process.argv;
 
 	// Read the arguments and set the options
@@ -69,151 +69,152 @@ try {
 			countSolutions = true;
 		} else if (argv[i] == "--nocount-solutions"){
 			countSolutions = false;
-		/*} else if (argv[i] == "--generate"){
-			action = GENERATE;
+		} else if (argv[i] == "--generate"){
+			action = "GENERATE";
 			printPuzzle = true;
-			if (i+1 < argv.length && !argv[i+1].startsWith("-")){
-				numberToGenerate = Integer.parseInt(argv[i+1]);
+			if (i+1 < argv.length && argv[i+1].charAt(0) != "-"){
+				numberToGenerate = parseInt(argv[i+1]);
+				if (isNaN(numberToGenerate) || numberToGenerate <= 0){
+					console.log("Bad number of puzzles to generate: "+argv[i+1]);
+					process.exit(1);
+				}
 				i++;
 			}
-		} else if (argv[i].equals("--difficulty")){
+		} else if (argv[i] == "--difficulty") {
 			if (argv.length <= i+1){
 				console.log("Please specify a difficulty.");
-				System.exit(1);
-			} else if (argv[i+1].equalsIgnoreCase("simple")){
-				difficulty = Difficulty.SIMPLE;
-			} else if (argv[i+1].equalsIgnoreCase("easy")){
-				difficulty = Difficulty.EASY;
-			} else if (argv[i+1].equalsIgnoreCase("intermediate")){
-				difficulty = Difficulty.INTERMEDIATE;
-			} else if (argv[i+1].equalsIgnoreCase("expert")){
-				difficulty = Difficulty.EXPERT;
-			} else if (argv[i+1].equalsIgnoreCase("any")){
-				difficulty = Difficulty.UNKNOWN;
+				process.exit(1);
+			} else if (argv[i+1].toLowerCase() == "simple"){
+				difficulty = qqwing.Difficulty.SIMPLE;
+			} else if (argv[i+1].toLowerCase() == "easy"){
+				difficulty = qqwing.Difficulty.EASY;
+			} else if (argv[i+1].toLowerCase() == "intermediate"){
+				difficulty = qqwing.Difficulty.INTERMEDIATE;
+			} else if (argv[i+1].toLowerCase() == "expert"){
+				difficulty = qqwing.Difficulty.EXPERT;
+			} else if (argv[i+1].toLowerCase() == "any"){
+				difficulty = qqwing.Difficulty.UNKNOWN;
 			} else {
 				console.log("Difficulty expected to be simple, easy, intermediate, expert, or any, not "+argv[i+1]);
-				System.exit(1);
+				process.exit(1);
 			}
 			i++;
-		} else if (argv[i].equals("--symmetry")){
+		} else if (argv[i] == "--symmetry") {
 			if (argv.length <= i+1){
 				console.log("Please specify a symmetry.");
-				System.exit(1);
-			} else if (argv[i+1].equals("none")){
-				symmetry = Symmetry.NONE;
-			} else if (argv[i+1].equals("rotate90")){
-				symmetry = Symmetry.ROTATE90;
-			} else if (argv[i+1].equals("rotate180")){
-				symmetry = Symmetry.ROTATE180;
-			} else if (argv[i+1].equals("mirror")){
-				symmetry = Symmetry.MIRROR;
-			} else if (argv[i+1].equals("flip")){
-				symmetry = Symmetry.FLIP;
-			} else if (argv[i+1].equals("random")){
-				symmetry = Symmetry.RANDOM;
+				process.exit(1);
+			} else if (argv[i+1] == "none") {
+				symmetry = qqwing.Symmetry.NONE;
+			} else if (argv[i+1] == "rotate90") {
+				symmetry = qqwing.Symmetry.ROTATE90;
+			} else if (argv[i+1] == "rotate180") {
+				symmetry = qqwing.Symmetry.ROTATE180;
+			} else if (argv[i+1] == "mirror") {
+				symmetry = qqwing.Symmetry.MIRROR;
+			} else if (argv[i+1] == "flip") {
+				symmetry = qqwing.Symmetry.FLIP;
+			} else if (argv[i+1] == "random") {
+				symmetry = qqwing.Symmetry.RANDOM;
 			} else {
 				console.log("Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not " + argv[i+1]);
-				System.exit(1);
+				process.exit(1);
 			}
 			i++;
-		} else if (argv[i].equals("--solve")){
-			action = SOLVE;
+		} else if (argv[i] == "--solve") {
+			action = "SOLVE";
 			printSolution = true;
-		} else if (argv[i].equals("--log-history")){
+		} else if (argv[i] == "--log-history") {
 			logHistory = true;
-		} else if (argv[i].equals("--nolog-history")){
+		} else if (argv[i] == "--nolog-history") {
 			logHistory = false;
-		} else if (argv[i].equals("--one-line")){
-			printStyle=PrintStyle.ONE_LINE;
-		} else if (argv[i].equals("--compact")){
-			printStyle=PrintStyle.COMPACT;
-		} else if (argv[i].equals("--readable")){
-			printStyle=PrintStyle.READABLE;
-		} else if (argv[i].equals("--csv")){
-			printStyle=PrintStyle.CSV;
-		} else if (argv[i].equals("-n") || argv[i].equals("--number")){
+		} else if (argv[i] == "--one-line") {
+			printStyle=qqwing.PrintStyle.ONE_LINE;
+		} else if (argv[i] == "--compact") {
+			printStyle=qqwing.PrintStyle.COMPACT;
+		} else if (argv[i] == "--readable") {
+			printStyle=qqwing.PrintStyle.READABLE;
+		} else if (argv[i] == "--csv") {
+			printStyle=qqwing.PrintStyle.CSV;
+		} else if (argv[i] == "-n" || argv[i] == "--number") {
 			if (i+1 < argv.length){
-				numberToGenerate = Integer.parseInt(argv[i+1]);
+				numberToGenerate = parseInt(argv[i+1]);
 				i++;
 			} else {
 				console.log("Please specify a number.");
-				System.exit(1);
+				process.exit(1);
 			}
-		} else if (argv[i].equals("-h") || argv[i].equals("--help") || argv[i].equals("help") || argv[i].equals("?")){
+		} else if (argv[i] == "-h" || argv[i] == "--help" || argv[i] == "help" || argv[i] == "?") {
 			printHelp();
-			System.exit(0);
-		} else if (argv[i].equals("--version")){
+			process.exit(0);
+		} else if (argv[i] == "--version") {
 			printVersion();
-			System.exit(0);
-		} else if (argv[i].equals("--about")){
+			process.exit(0);
+		} else if (argv[i] == "--about") {
 			printAbout();
-			System.exit(0);
-		*/
+			process.exit(0);
 		} else {
 			console.log("Unknown argument: '"+argv[i]+"'");
 			printHelp();
 			process.exit(0);
 		}
 	}
-/*
-	if (action == NONE){
+
+	if (action == "NONE"){
 		console.log("Either --solve or --generate must be specified.");
 		printHelp();
-		System.exit(1);
+		process.exit(1);
 	}
 
-	// Initialize the random number generator
-	QQWing.r = new Random(new Date().getTime());
-
 	// If printing out CSV, print a header
-	if (printStyle == PrintStyle.CSV){
-		if (printPuzzle) System.out.print("Puzzle,");
-		if (printSolution) System.out.print("Solution,");
-		if (printHistory) System.out.print("Solve History,");
-		if (printInstructions) System.out.print("Solve Instructions,");
-		if (countSolutions) System.out.print("Solution Count,");
-		if (timer) System.out.print("Time (milliseconds),");
-		if (printStats) System.out.print("Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty");
+	if (printStyle == qqwing.PrintStyle.CSV){
+		if (printPuzzle) process.stdout.write("Puzzle,");
+		if (printSolution) process.stdout.write("Solution,");
+		if (printHistory) process.stdout.write("Solve History,");
+		if (printInstructions) process.stdout.write("Solve Instructions,");
+		if (countSolutions) process.stdout.write("Solution Count,");
+		if (timer) process.stdout.write("Time (milliseconds),");
+		if (printStats) process.stdout.write("Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty");
 		console.log("");
 	}
 
 	// Create a new puzzle board
 	// and set the options
-	QQWing ss = new QQWing();
-	ss.setRecordHistory(printHistory || printInstructions || printStats || difficulty!=Difficulty.UNKNOWN);
+	var ss = new qqwing();
+	ss.setRecordHistory(printHistory || printInstructions || printStats || difficulty!=qqwing.Difficulty.UNKNOWN);
 	ss.setLogHistory(logHistory);
 	ss.setPrintStyle(printStyle);
 
 	// Solve puzzle or generate puzzles
 	// until end of input for solving, or
 	// until we have generated the specified number.
-	boolean done = false;
-	int numberGenerated = 0;
+	var done = false;
+	var numberGenerated = 0;
 	while (!done){
 		// record the start time for the timer.
-		long puzzleStartTime = getMicroseconds();
+		var puzzleStartTime = getMicroseconds();
 
 		// iff something has been printed for this particular puzzle
-		boolean printedSomething = false;
+		var printedSomething = false;
 
 		// Record whether the puzzle was possible or not,
 		// so that we don't try to solve impossible givens.
-		boolean havePuzzle = false;
-		if (action == GENERATE){
+		var havePuzzle = false;
+		if (action == "GENERATE"){
 			// Generate a puzzle
 			havePuzzle = ss.generatePuzzleSymmetry(symmetry);
 			if (!havePuzzle && printPuzzle){
-				System.out.print("Could not generate puzzle.");
-				if (printStyle==PrintStyle.CSV){
+				process.stdout.write("Could not generate puzzle.");
+				if (printStyle==qqwing.PrintStyle.CSV){
 					console.log(",");
 				} else {
-					console.log();
+					console.log("");
 				}
 				printedSomething = true;
+					process.exit(1);
 			}
 		} else {
 			// Read the next puzzle on STDIN
-			int[] puzzle = new int[BOARD_SIZE];
+			var puzzle = [];
 			if (readPuzzleFromStdIn(puzzle)){
 				havePuzzle = ss.setPuzzle(puzzle);
 				if (!havePuzzle){
@@ -222,11 +223,11 @@ try {
 						printedSomething = true;
 					}
 					if (printSolution) {
-						System.out.print("Puzzle is not possible.");
-						if (printStyle==PrintStyle.CSV){
-							System.out.print(",");
+						process.stdout.write("Puzzle is not possible.");
+						if (printStyle==qqwing.PrintStyle.CSV){
+							process.stdout.write(",");
 						} else {
-							console.log();
+							console.log("");
 						}
 						printedSomething = true;
 					}
@@ -239,7 +240,7 @@ try {
 			puzzle = null;
 		}
 
-		int solutions = 0;
+		var solutions = 0;
 
 		if (havePuzzle){
 
@@ -251,13 +252,13 @@ try {
 			}
 
 			// Solve the puzzle
-			if (printSolution || printHistory || printStats || printInstructions || difficulty!=Difficulty.UNKNOWN){
+			if (printSolution || printHistory || printStats || printInstructions || difficulty!=qqwing.Difficulty.UNKNOWN){
 				ss.solve();
 			}
 
 			// Bail out if it didn't meet the difficulty standards for generation
-			if (action == GENERATE){
-				if (difficulty!=Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
+			if (action == "GENERATE"){
+				if (difficulty!=qqwing.Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
 					havePuzzle = false;
 				} else {
 					numberGenerated++;
@@ -274,7 +275,7 @@ try {
 			printedSomething = true;
 
 			// Record the end time for the timer.
-			long puzzleDoneTime = getMicroseconds();
+			var puzzleDoneTime = getMicroseconds();
 
 			// Print the puzzle itself.
 			if (printPuzzle) ss.printPuzzle();
@@ -284,11 +285,11 @@ try {
 				if (ss.isSolved()){
 					ss.printSolution();
 				} else {
-					System.out.print("Puzzle has no solution.");
-					if (printStyle==PrintStyle.CSV){
-						System.out.print(",");
+					process.stdout.write("Puzzle has no solution.");
+					if (printStyle==qqwing.PrintStyle.CSV){
+						process.stdout.write(",");
 					} else {
-						console.log();
+						console.log("");
 					}
 				}
 			}
@@ -300,8 +301,8 @@ try {
 
 			// Print the number of solutions to the puzzle.
 			if (countSolutions){
-				if (printStyle == PrintStyle.CSV){
-					System.out.print(solutions+",");
+				if (printStyle == qqwing.PrintStyle.CSV){
+					process.stdout.write(solutions+",");
 				} else {
 					if (solutions == 0){
 						console.log("There are no solutions to the puzzle.");
@@ -315,9 +316,9 @@ try {
 
 			// Print out the time it took to solve the puzzle.
 			if (timer){
-				double t = ((double)(puzzleDoneTime - puzzleStartTime))/1000.0;
-				if (printStyle == PrintStyle.CSV){
-					System.out.print(t+",");
+				var t = (puzzleDoneTime - puzzleStartTime)/1000.0;
+				if (printStyle == qqwing.PrintStyle.CSV){
+					process.stdout.write(t+",");
 				} else {
 					console.log("Time: "+t +" milliseconds");
 				}
@@ -325,17 +326,17 @@ try {
 
 			// Print any stats we were able to gather while solving the puzzle.
 			if (printStats){
-				int givenCount = ss.getGivenCount();
-				int singleCount = ss.getSingleCount();
-				int hiddenSingleCount = ss.getHiddenSingleCount();
-				int nakedPairCount = ss.getNakedPairCount();
-				int hiddenPairCount = ss.getHiddenPairCount();
-				int pointingPairTripleCount = ss.getPointingPairTripleCount();
-				int boxReductionCount = ss.getBoxLineReductionCount();
-				int guessCount = ss.getGuessCount();
-				int backtrackCount = ss.getBacktrackCount();
-				String difficultyString = ss.getDifficultyAsString();
-				if (printStyle == PrintStyle.CSV){
+				var givenCount = ss.getGivenCount();
+				var singleCount = ss.getSingleCount();
+				var hiddenSingleCount = ss.getHiddenSingleCount();
+				var nakedPairCount = ss.getNakedPairCount();
+				var hiddenPairCount = ss.getHiddenPairCount();
+				var pointingPairTripleCount = ss.getPointingPairTripleCount();
+				var boxReductionCount = ss.getBoxLineReductionCount();
+				var guessCount = ss.getGuessCount();
+				var backtrackCount = ss.getBacktrackCount();
+				var difficultyString = ss.getDifficultyAsString();
+				if (printStyle == qqwing.PrintStyle.CSV){
 					console.log(givenCount+"," +singleCount+","+hiddenSingleCount
 							+","+nakedPairCount+","+hiddenPairCount
 							+"," +pointingPairTripleCount +"," +boxReductionCount
@@ -356,19 +357,18 @@ try {
 			}
 			puzzleCount++;
 		}
-		if (printedSomething && printStyle == PrintStyle.CSV){
-			console.log();
+		if (printedSomething && printStyle == qqwing.PrintStyle.CSV){
+			console.log("");
 		}
+
 	}
 
-	ss = null;
-
-	long applicationDoneTime = getMicroseconds();
+	var applicationDoneTime = getMicroseconds();
 	// Print out the time it took to do everything
 	if (timer){
-		double t = ((double)(applicationDoneTime - applicationStartTime))/1000000.0;
-		console.log(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==GENERATE?"generated":"solved")+" in "+t+" seconds.");
-	}*/
+		var t = (applicationDoneTime - applicationStartTime)/1000000.0;
+		console.log(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action=="GENERATE"?"generated":"solved")+" in "+t+" seconds.");
+	}
 } catch (e){
 	console.log(e);
 	process.exit(1);
@@ -405,4 +405,57 @@ function printHelp(){
 	console.log("  --help               Print this message");
 	console.log("  --about              Author and license information");
 	console.log("  --version            Display current version number");
+}
+
+function printVersion(){
+	console.log("qqwing 1.1.2");
+}
+
+function printAbout(){
+	console.log("qqwing - Sudoku solver and generator");
+	console.log("Copyright (C) 2014 Stephen Ostermiller");
+	console.log("");
+	console.log("This program is free software; you can redistribute it and/or modify");
+	console.log("it under the terms of the GNU General Public License as published by");
+	console.log("the Free Software Foundation; either version 2 of the License, or");
+	console.log("(at your option) any later version.");
+	console.log("");
+	console.log("This program is distributed in the hope that it will be useful,");
+	console.log("but WITHOUT ANY WARRANTY; without even the implied warranty of");
+	console.log("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the");
+	console.log("GNU General Public License for more details.");
+	console.log("");
+	console.log("You should have received a copy of the GNU General Public License along");
+	console.log("with this program; if not, write to the Free Software Foundation, Inc.,");
+	console.log("51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.");
+}
+
+function getMicroseconds(){
+	return new Date().getTime() * 1000;
+}
+
+
+/**
+ * Read a sudoku puzzle from standard input.
+ * STDIN is processed one character at a time
+ * until the sudoku is filled in.  Any digit
+ * or period is used to fill the sudoku, any
+ * other character is ignored.
+ */
+function readPuzzleFromStdIn(puzzle){
+	var fs = require('fs');
+	var read = 0;
+	while (read < 81){
+		var c = fs.readSync(process.stdin.fd, 1);
+		if (c[1] == 0) return false;
+		if (c[0] >= '1' && c[0] <='9'){
+			puzzle[read] = c[0]-'0';
+			read++;
+		}
+		if (c[0] == '.' || c[0] == '0'){
+			puzzle[read] = 0;
+			read++;
+		}
+	}
+	return true;
 }
