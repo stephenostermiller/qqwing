@@ -11,6 +11,7 @@ then
 fi
 
 echo "Building target/qqwing"
+rm -rf target/automake/qqwing target/qqwing target/.libs target/automake/*.o target/automake/*.lo target/automake/*.la target/automake/.libs/ target/automake/autom4te.cache/*
 cp src/cpp/*.cpp target/automake
 cp src/cpp/*.hpp target/automake
 cd target/automake
@@ -18,4 +19,3 @@ make
 cd ../..
 cp target/automake/qqwing target/qqwing
 ls target/qqwing
-
