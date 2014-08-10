@@ -48,7 +48,7 @@ version=`build/version.sh`
 mkdir -p target/js
 echo "Compiling js sources"
 
-buildjs qqwing-$version.js qqwing-object-start.js qqwing-private-static.js qqwing-private-instance.js qqwing-object-end.js qqwing-public-static.js
+buildjs qqwing-$version.js qqwing-object-start.js qqwing-private-static.js qqwing-private-instance.js qqwing-public-instance.js qqwing-object-end.js qqwing-public-static.js
 
 buildjs qqwing-main-$version.js qqwing-$version.js qqwing-main.js
 
