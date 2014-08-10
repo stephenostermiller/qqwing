@@ -90,7 +90,7 @@ testcppapp: cppcompile
 	@build/test-app-run.sh cpp
 
 .PHONY: testjsapp
-testjsapp: jscompile
+testjsapp: jsmin
 	@build/test-app-run.sh js
 
 .PHONY: clean
@@ -105,17 +105,26 @@ versionjava: javaversion
 .PHONY: compilejs
 compilejs: jscompile
 
+.PHONY: js
+js: jsmin
+
 .PHONY: minjs
 minjs: jsmin
 
 .PHONY: compilejava
 compilejava: javacompile
 
+.PHONY: java
+java: javacompile
+
 .PHONY: configurecpp
 configurecpp: cppconfigure
 
 .PHONY: compilecpp
 compilecpp: cppcompile
+
+.PHONY: cpp
+cpp: cppcompile
 
 .PHONY: unittest
 unittest: testunit
