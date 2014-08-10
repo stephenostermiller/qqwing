@@ -140,6 +140,7 @@ var reset = function(){
 			if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.GIVEN, value, position));
 		}
 	}
+	return true;
 };
 
 var singleSolveMove = function(round){
