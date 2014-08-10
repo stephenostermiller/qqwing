@@ -1,9 +1,8 @@
 #!/bin/sh
 
-set -e
-set -o pipefail
-
 version=`build/version.sh`
+
+exitstatus=0
 
 case $1 in
 	"java")
@@ -33,6 +32,14 @@ for test in test/app/*.sh
 do
 	echo -n '.'
 	$test
+	if [ $? -ne 0 ]
+	then
+		exitstatus=1
+		echo
+		echo "Failed $test"
+	fi
 done
 
 echo
+
+exit $exitstatus
