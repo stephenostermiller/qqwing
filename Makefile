@@ -93,6 +93,15 @@ testcppapp: cppcompile
 testjsapp: jsmin
 	@build/test-app-run.sh js
 
+.PHONY: jstest
+jstest: testjsunit testjsapp
+
+.PHONY: javatest
+javatest: testjavaunit testjavaapp
+
+.PHONY: cpptest
+cpptest: testcppapp
+
 .PHONY: clean
 clean:
 	rm -rf target/
@@ -170,3 +179,12 @@ apptestcpp: cppapptest
 
 .PHONY: apptestjs
 apptestjs: jsapptest
+
+.PHONY: testjs
+testjs: jstest
+
+.PHONY: testjava
+testjava: javatest
+
+.PHONY: testcpp
+testcpp: cpptest 
