@@ -370,7 +370,7 @@ try {
 		console.log(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action=="GENERATE"?"generated":"solved")+" in "+t+" seconds.");
 	}
 } catch (e){
-	console.log(e);
+	console.log(e.stack);
 	process.exit(1);
 }
 process.exit(0);

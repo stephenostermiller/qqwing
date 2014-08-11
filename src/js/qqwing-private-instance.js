@@ -185,15 +185,100 @@ var onlyPossibilityForCell = function(round){
 	}
 	return false;
 };
+
+/**
+ * Mark exactly one cell which is the only possible value for some row, if
+ * such a cell exists.
+ * This method will look in a row for a possibility that is only listed
+ * for one cell.  This type of cell is often called a "hidden single"
+ */
 var onlyValueInRow = function(round){
-	/* TODO */
-};
+	for (var row=0; row<qqwing.ROW_LENGTH; row++){
+		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			var count = 0;
+			var lastPosition = 0;
+			for (var col=0; col<qqwing.COL_HEIGHT; col++){
+				var position = (row*qqwing.ROW_LENGTH)+col;
+				var valPos = getPossibilityIndex(valIndex,position);
+				if (possibilities[valPos] == 0){
+					count++;
+					lastPosition = position;
+				}
+			}
+			if (count == 1){
+				var value = valIndex+1;
+				if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_SINGLE_ROW, value, lastPosition));
+				mark.call(this, lastPosition, round, value);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+/**
+ * Mark exactly one cell which is the only possible value for some column, if
+ * such a cell exists.
+ * This method will look in a column for a possibility that is only listed
+ * for one cell.  This type of cell is often called a "hidden single"
+ */
 var onlyValueInColumn = function(round){
-	/* TODO */
-};
+	for (var col=0; col<qqwing.COL_HEIGHT; col++){
+		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			var count = 0;
+			var lastPosition = 0;
+			for (var row=0; row<qqwing.ROW_LENGTH; row++){
+				var position = rowColumnToCell(row,col);
+				var valPos = getPossibilityIndex(valIndex,position);
+				if (possibilities[valPos] == 0){
+					count++;
+					lastPosition = position;
+				}
+			}
+			if (count == 1){
+				var value = valIndex+1;
+				if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_SINGLE_COLUMN, value, lastPosition));
+				mark.call(this, lastPosition, round, value);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+/**
+ * Mark exactly one cell which is the only possible value for some section, if
+ * such a cell exists.
+ * This method will look in a section for a possibility that is only listed
+ * for one cell.  This type of cell is often called a "hidden single"
+ */
 var onlyValueInSection = function(round){
-	/* TODO */
-};
+	for (var sec=0; sec<qqwing.SEC_COUNT; sec++){
+		var secPos = sectionToFirstCell(sec);
+		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			var count = 0;
+			var lastPosition = 0;
+			for (var i=0; i<3; i++){
+				for (var j=0; j<3; j++){
+					var position = secPos + i + 9*j;
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (possibilities[valPos] == 0){
+						count++;
+						lastPosition = position;
+					}
+				}
+			}
+			if (count == 1){
+				var value = valIndex+1;
+				if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_SINGLE_SECTION, value, lastPosition));
+				mark.call(this, lastPosition, round, value);
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 var guess = function(round, guessNumber){
 	var localGuessCount = 0;
@@ -250,25 +335,380 @@ var rollbackRound = function(round){
 };
 
 var pointingRowReduction = function(round){
-	/* TODO */
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		for (var section=0; section<9; section++){
+			var secStart = sectionToFirstCell(section);
+			var inOneRow = true;
+			var boxRow = -1;
+			for (var j=0; j<3; j++){
+				for (var i=0; i<3; i++){
+					var secVal=secStart+i+(9*j);
+					var valPos = getPossibilityIndex(valIndex,secVal);
+					if(possibilities[valPos] == 0){
+						if (boxRow == -1 || boxRow == j){
+							boxRow = j;
+						} else {
+							inOneRow = false;
+						}
+					}
+				}
+			}
+			if (inOneRow && boxRow != -1){
+				var doneSomething = false;
+				var row = cellToRow(secStart) + boxRow;
+				var rowStart = rowToFirstCell(row);
+
+				for (var i=0; i<9; i++){
+					var position = rowStart+i;
+					var section2 = cellToSection(position);
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (section != section2 && possibilities[valPos] == 0){
+						possibilities[valPos] = round;
+						doneSomething = true;
+					}
+				}
+				if (doneSomething){
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.POINTING_PAIR_TRIPLE_ROW, valIndex+1, rowStart));
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var rowBoxReduction = function(round){
-	/* TODO */
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		for (var row=0; row<9; row++){
+			var rowStart = rowToFirstCell(row);
+			var inOneBox = true;
+			var rowBox = -1;
+			for (var i=0; i<3; i++){
+				for (var j=0; j<3; j++){
+					var column = i*3+j;
+					var position = rowColumnToCell(row, column);
+					var valPos = getPossibilityIndex(valIndex,position);
+					if(possibilities[valPos] == 0){
+						if (rowBox == -1 || rowBox == i){
+							rowBox = i;
+						} else {
+							inOneBox = false;
+						}
+					}
+				}
+			}
+			if (inOneBox && rowBox != -1){
+				var doneSomething = false;
+				var column = 3*rowBox;
+				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
+				var secStartRow = cellToRow(secStart);
+				var secStartCol = cellToColumn(secStart);
+				for (var i=0; i<3; i++){
+					for (var j=0; j<3; j++){
+						var row2 = secStartRow+i;
+						var col2 = secStartCol+j;
+						var position = rowColumnToCell(row2, col2);
+						var valPos = getPossibilityIndex(valIndex,position);
+						if (row != row2 && possibilities[valPos] == 0){
+							possibilities[valPos] = round;
+							doneSomething = true;
+						}
+					}
+				}
+				if (doneSomething){
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.ROW_BOX, valIndex+1, rowStart));
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var colBoxReduction = function(round){
-	/* TODO */
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		for (var row=0; row<9; row++){
+			var rowStart = rowToFirstCell(row);
+			var inOneBox = true;
+			var rowBox = -1;
+			for (var i=0; i<3; i++){
+				for (var j=0; j<3; j++){
+					var column = i*3+j;
+					var position = rowColumnToCell(row, column);
+					var valPos = getPossibilityIndex(valIndex,position);
+					if(possibilities[valPos] == 0){
+						if (rowBox == -1 || rowBox == i){
+							rowBox = i;
+						} else {
+							inOneBox = false;
+						}
+					}
+				}
+			}
+			if (inOneBox && rowBox != -1){
+				var doneSomething = false;
+				var column = 3*rowBox;
+				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
+				var secStartRow = cellToRow(secStart);
+				var secStartCol = cellToColumn(secStart);
+				for (var i=0; i<3; i++){
+					for (var j=0; j<3; j++){
+						var row2 = secStartRow+i;
+						var col2 = secStartCol+j;
+						var position = rowColumnToCell(row2, col2);
+						var valPos = getPossibilityIndex(valIndex,position);
+						if (row != row2 && possibilities[valPos] == 0){
+							possibilities[valPos] = round;
+							doneSomething = true;
+						}
+					}
+				}
+				if (doneSomething){
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.ROW_BOX, valIndex+1, rowStart));
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var pointingColumnReduction = function(round){
-	/* TODO */
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		for (var section=0; section<9; section++){
+			var secStart = sectionToFirstCell(section);
+			var inOneRow = true;
+			var boxRow = -1;
+			for (var j=0; j<3; j++){
+				for (var i=0; i<3; i++){
+					var secVal=secStart+i+(9*j);
+					var valPos = getPossibilityIndex(valIndex,secVal);
+					if(possibilities[valPos] == 0){
+						if (boxRow == -1 || boxRow == j){
+							boxRow = j;
+						} else {
+							inOneRow = false;
+						}
+					}
+				}
+			}
+			if (inOneRow && boxRow != -1){
+				var doneSomething = false;
+				var row = cellToRow(secStart) + boxRow;
+				var rowStart = rowToFirstCell(row);
+
+				for (var i=0; i<9; i++){
+					var position = rowStart+i;
+					var section2 = cellToSection(position);
+					var valPos = getPossibilityIndex(valIndex,position);
+					if (section != section2 && possibilities[valPos] == 0){
+						possibilities[valPos] = round;
+						doneSomething = true;
+					}
+				}
+				if (doneSomething){
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.POINTING_PAIR_TRIPLE_ROW, valIndex+1, rowStart));
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var hiddenPairInRow = function(round){
-	/* TODO */
+	for (var row=0; row<9; row++){
+		for (var valIndex=0; valIndex<9; valIndex++){
+			var c1 = -1;
+			var c2 = -1;
+			var valCount = 0;
+			for (var column=0; column<9; column++){
+				var position = rowColumnToCell(row,column);
+				var valPos = getPossibilityIndex(valIndex,position);
+				if (possibilities[valPos] == 0){
+					if (c1 == -1 || c1 == column){
+						c1 = column;
+					} else if (c2 == -1 || c2 == column){
+						c2 = column;
+					}
+					valCount++;
+				}
+			}
+			if (valCount==2){
+				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					var c3 = -1;
+					var c4 = -1;
+					var valCount2 = 0;
+					for (var column=0; column<9; column++){
+						var position = rowColumnToCell(row,column);
+						var valPos = getPossibilityIndex(valIndex2,position);
+						if (possibilities[valPos] == 0){
+							if (c3 == -1 || c3 == column){
+								c3 = column;
+							} else if (c4 == -1 || c4 == column){
+								c4 = column;
+							}
+							valCount2++;
+						}
+					}
+					if (valCount2==2 && c1==c3 && c2==c4){
+						var doneSomething = false;
+						for (var valIndex3=0; valIndex3<9; valIndex3++){
+							if (valIndex3 != valIndex && valIndex3 != valIndex2){
+								var position1 = rowColumnToCell(row,c1);
+								var position2 = rowColumnToCell(row,c2);
+								var valPos1 = getPossibilityIndex(valIndex3,position1);
+								var valPos2 = getPossibilityIndex(valIndex3,position2);
+								if (possibilities[valPos1] == 0){
+									possibilities[valPos1] = round;
+									doneSomething = true;
+								}
+								if (possibilities[valPos2] == 0){
+									possibilities[valPos2] = round;
+									doneSomething = true;
+								}
+							}
+						}
+						if (doneSomething){
+							if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_PAIR_ROW, valIndex+1, rowColumnToCell(row,c1)));
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var hiddenPairInColumn = function(round){
-	/* TODO */
+	for (var column=0; column<9; column++){
+		for (var valIndex=0; valIndex<9; valIndex++){
+			var r1 = -1;
+			var r2 = -1;
+			var valCount = 0;
+			for (var row=0; row<9; row++){
+				var position = rowColumnToCell(row,column);
+				var valPos = getPossibilityIndex(valIndex,position);
+				if (possibilities[valPos] == 0){
+					if (r1 == -1 || r1 == row){
+						r1 = row;
+					} else if (r2 == -1 || r2 == row){
+						r2 = row;
+					}
+					valCount++;
+				}
+			}
+			if (valCount==2){
+				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					var r3 = -1;
+					var r4 = -1;
+					var valCount2 = 0;
+					for (var row=0; row<9; row++){
+						var position = rowColumnToCell(row,column);
+						var valPos = getPossibilityIndex(valIndex2,position);
+						if (possibilities[valPos] == 0){
+							if (r3 == -1 || r3 == row){
+								r3 = row;
+							} else if (r4 == -1 || r4 == row){
+								r4 = row;
+							}
+							valCount2++;
+						}
+					}
+					if (valCount2==2 && r1==r3 && r2==r4){
+						var doneSomething = false;
+						for (var valIndex3=0; valIndex3<9; valIndex3++){
+							if (valIndex3 != valIndex && valIndex3 != valIndex2){
+								var position1 = rowColumnToCell(r1,column);
+								var position2 = rowColumnToCell(r2,column);
+								var valPos1 = getPossibilityIndex(valIndex3,position1);
+								var valPos2 = getPossibilityIndex(valIndex3,position2);
+								if (possibilities[valPos1] == 0){
+									possibilities[valPos1] = round;
+									doneSomething = true;
+								}
+								if (possibilities[valPos2] == 0){
+									possibilities[valPos2] = round;
+									doneSomething = true;
+								}
+							}
+						}
+						if (doneSomething){
+							if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_PAIR_COLUMN, valIndex+1, rowColumnToCell(r1,column)));
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var hiddenPairInSection = function(round){
-	/* TODO */
+	for (var section=0; section<9; section++){
+		for (var valIndex=0; valIndex<9; valIndex++){
+			var si1 = -1;
+			var si2 = -1;
+			var valCount = 0;
+			for (var secInd=0; secInd<9; secInd++){
+				var position = sectionToCell(section,secInd);
+				var valPos = getPossibilityIndex(valIndex,position);
+				if (possibilities[valPos] == 0){
+					if (si1 == -1 || si1 == secInd){
+						si1 = secInd;
+					} else if (si2 == -1 || si2 == secInd){
+						si2 = secInd;
+					}
+					valCount++;
+				}
+			}
+			if (valCount==2){
+				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					var si3 = -1;
+					var si4 = -1;
+					var valCount2 = 0;
+					for (var secInd=0; secInd<9; secInd++){
+						var position = sectionToCell(section,secInd);
+						var valPos = getPossibilityIndex(valIndex2,position);
+						if (possibilities[valPos] == 0){
+							if (si3 == -1 || si3 == secInd){
+								si3 = secInd;
+							} else if (si4 == -1 || si4 == secInd){
+								si4 = secInd;
+							}
+							valCount2++;
+						}
+					}
+					if (valCount2==2 && si1==si3 && si2==si4){
+						var doneSomething = false;
+						for (var valIndex3=0; valIndex3<9; valIndex3++){
+							if (valIndex3 != valIndex && valIndex3 != valIndex2){
+								var position1 = sectionToCell(section,si1);
+								var position2 = sectionToCell(section,si2);
+								var valPos1 = getPossibilityIndex(valIndex3,position1);
+								var valPos2 = getPossibilityIndex(valIndex3,position2);
+								if (possibilities[valPos1] == 0){
+									possibilities[valPos1] = round;
+									doneSomething = true;
+								}
+								if (possibilities[valPos2] == 0){
+									possibilities[valPos2] = round;
+									doneSomething = true;
+								}
+							}
+						}
+						if (doneSomething){
+							if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.HIDDEN_PAIR_SECTION, valIndex+1, sectionToCell(section,si1)));
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
 };
 
 /**
@@ -352,17 +792,88 @@ var findPositionWithFewestPossibilities = function(){
 };
 
 var handleNakedPairs = function(round){
-	/* TODO */
+	for (var position=0; position<qqwing.BOARD_SIZE; position++){
+		var possibilities = countPossibilities(position);
+		if (possibilities == 2){
+			var row = cellToRow(position);
+			var column = cellToColumn(position);
+			var section = cellToSectionStartCell(position);
+			for (var position2=position; position2<qqwing.BOARD_SIZE; position2++){
+				if (position != position2){
+					var possibilities2 = countPossibilities(position2);
+					if (possibilities2 == 2 && arePossibilitiesSame(position, position2)){
+						if (row == cellToRow(position2)){
+							var doneSomething = false;
+							for (var column2=0; column2<9; column2++){
+								var position3 = rowColumnToCell(row,column2);
+								if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
+									doneSomething = true;
+								}
+							}
+							if (doneSomething){
+								if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.NAKED_PAIR_ROW, 0, position));
+								return true;
+							}
+						}
+						if (column == cellToColumn(position2)){
+							var doneSomething = false;
+							for (var row2=0; row2<9; row2++){
+								var position3 = rowColumnToCell(row2,column);
+								if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
+									doneSomething = true;
+								}
+							}
+							if (doneSomething){
+								if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.NAKED_PAIR_COLUMN, 0, position));
+								return true;
+							}
+						}
+						if (section == cellToSectionStartCell(position2)){
+							var doneSomething = false;
+							var secStart = cellToSectionStartCell(position);
+							for (var i=0; i<3; i++){
+								for (var j=0; j<3; j++){
+									var position3=secStart+i+(9*j);
+									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
+										doneSomething = true;
+									}
+								}
+							}
+							if (doneSomething){
+								if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.NAKED_PAIR_SECTION, 0, position));
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
 };
+
 var countPossibilities = function(position){
-	/* TODO */
+	var count = 0;
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		var valPos = getPossibilityIndex(valIndex,position);
+		if (possibilities[valPos] == 0) count++;
+	}
+	return count;
 };
+
 var arePossibilitiesSame = function(position1, position2){
-	/* TODO */
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		var valPos1 = getPossibilityIndex(valIndex,position1);
+		var valPos2 = getPossibilityIndex(valIndex,position2);
+		if ((possibilities[valPos1] == 0 || possibilities[valPos2] == 0) && (possibilities[valPos1] != 0 || possibilities[valPos2] != 0)){
+				return false;
+		}
+	}
+	return true;
 };
 
 var addHistoryItem = function(l){
-	//if (logHistory) l.print();
+	if (logHistory) l.print();
 	if (recordHistory){
 		solveHistory.push(l);
 		solveInstructions.push(l);
@@ -380,7 +891,7 @@ var shuffleRandomArrays = function(){
  * member variables.
  */
 var print = function(puz){
-	console.log(sudokuToString.call(this, puz));
+	process.stdout.write(sudokuToString.call(this, puz));
 };
 
 var sudokuToString = function(puz){
@@ -422,14 +933,23 @@ var sudokuToString = function(puz){
 };
 
 var rollbackNonGuesses = function(){
-	/* TODO */
+	// Guesses are odd rounds
+	// Non-guesses are even rounds
+	for (var i=2; i<=lastSolveRound; i+=2){
+		rollbackRound.call(this, i);
+	}
 };
+
 var clearPuzzle = function(){
-	/* TODO */
+	// Clear any existing puzzle
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
+		puzzle[i] = 0;
+	}
+	reset.call(this);
 };
 
 var printHistory = function(v){
-	console.log(getHistory(v));
+	process.stdout.write(getHistory(v));
 };
 
 var getHistory = function(v){
@@ -459,10 +979,16 @@ var getHistory = function(v){
 };
 
 var removePossibilitiesInOneFromTwo = function(position1, position2, round){
-	/* TODO */
-};
-var IntToString = function(num){
-	/* TODO */
+	var doneSomething = false;
+	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		var valPos1 = getPossibilityIndex(valIndex,position1);
+		var valPos2 = getPossibilityIndex(valIndex,position2);
+		if (possibilities[valPos1] == 0 && possibilities[valPos2] == 0){
+			possibilities[valPos2] = round;
+			doneSomething = true;
+		}
+	}
+	return doneSomething;
 };
 
 /**
@@ -479,8 +1005,20 @@ var shuffleArray = function(array, size){
 };
 
 var getRandomSymmetry = function(){
-	/* TODO */
+	var rand = Math.floor(Math.random() * 4)
+	switch (rand){
+		case 0: return qqwing.Symmetry.ROTATE90;
+		case 1: return qqwing.Symmetry.ROTATE180;
+		case 2: return qqwing.Symmetry.MIRROR;
+		case 3: return qqwing.Symmetry.FLIP;
+	}
+	throw ("Unexpected random value: " + rand);
 };
+
 var getLogCount = function(v, type){
-	/* TODO */
+	var count = 0;
+	for (var i=0; i<v.length; i++){
+		if((v[i]).getType() == type) count++;
+	}
+	return count;
 };
