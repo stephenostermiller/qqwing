@@ -1,5 +1,5 @@
 .PHONY: all
-all: dist test
+all: dist test website
 
 .PHONY: dist
 dist: jar tgz rpm deb
@@ -77,6 +77,10 @@ testjavaapp: jar
 testcppapp: cppcompile
 	@build/test-app-run.sh cpp
 
+.PHONY: website
+website:
+	@build/build_website.sh
+
 .PHONY: clean
 clean:
 	rm -rf target/
@@ -130,3 +134,6 @@ apptestjava: javaapptest
 
 .PHONY: apptestcpp
 apptestcpp: cppapptest
+
+.PHONY: www
+www: website

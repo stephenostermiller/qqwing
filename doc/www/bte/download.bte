@@ -1,0 +1,26 @@
+<%bte.doc super="page.bte"%>
+<%bte.tpl name=pageTitle %>Download QQwing - Sudoku Generator and Solver<%/bte.tpl%>
+<%bte.tpl name=description %>Download a fast command line program written in C++ for generating and solving Soduku puzzles.<%/bte.tpl%>
+<%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
+<%bte.tpl name=downloadLinkText %><b>Download</b><%/bte.tpl%>
+<%bte.tpl name=pageContent %>
+<h1>QQwing Download</h1>
+
+<h2>Version VERSION</h2>
+<h3>Source Code</h3>
+<h4>Source Tarball</h4>
+<a href="qqwing-VERSION.tar.gz">qqwing-VERSION.tar.gz</a> - <a href="install.html#targz">.tar.gz installation instructions</a>
+<h4>Source RPM</h4>
+<a href="qqwing-VERSION-1.src.rpm">qqwing-VERSION-1.src.rpm</a> - <a href="install.html#srpm">.src.rpm installation instructions</a>
+<h4>Java Jar</h4>
+<a href="qqwing-VERSION.jar">qqwing-VERSION.jar</a> - <a href="install.html#jar">.jar installation instructions</a>
+<h3>Binaries</h3>
+<h4>Windows Binary</h4>
+<a href="qqwing-1.0.1-1.windows.bin.zip">qqwing-1.0.1-1.windows.bin.zip</a> - <a href="install.html#exe">windows installation instructions</a>
+<h4>i686 Linux Binary</h4>
+<a href="qqwing-1.0.3-1.i686.rpm">qqwing-1.0.3-1.i686.rpm</a> - <a href="install.html#rpm">binary .rpm installation instructions</a>
+<h4>64 Bit Linux Binary</h4>
+<a href="qqwing-VERSION-1.x86_64.rpm">qqwing-VERSION-1.x86_64.rpm</a> - <a href="install.html#rpm">binary .rpm installation instructions</a><br>
+<a href="qqwing_VERSION-1_amd64.deb">qqwing_VERSION-1_amd64.deb</a> - <a href="install.html#deb">binary .deb installation instructions</a>
+<%/bte.tpl%>
+<%/bte.doc%>
