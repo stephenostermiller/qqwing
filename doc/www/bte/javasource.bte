@@ -1,0 +1,17 @@
+<%bte.doc super="page.bte" output=false%>
+<%bte.tpl name=pageTitle %><%bte.grp onNoResolve=ok %><%bte.inc name="title"%><%/bte.grp%><%/bte.tpl%>
+<%bte.tpl name=description %>Colored Java source code for QQwing<%/bte.tpl%>
+<%bte.tpl name=keywords %>sudoku generator source code, sudoku solver source code, java<%/bte.tpl%>
+<%bte.tpl name=javaSourceLinkText %><b>Java Source Code</b><%/bte.tpl%>
+
+<%bte.tpl name=pageContent %>
+
+<p>Full source code is <a href="https://github.com/stephenostermiller/qqwing">available on github</a>.</p>
+
+<div class=sourcedoc>
+<%bte.inc name="highlightedDocument"%>
+</div>
+Syntax Highlighting created using the
+<a href="http://ostermiller.org/syntax/">com.Ostermiller.Syntax</a> package.<br>
+<%/bte.tpl%>
+<%/bte.doc%>

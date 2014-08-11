@@ -1,0 +1,59 @@
+<%bte.doc output="false"%>
+<%bte.tpl name=page %><!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head><title><%bte.inc name=pageTitle %></title><%bte.grp onNoResolve=warning %>
+<meta name="description" content="<%bte.inc name=description %>"><%/bte.grp %><%bte.grp onNoResolve=warning %>
+<meta name="keywords" content="<%bte.inc name=keywords %>"><%/bte.grp %>
+<link rel="stylesheet" media="screen" title="Web View" href="style.css" type="text/css">
+<link rel="stylesheet" media="print" href="printable.css" type="text/css">
+<link rel="alternate stylesheet" media="screen" title="Print Preview" href="printable.css" type="text/css">
+<%bte.grp onNoResolve=ok %><%bte.inc name=headContent %><%/bte.grp %>
+</head>
+<body>
+
+<div id=head>
+<h1><a name="content"><%bte.inc name=pageTitle %></a></h1>
+</div>
+
+<div id=content><%bte.inc name=pageContent %></div>
+
+<div id=menu>
+<ul>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=homeLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=downloadLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=installLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=instructionsLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=cppSourceLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=javaSourceLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=bugsLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=licenseLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
+name=playLinkText %><%/bte.grp %></li>
+</ul>
+</div>
+
+<div id=foot>
+<p>Copyright &copy; <a href="http://ostermiller.org/contact.pl?regarding=QQwing" class=mail>Stephen Ostermiller</a> 2005-2014</p>
+<p style="text-align:right;font-size:smaller"><a href="http://ostermiller.org/">ostermiller.org</a> (<a href="http://ostermiller.org/siteindex.html">site index</a>)</p>
+</div>
+
+</body>
+</html><%/bte.tpl%>
+<%bte.tpl name=homeLinkText %><a href="./">QQwing Home</a><%/bte.tpl%>
+<%bte.tpl name=downloadLinkText %><a href="download.html">Download</a><%/bte.tpl%>
+<%bte.tpl name=installLinkText %><a href="install.html">Installation</a><%/bte.tpl%>
+<%bte.tpl name=instructionsLinkText %><a href="instructions.html">Instructions</a><%/bte.tpl%>
+<%bte.tpl name=cppSourceLinkText %><a href="qqwing.cpp.html">C++ Source Code</a><%/bte.tpl%>
+<%bte.tpl name=javaSourceLinkText %><a href="QQWing.java.html">Java Source Code</a><%/bte.tpl%>
+<%bte.tpl name=licenseLinkText %><a href="license.html">License</a><%/bte.tpl%>
+<%bte.tpl name=playLinkText %><a href="play.html">Play Online</a><%/bte.tpl%>
+<%bte.tpl name=bugsLinkText %><a href="bugs.html">Bugs/Features</a><%/bte.tpl%>
+<%/bte.doc%>
