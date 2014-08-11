@@ -197,22 +197,22 @@ this.solve = function(round){
 
 
 this.countSolutions = function(round, limitToTwo){
-    if (!round || round <= 1){
-	    // Don't record history while generating.
-	    var recHistory = recordHistory;
-	    this.setRecordHistory(false);
-	    var lHistory = logHistory;
-	    this.setLogHistory(false);
+	if (!round || round <= 1){
+		// Don't record history while generating.
+		var recHistory = recordHistory;
+		this.setRecordHistory(false);
+		var lHistory = logHistory;
+		this.setLogHistory(false);
 
-	    reset.call(this);
-	    var solutionCount = this.countSolutions(2, false);
+		reset.call(this);
+		var solutionCount = this.countSolutions(2, false);
 
-	    // Restore recording history.
-	    this.setRecordHistory(recHistory);
-	    this.setLogHistory(lHistory);
+		// Restore recording history.
+		this.setRecordHistory(recHistory);
+		this.setLogHistory(lHistory);
 
-	    return solutionCount;
-    } else {        
+		return solutionCount;
+	} else {
 		while (singleSolveMove.call(this, round)){
 			if (this.isSolved()){
 				rollbackRound.call(this, round);
@@ -235,7 +235,7 @@ this.countSolutions = function(round, limitToTwo){
 		}
 		rollbackRound.call(this, round);
 		return solutions;
-    }
+	}
 };
 
 this.isSolved = function(){
