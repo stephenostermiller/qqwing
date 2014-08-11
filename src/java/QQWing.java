@@ -1538,7 +1538,15 @@ public class QQWing {
 					action = GENERATE;
 					printPuzzle = true;
 					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
-						numberToGenerate = Integer.parseInt(argv[i+1]);
+						try {
+							numberToGenerate = Integer.parseInt(argv[i+1]);
+						} catch (NumberFormatException nfx){
+							numberToGenerate = 0;
+						}
+						if (numberToGenerate <= 0){
+							System.out.println("Bad number of puzzles to generate: "+argv[i+1]);
+							System.exit(1);
+						}
 						i++;
 					}
 				} else if (argv[i].equals("--difficulty")){
