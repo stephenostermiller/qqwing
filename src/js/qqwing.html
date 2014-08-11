@@ -2,25 +2,51 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src=target/jsmin/qqwing-1.1.2.min.js"></script>
+<script src="../../target/jsmin/qqwing-1.1.3.min.js"></script>
 <script>
-function doOnLoad(){
+
+function generate(form){
 	var q = new qqwing();
-	q.setPuzzle([0,0,0,1,0,0,0,0,5,0,0,8,0,3,0,0,0,0,0,4,0,0,6,0,2,0,0,0,0,4,0,5,0,0,0,0,0,9,6,0,0,2,0,0,4,0,0,0,3,0,0,0,1,0,0,0,5,0,0,0,8,0,0,0,6,0,0,0,0,4,0,2,8,2,1,0,0,0,6,5,0]);
-	q.setRecordHistory(true);
-	q.solve();
-	document.getElementById('puzzle').innerHTML = q.getPuzzleString();
-	document.getElementById('solution').innerHTML = q.getSolutionString();
-	document.getElementById('history').innerHTML = q.getSolveHistory();
+	var output = "";
+	for (var i=0; i<form.generatenumber.value;){
+		q.setRecordHistory(true);
+		q.generatePuzzle();
+		output += q.getPuzzleString();
+		i++;
+	}
+	document.getElementById('output').innerHTML = output;
 }
 </script>
-<head>
-<body onload="doOnLoad();">
+</head>
+<body>
+<h1>QQwing</h1>
+<div id=generatetab>
+	<h2>Generate Soduku puzzles</h2>
+	<form name=generateform onsubmit="generate(this); return false;">
+		<div>How many? <input type=number name=generatenumber min=1 value=1></div>
+		<div>Difficulty:
+			<select name=difficultyselect>
+				<option value=0>Any</option>
+				<option value=1>Simple</option>
+				<option value=2>Easy</option>
+				<option value=3>Intermediate</option>
+				<option value=4>Expert</option>
+			</select>
+		</div>
+		<div><input type=submit value=Generate></div>
+	</form>
+</div>
+<div id=solvetab>
+	<h2>Paste your Soduku puzzles to solve here:</h2>
+	<textarea id=tosolve></textarea>
+</div>
 <pre id=puzzle>
 </pre>
 <pre id=solution>
 </pre>
 <pre id=history>
+</pre>
+<pre id=output>
 </pre>
 </body>
 </html>

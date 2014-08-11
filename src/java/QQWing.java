@@ -1706,9 +1706,6 @@ public class QQWing {
 							if (numberGenerated >= numberToGenerate) done = true;
 						}
 					}
-				}
-
-				if (havePuzzle){
 
 					// With a puzzle now in hand and possibly solved
 					// print out the solution, stats, etc.
