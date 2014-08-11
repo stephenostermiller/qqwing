@@ -2,69 +2,69 @@
 http://wellstyled.com/tools/colorscheme2/index-en.html?tetrad;50;0;180;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0
 */
 html { 
-  padding:0px;
-  margin:0px;
+	padding:0px;
+	margin:0px;
 }
 
 body {
-  padding:0px;
-  margin:0px;
-  color:#CFE6CF;
-  background-color:#598059;
+	padding:0px;
+	margin:0px;
+	color:#CFE6CF;
+	background-color:#598059;
 }
 
 a:link {
-  color:#CCAE8F;
-  text-decoration:none;
+	color:#CCAE8F;
+	text-decoration:none;
 }
 a:visited {
-  color:#BF9060;
-  text-decoration:none;
+	color:#BF9060;
+	text-decoration:none;
 }
 a:link:hover {
-  text-decoration:underline;
+	text-decoration:underline;
 }
 #head{
-  margin: 0px;
-  padding:0cm 3cm 0cm 3cm;
-  border:1px solid #598059;
-  border-bottom:20px solid #647D8F;
-  height:60px;
-  font:monospaced;
+	margin: 0px;
+	padding:0cm 3cm 0cm 3cm;
+	border:1px solid #598059;
+	border-bottom:20px solid #647D8F;
+	height:60px;
+	font:monospaced;
 
 }
 
 #content {
-  margin: 0px 0px 0px 180px;
-  padding: 1cm;
-  min-height:600px;
+	margin: 0px 0px 0px 180px;
+	padding: 1cm;
+	min-height:600px;
 }
 
 #menu {
-  position: absolute;
-  left: 0px;
-  top:81px;
-  width: 180px;
-  margin: 0px; 
-  padding: 3px;
+	position: absolute;
+	left: 0px;
+	top:81px;
+	width: 180px;
+	margin: 0px; 
+	padding: 3px;
 }
 
 #menu ul {
-  margin:0px 3px 0px 10px;
-  padding:0px 0px 0px 10px;
+	margin:0px 3px 0px 10px;
+	padding:0px 0px 0px 10px;
 }
 
 #foot{
-  border:1px solid #598059;
-  border-top:20px solid #647D8F;
-  margin: 0px;
-  padding: 0px;
-  color:#CFE6CF;
-  background-color:#598059;
+	border:1px solid #598059;
+	border-top:20px solid #647D8F;
+	margin: 0px;
+	padding: 0px;
+	color:#CFE6CF;
+	background-color:#598059;
 
 }
 a.mail {
-  font-style:italic;
+	font-style:italic;
 }
 
 .tag{
@@ -102,8 +102,8 @@ a.mail {
 	color:navy;
 }
 .operator{
-    font-weight:bold;
-    color:navy;
+	font-weight:bold;
+	color:navy;
 }
 .comment{
 	color:green;
@@ -120,8 +120,8 @@ a.mail {
 	color:orange;
 }
 .sourcedoc{
-    background-color:white;
-    overflow:scroll;
-    padding:1cm;
+	background-color:white;
+	overflow:scroll;
+	padding:1cm;
 }
 
