@@ -81,6 +81,12 @@ testcppapp: cppcompile
 website:
 	@build/build_website.sh
 
+.PHONY: javatest
+javatest: testjavaunit testjavaapp
+
+.PHONY: cpptest
+cpptest: testcppapp
+
 .PHONY: clean
 clean:
 	rm -rf target/
@@ -122,6 +128,12 @@ javaapptest: testjavaapp
 
 .PHONY: cppapptest
 cppapptest: testcppapp
+
+.PHONY: testjava
+testjava: javatest
+
+.PHONY: testcpp
+testcpp: cpptest
 
 .PHONY: unittestjava
 unittestjava: javaunittest
