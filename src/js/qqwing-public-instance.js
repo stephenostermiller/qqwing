@@ -134,7 +134,7 @@ this.LogItem = function(r, t, v, p){
  * The given puzzle must be an array of 81 integers.
  */
 this.setPuzzle = function(initPuzzle){
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		puzzle[i] = initPuzzle[i];
 	}
 	return reset.call(this);
@@ -196,16 +196,50 @@ this.solve = function(round){
 };
 
 
-this.countSolutions = function(){
-	/* TODO */
-};
+this.countSolutions = function(round, limitToTwo){
+    if (!round || round <= 1){
+	    // Don't record history while generating.
+	    var recHistory = recordHistory;
+	    setRecordHistory(false);
+	    var lHistory = logHistory;
+	    setLogHistory(false);
 
-this.printPossibilities = function(){
-	/* TODO */
+	    reset.call(this);
+	    var solutionCount = countSolutions(2, false);
+
+	    // Restore recording history.
+	    setRecordHistory(recHistory);
+	    setLogHistory(lHistory);
+
+	    return solutionCount;
+    } else {        
+		while (singleSolveMove.call(this, round)){
+			if (isSolved()){
+				rollbackRound.call(this, round);
+				return 1;
+			}
+			if (isImpossible.call(this)){
+				rollbackRound.call(this, round);
+				return 0;
+			}
+		}
+
+		var solutions = 0;
+		var nextRound = round+1;
+		for (var guessNumber=0; guess.call(this, nextRound, guessNumber); guessNumber++){
+			solutions += countSolutions(nextRound, limitToTwo);
+			if (limitToTwo && solutions >=2){
+				rollbackRound.call(this, round);
+				return solutions;
+			}
+		}
+		rollbackRound.call(this, round);
+		return solutions;
+    }
 };
 
 this.isSolved = function(){
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		if (solution[i] == 0){
 			return false;
 		}
@@ -234,11 +268,111 @@ this.setPrintStyle = function(ps){
 };
 
 this.generatePuzzle = function(){
-	/* TODO */
+	return generatePuzzleSymmetry(qqwing.Symmetry.NONE);
 };
 
 this.generatePuzzleSymmetry = function(symmetry){
-	/* TODO */
+		if (symmetry == qqwing.Symmetry.RANDOM) symmetry = getRandomSymmetry.call(this);
+
+		// Don't record history while generating.
+		var recHistory = recordHistory;
+		setRecordHistory(false);
+		var lHistory = logHistory;
+		setLogHistory(false);
+
+		clearPuzzle.call(this);
+
+		// Start by getting the randomness in order so that
+		// each puzzle will be different from the last.
+		shuffleRandomArrays.call(this);
+
+		// Now solve the puzzle the whole way.  The solve
+		// uses random algorithms, so we should have a
+		// really randomly totally filled sudoku
+		// Even when starting from an empty grid
+		solve();
+
+		if (symmetry == qqwing.Symmetry.NONE){
+			// Rollback any square for which it is obvious that
+			// the square doesn't contribute to a unique solution
+			// (ie, squares that were filled by logic rather
+			// than by guess)
+			rollbackNonGuesses.call(this);
+		}
+
+		// Record all marked squares as the puzzle so
+		// that we can call countSolutions without losing it.
+		for (var i=0; i<qqwing.BOARD_SIZE; i++){
+			puzzle[i] = solution[i];
+		}
+
+		// Rerandomize everything so that we test squares
+		// in a different order than they were added.
+		shuffleRandomArrays.call(this);
+
+		// Remove one value at a time and see if
+		// the puzzle still has only one solution.
+		// If it does, leave it0 out the point because
+		// it is not needed.
+		for (var i=0; i<qqwing.BOARD_SIZE; i++){
+			// check all the positions, but in shuffled order
+			var position = randomBoardArray[i];
+			if (puzzle[position] > 0){
+				var positionsym1 = -1;
+				var positionsym2 = -1;
+				var positionsym3 = -1;
+				switch (symmetry){
+					case ROTATE90:
+						positionsym2 = rowColumnToCell(qqwing.COL_HEIGHT-1-cellToColumn(position),cellToRow(position));
+						positionsym3 = rowColumnToCell(cellToColumn(position),qqwing.ROW_LENGTH-1-cellToRow(position));
+					case ROTATE180:
+						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
+					break;
+					case MIRROR:
+						positionsym1 = rowColumnToCell(cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
+					break;
+					case FLIP:
+						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),cellToColumn(position));
+					break;
+				}
+				// try backing out the value and
+				// counting solutions to the puzzle
+				var savedValue = puzzle[position];
+				puzzle[position] = 0;
+				var savedSym1 = 0;
+				if (positionsym1 >= 0){
+					savedSym1 = puzzle[positionsym1];
+					puzzle[positionsym1] = 0;
+				}
+				var savedSym2 = 0;
+				if (positionsym2 >= 0){
+					savedSym2 = puzzle[positionsym2];
+					puzzle[positionsym2] = 0;
+				}
+				var savedSym3 = 0;
+				if (positionsym3 >= 0){
+					savedSym3 = puzzle[positionsym3];
+					puzzle[positionsym3] = 0;
+				}
+				reset();
+				if (countSolutions(2, true) > 1){
+					// Put it back in, it is needed
+					puzzle[position] = savedValue;
+					if (positionsym1 >= 0) puzzle[positionsym1] = savedSym1;
+					if (positionsym2 >= 0) puzzle[positionsym2] = savedSym2;
+					if (positionsym3 >= 0) puzzle[positionsym3] = savedSym3;
+				}
+			}
+		}
+
+		// Clear all solution info, leaving just the puzzle.
+		reset.call(this);
+
+		// Restore recording history.
+		setRecordHistory(recHistory);
+		setLogHistory(lHistory);
+
+		return true;
 };
 
 this.getGivenCount = function(){

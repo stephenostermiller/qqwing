@@ -82,7 +82,6 @@
 				void printSolution();
 				bool solve();
 				int countSolutions();
-				void printPossibilities();
 				bool isSolved();
 				void printSolveHistory();
 				void setRecordHistory(bool recHistory);

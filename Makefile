@@ -2,7 +2,7 @@
 all: dist test website
 
 .PHONY: dist
-dist: jar tgz rpm deb
+dist: jar tgz rpm deb jsmin
 	@build/show_dist.sh
 
 .PHONY: compile
@@ -27,6 +27,14 @@ cppconfigure: notroot neaten
 .PHONY: cppcompile
 cppcompile: cppconfigure
 	@build/cpp_compile.sh
+
+.PHONY: jscompile
+jscompile:
+		@build/js_build.sh
+
+.PHONY: jsmin
+jsmin: jscompile
+		@build/js_minimize.sh
 
 .PHONY: tgz
 tgz: cppcompile
@@ -62,12 +70,16 @@ testunit: testjavaunit
 testjavaunit: javacompile javatestcompile
 	@build/java_unit_tests.sh
 
+.PHONY: testjsunit
+testjsunit: jscompile
+	@build/js_unit_tests.sh
+
 .PHONY: javatestcompile
 javatestcompile: javacompile
 	@build/java_test_compile.sh
 
 .PHONY: testapp
-testapp: testcppapp testjavaapp
+testapp: testcppapp testjavaapp testjsapp
 
 .PHONY: testjavaapp
 testjavaapp: jar
@@ -76,6 +88,10 @@ testjavaapp: jar
 .PHONY: testcppapp
 testcppapp: cppcompile
 	@build/test-app-run.sh cpp
+
+.PHONY: testjsapp
+testjsapp: jsmin
+	@build/test-app-run.sh js
 
 .PHONY: website
 website:
@@ -105,14 +121,17 @@ compilejava: javacompile
 .PHONY: java
 java: javacompile
 
+.PHONY: cpp
+cpp: cppcompile
+
+.PHONY: js
+js: jsmin
+
 .PHONY: configurecpp
 configurecpp: cppconfigure
 
 .PHONY: compilecpp
 compilecpp: cppcompile
-
-.PHONY: cpp
-cpp: cppcompile
 
 .PHONY: unittest
 unittest: testunit
@@ -128,6 +147,9 @@ apptest: testapp
 
 .PHONY: javaapptest
 javaapptest: testjavaapp
+
+.PHONY: jsapptest
+jsapptest: testjsapp
 
 .PHONY: cppapptest
 cppapptest: testcppapp
@@ -149,6 +171,9 @@ compilejavatest: testcompilejava
 
 .PHONY: apptestjava
 apptestjava: javaapptest
+
+.PHONY: apptestjs
+apptestjs: jsapptest
 
 .PHONY: apptestcpp
 apptestcpp: cppapptest

@@ -1319,36 +1319,6 @@ namespace qqwing {
 				possibilities[valPos] = round;
 			}
 		}}
-
-		//cout << "Col Start: " << colStart << " Row Start: " << rowStart << " Section Start: " << secStart<< " Value: " << value << endl;
-		//printPossibilities();
-	}
-
-	/**
-	 * Print a human readable list of all the possibilities for the
-	 * squares that have not yet been filled in.
-	 */
-	void SudokuBoard::printPossibilities(){
-		for(int i=0; i<BOARD_SIZE; i++){
-			cout << " ";
-			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-				int posVal = (9*i)+valIndex;
-				int value = valIndex+1;
-				if (possibilities[posVal]==0){
-					cout << value;
-				} else {
-					cout << ".";
-				}
-			}
-			if (i != BOARD_SIZE-1 && i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
-				cout << endl << "-------------------------------|-------------------------------|-------------------------------" << endl;
-			} else if (i%9==8){
-				cout << endl;
-			} else if (i%3==2){
-				cout << " |";
-			}
-		}
-		cout << endl;
 	}
 
 	/**

@@ -23,21 +23,21 @@
  * Once initialized, this puzzle remains as is.
  * The answer is worked out in "solution".
  */
-var puzzle = new Array(BOARD_SIZE);
+var puzzle = new Array(qqwing.BOARD_SIZE);
 
 /**
  * The 81 integers that make up a sudoku puzzle.
  * The solution is built here, after completion
  * all will be 1-9.
  */
-var solution = new Array(BOARD_SIZE);
+var solution = new Array(qqwing.BOARD_SIZE);
 
 /**
  * Recursion depth at which each of the numbers
  * in the solution were placed.  Useful for backing
  * out solve branches that don't lead to a solution.
  */
-var solutionRound = new Array(BOARD_SIZE);
+var solutionRound = new Array(qqwing.BOARD_SIZE);
 
 /**
  * The 729 integers that make up a the possible
@@ -50,7 +50,7 @@ var solutionRound = new Array(BOARD_SIZE);
  * which it was determined that it could not be
  * a possibility.
  */
-var possibilities = new Array(POSSIBILITY_SIZE);
+var possibilities = new Array(qqwing.POSSIBILITY_SIZE);
 
 /**
  * An array the size of the board (81) containing each
@@ -58,9 +58,9 @@ var possibilities = new Array(POSSIBILITY_SIZE);
  * be shuffled so that operations that need to
  * look at each cell can do so in a random order.
  */
-var randomBoardArray = new Array(BOARD_SIZE);
+var randomBoardArray = new Array(qqwing.BOARD_SIZE);
 
-for (var i=0; i<BOARD_SIZE; i++){
+for (var i=0; i<qqwing.BOARD_SIZE; i++){
 	randomBoardArray[i] = i;
 }
 
@@ -69,9 +69,9 @@ for (var i=0; i<BOARD_SIZE; i++){
  * some random order to be used when trying each
  * position in turn during guesses.
  */
-var randomPossibilityArray = new Array(NUM_POSS);
+var randomPossibilityArray = new Array(qqwing.NUM_POSS);
 
-for (var i=0; i<NUM_POSS; i++){
+for (var i=0; i<qqwing.NUM_POSS; i++){
 	randomPossibilityArray[i] = i;
 }
 
@@ -117,20 +117,20 @@ var lastSolveRound = 0;
  * and clears any history messages.
  */
 var reset = function(){
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		solution[i] = 0;
 	}
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		solutionRound[i] = 0;
 	}
-	for (var i=0; i<POSSIBILITY_SIZE; i++){
+	for (var i=0; i<qqwing.POSSIBILITY_SIZE; i++){
 		possibilities[i] = 0;
 	}
 	solveHistory = [];
 	solveInstructions = [];
 
 	var round = 1;
-	for (var position=0; position<BOARD_SIZE; position++){
+	for (var position=0; position<qqwing.BOARD_SIZE; position++){
 		if (puzzle[position] > 0){
 			var valIndex = puzzle[position]-1;
 			var valPos = getPossibilityIndex(valIndex,position);
@@ -165,11 +165,11 @@ var singleSolveMove = function(round){
  * of cell is often called a "single"
  */
 var onlyPossibilityForCell = function(round){
-	for (var position=0; position<BOARD_SIZE; position++){
+	for (var position=0; position<qqwing.BOARD_SIZE; position++){
 		if (solution[position] == 0){
 			var count = 0;
 			var lastValue = 0;
-			for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
 					count++;
@@ -194,14 +194,11 @@ var onlyValueInColumn = function(round){
 var onlyValueInSection = function(round){
 	/* TODO */
 };
-var countSolutions = function(round, limitToTwo){
-	/* TODO */
-};
 
 var guess = function(round, guessNumber){
 	var localGuessCount = 0;
 	var position = findPositionWithFewestPossibilities.call(this);
-	for (var i=0; i<NUM_POSS; i++){
+	for (var i=0; i<qqwing.NUM_POSS; i++){
 		var valIndex = randomPossibilityArray[i];
 		var valPos = getPossibilityIndex(valIndex,position);
 		if (possibilities[valPos] == 0){
@@ -218,10 +215,10 @@ var guess = function(round, guessNumber){
 };
 
 var isImpossible = function(){
-	for (var position=0; position<BOARD_SIZE; position++){
+	for (var position=0; position<qqwing.BOARD_SIZE; position++){
 		if (solution[position] == 0){
 			var count = 0;
-			for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0) count++;
 			}
@@ -235,13 +232,13 @@ var isImpossible = function(){
 
 var rollbackRound = function(round){
 	if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.ROLLBACK));
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		if (solutionRound[i] == round){
 			solutionRound[i] = 0;
 			solution[i] = 0;
 		}
 	}
-	{for (var i=0; i<POSSIBILITY_SIZE; i++){
+	{for (var i=0; i<qqwing.POSSIBILITY_SIZE; i++){
 		if (possibilities[i] == round){
 			possibilities[i] = 0;
 		}
@@ -295,7 +292,7 @@ var mark = function(position, round, value){
 	// Take this value out of the possibilities for everything in the row
 	solutionRound[position] = round;
 	var rowStart = cellToRow(position)*9;
-	for (var col=0; col<COL_HEIGHT; col++){
+	for (var col=0; col<qqwing.COL_HEIGHT; col++){
 		var rowVal=rowStart+col;
 		var valPos = getPossibilityIndex(valIndex,rowVal);
 		if (possibilities[valPos] == 0){
@@ -337,11 +334,11 @@ var mark = function(position, round, value){
 var findPositionWithFewestPossibilities = function(){
 	var minPossibilities = 10;
 	var bestPosition = 0;
-	for (var i=0; i<BOARD_SIZE; i++){
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
 		var position = randomBoardArray[i];
 		if (solution[position] == 0){
 			var count = 0;
-			for (var valIndex=0; valIndex<NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0) count++;
 			}
@@ -373,8 +370,8 @@ var addHistoryItem = function(l){
 };
 
 var shuffleRandomArrays = function(){
-	shuffleArray(randomBoardArray, BOARD_SIZE);
-	shuffleArray(randomPossibilityArray, NUM_POSS);
+	shuffleArray(randomBoardArray, qqwing.BOARD_SIZE);
+	shuffleArray(randomPossibilityArray, qqwing.NUM_POSS);
 };
 
 /**
@@ -388,7 +385,7 @@ var print = function(puz){
 
 var sudokuToString = function(puz){
 	var s = "";
-	for(var i=0; i<BOARD_SIZE; i++){
+	for(var i=0; i<qqwing.BOARD_SIZE; i++){
 		if (printStyle == qqwing.PrintStyle.READABLE){
 			s += " ";
 		}
@@ -397,7 +394,7 @@ var sudokuToString = function(puz){
 		} else {
 			s += puz[i];
 		}
-		if (i == BOARD_SIZE-1){
+		if (i == qqwing.BOARD_SIZE-1){
 			if (printStyle == qqwing.PrintStyle.CSV){
 				s += ",";
 			} else {
@@ -410,7 +407,7 @@ var sudokuToString = function(puz){
 			if (printStyle == qqwing.PrintStyle.READABLE || printStyle == qqwing.PrintStyle.COMPACT){
 				s += "\n";
 			}
-			if (i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
+			if (i%qqwing.SEC_GROUP_SIZE==qqwing.SEC_GROUP_SIZE-1){
 				if (printStyle == qqwing.PrintStyle.READABLE){
 					s += "-------|-------|-------\n";
 				}

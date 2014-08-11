@@ -408,7 +408,7 @@ function printHelp(){
 }
 
 function printVersion(){
-	console.log("qqwing 1.1.2");
+	console.log("qqwing 1.1.3");
 }
 
 function printAbout(){
@@ -445,7 +445,7 @@ function getMicroseconds(){
 function readPuzzleFromStdIn(puzzle){
 	var fs = require('fs');
 	var read = 0;
-	while (read < 81){
+	while (read < qqwing.BOARD_SIZE){
 		var c = fs.readSync(process.stdin.fd, 1);
 		if (c[1] == 0) return false;
 		if (c[0] >= '1' && c[0] <='9'){

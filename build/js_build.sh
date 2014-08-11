@@ -52,7 +52,7 @@ buildjs qqwing-$version.js qqwing-object-start.js qqwing-private-static.js qqwin
 
 buildjs qqwing-main-$version.js qqwing-$version.js qqwing-main.js
 
-buildjs qqwing-test-$version.js qqwing-private-static.js qqwing-test.js
+buildjs qqwing-test-$version.js qqwing-object-start.js qqwing-object-end.js qqwing-public-static.js qqwing-private-static.js qqwing-test.js
 
 echo
 touch target/jscompile
