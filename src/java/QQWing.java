@@ -1390,7 +1390,7 @@ public class QQWing {
 			}
 		}
 	}
-    
+
 	/**
 	 * print the given BOARD_SIZEd array of ints
 	 * as a sudoku puzzle.  Use print options from

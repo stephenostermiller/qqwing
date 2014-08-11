@@ -29,12 +29,12 @@ cppcompile: cppconfigure
 	@build/cpp_compile.sh
 
 .PHONY: jscompile
-jscompile:
-		@build/js_build.sh
+jscompile: neaten
+	@build/js_build.sh
 
 .PHONY: jsmin
 jsmin: jscompile
-		@build/js_minimize.sh
+	@build/js_minimize.sh
 
 .PHONY: tgz
 tgz: cppcompile
