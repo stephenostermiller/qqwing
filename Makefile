@@ -156,6 +156,9 @@ unittestjava: javaunittest
 PHONY: unittestjs
 unittestjs: jsunittest
 
+.PHONY: unittestjava
+unittestjava: javaunittest
+
 .PHONY: compilejavatest
 compilejavatest: testcompilejava
 
