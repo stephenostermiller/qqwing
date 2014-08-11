@@ -393,7 +393,7 @@ public class QQWing {
 
 	boolean generatePuzzleSymmetry(Symmetry symmetry) throws Exception {
 
-		if (symmetry ==  Symmetry.RANDOM) symmetry = getRandomSymmetry();
+		if (symmetry == Symmetry.RANDOM) symmetry = getRandomSymmetry();
 
 		// Don't record history while generating.
 		boolean recHistory = recordHistory;
@@ -1389,39 +1389,8 @@ public class QQWing {
 				possibilities[valPos] = round;
 			}
 		}
-
-		//System.out.println("Col Start: "+colStart+" Row Start: "+rowStart+" Section Start: "+secStart<< " Value: "+value);
-		//printPossibilities();
 	}
-
-	/**
-	 * Print a human readable list of all the possibilities for the
-	 * squares that have not yet been filled in.
-	 */
-	void printPossibilities(){
-		for(int i=0; i<BOARD_SIZE; i++){
-			System.out.print(" ");
-			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-				int posVal = (9*i)+valIndex;
-				int value = valIndex+1;
-				if (possibilities[posVal]==0){
-					System.out.println(value);
-				} else {
-					System.out.print(".");
-				}
-			}
-			if (i != BOARD_SIZE-1 && i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
-				System.out.println();
-				System.out.println("-------------------------------|-------------------------------|-------------------------------");
-			} else if (i%9==8){
-				System.out.println();
-			} else if (i%3==2){
-				System.out.print(" |");
-			}
-		}
-		System.out.println();
-	}
-
+    
 	/**
 	 * print the given BOARD_SIZEd array of ints
 	 * as a sudoku puzzle.  Use print options from
