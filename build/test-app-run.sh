@@ -1,9 +1,8 @@
 #!/bin/sh
 
-set -e
-set -o pipefail
-
 version=`build/version.sh`
+
+exitstatus=0
 
 case $1 in
 	"java")
@@ -16,8 +15,13 @@ case $1 in
 		export QQWING="target/qqwing"
 		export QQWINGSRCWITHCOPYRIGHT=src/cpp/qqwing.cpp
 		;;
+	"js")
+		export QQWINGTESTTYPE=js
+		export QQWING="node target/jsmin/qqwing-main-$version.min.js"
+		export QQWINGSRCWITHCOPYRIGHT=src/js/qqwing-main.js
+		;;
 	*)
-		echo "Expected java or cpp as argument"
+		echo "Expected java, cpp, or js as argument"
 		exit 1
 		;;
 esac
@@ -28,6 +32,14 @@ for test in test/app/*.sh
 do
 	echo -n '.'
 	$test
+	if [ $? -ne 0 ]
+	then
+		exitstatus=1
+		echo
+		echo "Failed $test"
+	fi
 done
 
 echo
+
+exit $exitstatus

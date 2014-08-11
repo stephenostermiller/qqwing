@@ -60,7 +60,7 @@ testunit: testjavaunit
 
 .PHONY: testjavaunit
 testjavaunit: javacompile javatestcompile
-	@build/java_tests_run.sh
+	@build/java_unit_tests.sh
 
 .PHONY: javatestcompile
 javatestcompile: javacompile
@@ -80,3 +80,53 @@ testcppapp: cppcompile
 .PHONY: clean
 clean:
 	rm -rf target/
+
+# Target aliases
+
+.PHONY: versionjava
+versionjava: javaversion
+
+.PHONY: compilejava
+compilejava: javacompile
+
+.PHONY: java
+java: javacompile
+
+.PHONY: configurecpp
+configurecpp: cppconfigure
+
+.PHONY: compilecpp
+compilecpp: cppcompile
+
+.PHONY: cpp
+cpp: cppcompile
+
+.PHONY: unittest
+unittest: testunit
+
+.PHONY: javaunittest
+javaunittest: testjavaunit
+
+.PHONY: testcompilejava
+testcompilejava: javatestcompile
+
+.PHONY: apptest
+apptest: testapp
+
+.PHONY: javaapptest
+javaapptest: testjavaapp
+
+.PHONY: cppapptest
+cppapptest: testcppapp
+
+.PHONY: unittestjava
+unittestjava: javaunittest
+
+.PHONY: compilejavatest
+compilejavatest: testcompilejava
+
+.PHONY: apptestjava
+apptestjava: javaapptest
+
+.PHONY: apptestcpp
+apptestcpp: cppapptest

@@ -110,6 +110,10 @@ int main(int argc, char *argv[]){
 				printPuzzle = true;
 				if (i+1 < argc && argv[i+1][0] != '-'){
 					numberToGenerate = atoi(argv[i+1]);
+					if (numberToGenerate <= 0){
+						cout << "Bad number of puzzles to generate: " << argv[i+1] << endl;
+						return 1;
+					}
 					i++;
 				}
 			} else if (!strcmp(argv[i],"--difficulty")){
