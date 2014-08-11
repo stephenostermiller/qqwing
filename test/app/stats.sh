@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-actual=`echo '9..6...7...1..428.7..2.............81.8....45.9..4.6....7.9.5.....4.5....1..6..29' | ./target/qqwing --solve --csv --log-history --stats`
+actual=`echo '9..6...7...1..428.7..2.............81.8....45.9..4.6....7.9.5.....4.5....1..6..29' | $QQWING --solve --csv --log-history --stats`
 
 expected="Solution,Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty
 Round: 1 - Mark given (Row: 1 - Column: 1 - Value: 9)
