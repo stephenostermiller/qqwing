@@ -92,7 +92,6 @@ namespace qqwing {
 			int position;
 	};
 
-	string IntToString(int num);
 	void shuffleArray(int* array, int size);
 	SudokuBoard::Symmetry getRandomSymmetry();
 	int getLogCount(vector<LogItem*>* v, LogItem::LogType type);

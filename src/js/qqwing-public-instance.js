@@ -115,7 +115,7 @@ this.LogItem = function(r, t, v, p){
 			var printed = false;
 			if (position > -1){
 				if (printed) s += " - ";
-				s += "Row: " + cellToRow(position)+1 + " - Column: " + cellToColumn(position)+1;
+				s += "Row: " + (cellToRow(position)+1) + " - Column: " + (cellToColumn(position)+1);
 				printed = true;
 			}
 			if (value > 0){
@@ -200,21 +200,21 @@ this.countSolutions = function(round, limitToTwo){
     if (!round || round <= 1){
 	    // Don't record history while generating.
 	    var recHistory = recordHistory;
-	    setRecordHistory(false);
+	    this.setRecordHistory(false);
 	    var lHistory = logHistory;
-	    setLogHistory(false);
+	    this.setLogHistory(false);
 
 	    reset.call(this);
-	    var solutionCount = countSolutions(2, false);
+	    var solutionCount = this.countSolutions(2, false);
 
 	    // Restore recording history.
-	    setRecordHistory(recHistory);
-	    setLogHistory(lHistory);
+	    this.setRecordHistory(recHistory);
+	    this.setLogHistory(lHistory);
 
 	    return solutionCount;
     } else {        
 		while (singleSolveMove.call(this, round)){
-			if (isSolved()){
+			if (this.isSolved()){
 				rollbackRound.call(this, round);
 				return 1;
 			}
@@ -227,7 +227,7 @@ this.countSolutions = function(round, limitToTwo){
 		var solutions = 0;
 		var nextRound = round+1;
 		for (var guessNumber=0; guess.call(this, nextRound, guessNumber); guessNumber++){
-			solutions += countSolutions(nextRound, limitToTwo);
+			solutions += this.countSolutions(nextRound, limitToTwo);
 			if (limitToTwo && solutions >=2){
 				rollbackRound.call(this, round);
 				return solutions;
@@ -276,9 +276,9 @@ this.generatePuzzleSymmetry = function(symmetry){
 
 		// Don't record history while generating.
 		var recHistory = recordHistory;
-		setRecordHistory(false);
+		this.setRecordHistory(false);
 		var lHistory = logHistory;
-		setLogHistory(false);
+		this.setLogHistory(false);
 
 		clearPuzzle.call(this);
 
@@ -290,7 +290,7 @@ this.generatePuzzleSymmetry = function(symmetry){
 		// uses random algorithms, so we should have a
 		// really randomly totally filled sudoku
 		// Even when starting from an empty grid
-		solve();
+		this.solve();
 
 		if (symmetry == qqwing.Symmetry.NONE){
 			// Rollback any square for which it is obvious that
@@ -322,16 +322,16 @@ this.generatePuzzleSymmetry = function(symmetry){
 				var positionsym2 = -1;
 				var positionsym3 = -1;
 				switch (symmetry){
-					case ROTATE90:
+					case qqwing.Symmetry.ROTATE90:
 						positionsym2 = rowColumnToCell(qqwing.COL_HEIGHT-1-cellToColumn(position),cellToRow(position));
 						positionsym3 = rowColumnToCell(cellToColumn(position),qqwing.ROW_LENGTH-1-cellToRow(position));
-					case ROTATE180:
+					case qqwing.Symmetry.ROTATE180:
 						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
 					break;
-					case MIRROR:
+					case qqwing.Symmetry.MIRROR:
 						positionsym1 = rowColumnToCell(cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
 					break;
-					case FLIP:
+					case qqwing.Symmetry.FLIP:
 						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),cellToColumn(position));
 					break;
 				}
@@ -354,8 +354,8 @@ this.generatePuzzleSymmetry = function(symmetry){
 					savedSym3 = puzzle[positionsym3];
 					puzzle[positionsym3] = 0;
 				}
-				reset();
-				if (countSolutions(2, true) > 1){
+				reset.call(this);
+				if (this.countSolutions(2, true) > 1){
 					// Put it back in, it is needed
 					puzzle[position] = savedValue;
 					if (positionsym1 >= 0) puzzle[positionsym1] = savedSym1;
@@ -369,50 +369,115 @@ this.generatePuzzleSymmetry = function(symmetry){
 		reset.call(this);
 
 		// Restore recording history.
-		setRecordHistory(recHistory);
-		setLogHistory(lHistory);
+		this.setRecordHistory(recHistory);
+		this.setLogHistory(lHistory);
 
 		return true;
 };
 
+/**
+ * Get the number of cells that are
+ * set in the puzzle (as opposed to
+ * figured out in the solution
+ */
 this.getGivenCount = function(){
-	/* TODO */
+	var count = 0;
+	for (var i=0; i<qqwing.BOARD_SIZE; i++){
+		if (puzzle[i] != 0) count++;
+	}
+	return count;
 };
 
+/**
+ * Get the number of cells for which the solution was determined
+ * because there was only one possible value for that cell.
+ */
 this.getSingleCount = function(){
-	/* TODO */
+	return getLogCount.call(this, solveInstructions, qqwing.LogType.SINGLE);
+}
+
+/**
+ * Get the number of cells for which the solution was determined
+ * because that cell had the only possibility for some value in
+ * the row, column, or section.
+ */
+this.getHiddenSingleCount = function(){
+	return (
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_SINGLE_ROW) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_SINGLE_COLUMN) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_SINGLE_SECTION)
+	);
 };
 
-this.getHiddenSingleCount = function(){
-	/* TODO */
-};
+/**
+ * Get the number of naked pair reductions that were performed
+ * in solving this puzzle.
+ */
 
 this.getNakedPairCount = function(){
-	/* TODO */
+	return (
+		getLogCount.call(this, solveInstructions, qqwing.LogType.NAKED_PAIR_ROW) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.NAKED_PAIR_COLUMN) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.NAKED_PAIR_SECTION)
+	);
 };
 
+/**
+ * Get the number of hidden pair reductions that were performed
+ * in solving this puzzle.
+ */
 this.getHiddenPairCount = function(){
-	/* TODO */
+	return (
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_PAIR_ROW) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_PAIR_COLUMN) +
+		getLogCount.call(this, solveInstructions, qqwing.LogType.HIDDEN_PAIR_SECTION)
+	);
 };
 
+/**
+ * Get the number of box/line reductions that were performed
+ * in solving this puzzle.
+ */
 this.getBoxLineReductionCount = function(){
-	/* TODO */
+	return (
+		getLogCount.call(this, solveInstructions, qqwing.LogType.ROW_BOX)+
+		getLogCount.call(this, solveInstructions, qqwing.LogType.COLUMN_BOX)
+	);
 };
+
+/**
+ * Get the number of pointing pair/triple reductions that were performed
+ * in solving this puzzle.
+ */
 
 this.getPointingPairTripleCount = function(){
-	/* TODO */
+	return (
+		getLogCount.call(this, solveInstructions, qqwing.LogType.POINTING_PAIR_TRIPLE_ROW)+
+		getLogCount.call(this, solveInstructions, qqwing.LogType.POINTING_PAIR_TRIPLE_COLUMN)
+	);
 };
 
+/**
+ * Get the number lucky guesses in solving this puzzle.
+ */
 this.getGuessCount = function(){
-	/* TODO */
+	return getLogCount.call(this, solveInstructions, qqwing.LogType.GUESS);
 };
 
+/**
+ * Get the number of backtracks (unlucky guesses) required
+ * when solving this puzzle.
+ */
 this.getBacktrackCount = function(){
-	/* TODO */
+	return getLogCount.call(this, solveHistory, qqwing.LogType.ROLLBACK);
 };
 
 this.printSolveInstructions = function(){
-	/* TODO */
+	if (this.isSolved()){
+		printHistory(solveInstructions);
+	} else {
+		console.log("No solve instructions - Puzzle is not possible to solve.");
+	}
 };
 
 this.getDifficulty = function(){
