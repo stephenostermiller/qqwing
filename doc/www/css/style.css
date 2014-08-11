@@ -1,7 +1,7 @@
 /*
 http://wellstyled.com/tools/colorscheme2/index-en.html?tetrad;50;0;180;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0
 */
-html { 
+html {
 	padding:0px;
 	margin:0px;
 }
@@ -45,7 +45,7 @@ a:link:hover {
 	left: 0px;
 	top:81px;
 	width: 180px;
-	margin: 0px; 
+	margin: 0px;
 	padding: 3px;
 }
 
@@ -72,7 +72,7 @@ a.mail {
 	color:blue;
 }
 .endtag{
-	color:blue;	
+	color:blue;
 }
 .reference{
 	color:black;
