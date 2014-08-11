@@ -268,7 +268,7 @@ this.setPrintStyle = function(ps){
 };
 
 this.generatePuzzle = function(){
-	return generatePuzzleSymmetry(qqwing.Symmetry.NONE);
+	return this.generatePuzzleSymmetry(qqwing.Symmetry.NONE);
 };
 
 this.generatePuzzleSymmetry = function(symmetry){
