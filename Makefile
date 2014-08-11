@@ -1,24 +1,16 @@
 .PHONY: all
-all: dist test
+all: dist test website
 
 .PHONY: dist
-dist: jar tgz rpm deb jsmin
+dist: jar tgz rpm deb
 	@build/show_dist.sh
 
 .PHONY: compile
-compile: javacompile cppcompile jscompile
+compile: javacompile cppcompile
 
 .PHONY: javaversion
 javaversion: notroot neaten
 	@build/java_version.sh
-
-.PHONY: jscompile
-jscompile:
-	@build/js_build.sh
-
-.PHONY: jsmin
-jsmin: jscompile
-	@build/js_minimize.sh
 
 .PHONY: javacompile
 javacompile: javaversion
@@ -64,22 +56,18 @@ neaten:
 test: testunit testapp
 
 .PHONY: testunit
-testunit: testjavaunit testjsunit
+testunit: testjavaunit
 
 .PHONY: testjavaunit
 testjavaunit: javacompile javatestcompile
 	@build/java_unit_tests.sh
-
-.PHONY: testjsunit
-testjsunit: jscompile
-	@build/js_unit_tests.sh
 
 .PHONY: javatestcompile
 javatestcompile: javacompile
 	@build/java_test_compile.sh
 
 .PHONY: testapp
-testapp: testcppapp testjavaapp testjsapp
+testapp: testcppapp testjavaapp
 
 .PHONY: testjavaapp
 testjavaapp: jar
@@ -89,18 +77,18 @@ testjavaapp: jar
 testcppapp: cppcompile
 	@build/test-app-run.sh cpp
 
-.PHONY: testjsapp
-testjsapp: jsmin
-	@build/test-app-run.sh js
-
-.PHONY: jstest
-jstest: testjsunit testjsapp
+.PHONY: website
+website:
+	@build/build_website.sh
 
 .PHONY: javatest
 javatest: testjavaunit testjavaapp
 
 .PHONY: cpptest
 cpptest: testcppapp
+
+.PHONY: jstest
+jstest: testjsunit testjsapp
 
 .PHONY: clean
 clean:
@@ -110,15 +98,6 @@ clean:
 
 .PHONY: versionjava
 versionjava: javaversion
-
-.PHONY: compilejs
-compilejs: jscompile
-
-.PHONY: js
-js: jsmin
-
-.PHONY: minjs
-minjs: jsmin
 
 .PHONY: compilejava
 compilejava: javacompile
@@ -141,9 +120,6 @@ unittest: testunit
 .PHONY: javaunittest
 javaunittest: testjavaunit
 
-.PHONY: jsunittest
-jsunittest: testjsunit
-
 .PHONY: testcompilejava
 testcompilejava: javatestcompile
 
@@ -156,14 +132,14 @@ javaapptest: testjavaapp
 .PHONY: cppapptest
 cppapptest: testcppapp
 
-.PHONY: jsapptest
-jsapptest: testjsapp
+.PHONY: testjava
+testjava: javatest
 
-.PHONY: unittestjava
-unittestjava: javaunittest
+.PHONY: testcpp
+testcpp: cpptest
 
-PHONY: unittestjs
-unittestjs: jsunittest
+.PHONY: testjs
+testjs: jstest
 
 .PHONY: unittestjava
 unittestjava: javaunittest
@@ -177,14 +153,5 @@ apptestjava: javaapptest
 .PHONY: apptestcpp
 apptestcpp: cppapptest
 
-.PHONY: apptestjs
-apptestjs: jsapptest
-
-.PHONY: testjs
-testjs: jstest
-
-.PHONY: testjava
-testjava: javatest
-
-.PHONY: testcpp
-testcpp: cpptest 
+.PHONY: www
+www: website

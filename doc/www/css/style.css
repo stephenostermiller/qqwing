@@ -1,0 +1,127 @@
+/*
+http://wellstyled.com/tools/colorscheme2/index-en.html?tetrad;50;0;180;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0.3;-0.8;0.3;0.5;0.1;0.9;0.5;0.75;0
+*/
+html {
+	padding:0px;
+	margin:0px;
+}
+
+body {
+	padding:0px;
+	margin:0px;
+	color:#CFE6CF;
+	background-color:#598059;
+}
+
+a:link {
+	color:#CCAE8F;
+	text-decoration:none;
+}
+a:visited {
+	color:#BF9060;
+	text-decoration:none;
+}
+a:link:hover {
+	text-decoration:underline;
+}
+#head{
+	margin: 0px;
+	padding:0cm 3cm 0cm 3cm;
+	border:1px solid #598059;
+	border-bottom:20px solid #647D8F;
+	height:60px;
+	font:monospaced;
+
+}
+
+#content {
+	margin: 0px 0px 0px 180px;
+	padding: 1cm;
+	min-height:600px;
+}
+
+#menu {
+	position: absolute;
+	left: 0px;
+	top:81px;
+	width: 180px;
+	margin: 0px;
+	padding: 3px;
+}
+
+#menu ul {
+	margin:0px 3px 0px 10px;
+	padding:0px 0px 0px 10px;
+}
+
+#foot{
+	border:1px solid #598059;
+	border-top:20px solid #647D8F;
+	margin: 0px;
+	padding: 0px;
+	color:#CFE6CF;
+	background-color:#598059;
+
+}
+a.mail {
+	font-style:italic;
+}
+
+.tag{
+	font-weight:bold;
+	color:blue;
+}
+.endtag{
+	color:blue;
+}
+.reference{
+	color:black;
+}
+.name{
+	font-weight:bold;
+	color:maroon;
+}
+.value{
+	font-style: italic;
+	color:maroon;
+}
+.text{
+	font-weight:bold;
+	color:black;
+}
+.reservedWord{
+	color:blue;
+}
+.identifier{
+	color:black;
+}
+.literal{
+	color:maroon;
+}
+.separator{
+	color:navy;
+}
+.operator{
+	font-weight:bold;
+	color:navy;
+}
+.comment{
+	color:green;
+}
+.preprocessor{
+	color:purple;
+}
+.whitespace{
+}
+.error{
+	color:red;
+}
+.unknown{
+	color:orange;
+}
+.sourcedoc{
+	background-color:white;
+	overflow:scroll;
+	padding:1cm;
+}
+

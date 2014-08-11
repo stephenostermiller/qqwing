@@ -1,0 +1,14 @@
+<%bte.doc super="page.bte"%>
+<%bte.tpl name=pageTitle %>Play Sudoku Online<%/bte.tpl%>
+<%bte.tpl name=description %>The place to play Sudoku puzzles in your web browser online.<%/bte.tpl%>
+<%bte.tpl name=keywords %>play sudoku, online sudoku<%/bte.tpl%>
+<%bte.tpl name=playLinkText %><b>Play Online</b><%/bte.tpl%>
+<%bte.tpl name=pageContent %>
+<h1>Play Sudoku Online</h1>
+
+<p>QQwing is hooked up to a web front end so that you can play sudoku online.</p>
+
+<h2><a href="http://ostermiller.org/calc/sudoku.html">Click here to play sudoku</a></h2>
+
+<%/bte.tpl%>
+<%/bte.doc%>
