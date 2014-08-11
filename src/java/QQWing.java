@@ -2149,77 +2149,77 @@ public class QQWing {
 		 * determined by the type of log item.
 		 */
 		void print(){
-			System.out.println("Round: "+getRound()+" - ");
+			System.out.print("Round: "+getRound()+" - ");
 			switch(type){
 				case GIVEN:{
-					System.out.println("Mark given");
+					System.out.print("Mark given");
 				} break;
 				case ROLLBACK:{
-					System.out.println("Roll back round");
+					System.out.print("Roll back round");
 				} break;
 				case GUESS:{
-					System.out.println("Mark guess (start round)");
+					System.out.print("Mark guess (start round)");
 				} break;
 				case HIDDEN_SINGLE_ROW:{
-					System.out.println("Mark single possibility for value in row");
+					System.out.print("Mark single possibility for value in row");
 				} break;
 				case HIDDEN_SINGLE_COLUMN:{
-					System.out.println("Mark single possibility for value in column");
+					System.out.print("Mark single possibility for value in column");
 				} break;
 				case HIDDEN_SINGLE_SECTION:{
-					System.out.println("Mark single possibility for value in section");
+					System.out.print("Mark single possibility for value in section");
 				} break;
 				case SINGLE:{
-					System.out.println("Mark only possibility for cell");
+					System.out.print("Mark only possibility for cell");
 				} break;
 				case NAKED_PAIR_ROW:{
-					System.out.println("Remove possibilities for naked pair in row");
+					System.out.print("Remove possibilities for naked pair in row");
 				} break;
 				case NAKED_PAIR_COLUMN:{
-					System.out.println("Remove possibilities for naked pair in column");
+					System.out.print("Remove possibilities for naked pair in column");
 				} break;
 				case NAKED_PAIR_SECTION:{
-					System.out.println("Remove possibilities for naked pair in section");
+					System.out.print("Remove possibilities for naked pair in section");
 				} break;
 				case POINTING_PAIR_TRIPLE_ROW: {
-					System.out.println("Remove possibilities for row because all values are in one section");
+					System.out.print("Remove possibilities for row because all values are in one section");
 				} break;
 				case POINTING_PAIR_TRIPLE_COLUMN: {
-					System.out.println("Remove possibilities for column because all values are in one section");
+					System.out.print("Remove possibilities for column because all values are in one section");
 				} break;
 				case ROW_BOX: {
-					System.out.println("Remove possibilities for section because all values are in one row");
+					System.out.print("Remove possibilities for section because all values are in one row");
 				} break;
 				case COLUMN_BOX: {
-					System.out.println("Remove possibilities for section because all values are in one column");
+					System.out.print("Remove possibilities for section because all values are in one column");
 				} break;
 				case HIDDEN_PAIR_ROW: {
-					System.out.println("Remove possibilities from hidden pair in row");
+					System.out.print("Remove possibilities from hidden pair in row");
 				} break;
 				case HIDDEN_PAIR_COLUMN: {
-					System.out.println("Remove possibilities from hidden pair in column");
+					System.out.print("Remove possibilities from hidden pair in column");
 				} break;
 				case HIDDEN_PAIR_SECTION: {
-					System.out.println("Remove possibilities from hidden pair in section");
+					System.out.print("Remove possibilities from hidden pair in section");
 				} break;
 				default:{
-					System.out.println("!!! Performed unknown optimization !!!");
+					System.out.print("!!! Performed unknown optimization !!!");
 				} break;
 			}
 			if (value > 0 || position > -1){
-				System.out.println(" (");
+				System.out.print(" (");
 				boolean printed = false;
 				if (position > -1){
-					if (printed) System.out.println(" - ");
-					System.out.println("Row: "+QQWing.cellToRow(position)+1+" - Column: "+QQWing.cellToColumn(position)+1);
+					if (printed) System.out.print(" - ");
+					System.out.print("Row: "+(QQWing.cellToRow(position)+1)+" - Column: "+(QQWing.cellToColumn(position)+1));
 					printed = true;
 				}
 				if (value > 0){
-					if (printed) System.out.println(" - ");
-					System.out.println("Value: "+value);
+					if (printed) System.out.print(" - ");
+					System.out.print("Value: "+value);
 					printed = true;
 				}
-				System.out.println(")");
+				System.out.print(")");
 			}
 		}
 	}
