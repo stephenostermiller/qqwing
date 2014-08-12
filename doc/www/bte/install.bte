@@ -33,22 +33,27 @@ Place the executable somewhere on your computer:
 
 <h2><a name=rpm></a>Binary RPM Installation Instructions</h2>
 Use rpm to install the package:
-<ol>
+<ul>
 <li>sudo rpm --upgrade --verbose qqwing-*.rpm</li>
-</ol>
+</ul>
 
 <h2><a name=deb></a>Binary DEB Installation Instructions</h2>
 Use dpkg to install the package:
-<ol>
+<ul>
 <li>sudo dpkg --install qqwing_*.deb</li>
-</ol>
+</ul>
 
 <h2><a name=jar></a>Java Jar Installation Instructions</h2>
 The java jar file is executable:
-<ol>
+<ul>
 <li>java -jar qqwing-VERSION.jar</li>
-</ol>
+</ul>
 
+<h2><a name=js></a>JavaScript Installation Instructions</h2>
+qqwing-main-VERSION.min.js can be run with <a href="http://nodejs.org/">NodeJS</a>
+<ul>
+<li>node qqwing-main-VERSION.min.js</li>
+</ul>
 
 <%/bte.tpl%>
 <%/bte.doc%>
