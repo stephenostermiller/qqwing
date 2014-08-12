@@ -18,6 +18,16 @@ then
 	exit 1
 fi
 
+if [ `echo "$puzzle" | wc -l` != 1 ]
+then
+	echo
+	echo "Expected one line of output"
+	echo "qqwing: $QQWING"
+	echo "test: $test"
+	echo "Puzzle: $puzzle"
+	exit 1
+fi
+
 if ! echo "$puzzle" | sed 's/\.//g' |  grep -qE '^[0-9]{15}'
 then
 	echo
@@ -31,7 +41,7 @@ fi
 if ! echo "$puzzle" | sed -r 's/[0-9]//g' |  grep -qE '^\.{30}'
 then
 	echo
-	echo "Generated puzzle does not have at least 30 unknows"
+	echo "Generated puzzle does not have at least 30 unknowns"
 	echo "qqwing: $QQWING"
 	echo "test: $test"
 	echo "Puzzle: $puzzle"
