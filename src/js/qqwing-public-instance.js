@@ -45,7 +45,7 @@ this.LogItem = function(r, t, v, p){
 	};
 
 	this.print = function(){
-		console.log(this.toString());
+		println(this.toString());
 	};
 
 	this.getType =function(){
@@ -472,11 +472,20 @@ this.getBacktrackCount = function(){
 	return getLogCount.call(this, solveHistory, qqwing.LogType.ROLLBACK);
 };
 
+
+this.getSolveInstructions = function(){
+	if (this.isSolved()){
+		return getHistory.call(this, solveInstructions);
+	} else {
+		println("No solve instructions - Puzzle is not possible to solve.");
+	}
+};
+
 this.printSolveInstructions = function(){
 	if (this.isSolved()){
 		printHistory(solveInstructions);
 	} else {
-		console.log("No solve instructions - Puzzle is not possible to solve.");
+		println("No solve instructions - Puzzle is not possible to solve.");
 	}
 };
 

@@ -891,7 +891,7 @@ var shuffleRandomArrays = function(){
  * member variables.
  */
 var print = function(puz){
-	process.stdout.write(sudokuToString.call(this, puz));
+	printnoln(sudokuToString.call(this, puz));
 };
 
 var sudokuToString = function(puz){
@@ -949,7 +949,7 @@ var clearPuzzle = function(){
 };
 
 var printHistory = function(v){
-	process.stdout.write(getHistory(v));
+	printnoln(getHistory(v));
 };
 
 var getHistory = function(v){

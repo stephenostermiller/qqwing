@@ -101,3 +101,12 @@ var sectionToCell = function(section, offset){
 			+ Math.floor(offset/qqwing.GRID_SIZE)*qqwing.SEC_SIZE
 			+ (offset%qqwing.GRID_SIZE);
 };
+
+var println = function(s){
+	if ((typeof console != 'undefined') && console.log) console.log(s);
+};
+
+var printnoln = function(s){
+	if ((typeof process != 'undefined') && process.stdout && process.stdout.write) process.stdout.write(s);
+	else println(s);
+};
