@@ -21,8 +21,9 @@ for file in doc/www/bte/*.bte
 do
 	sed "s/VERSION/$version/g" $file > target/www/${file##*/}
 done
-
+sed "s/VERSION/$version/g"  doc/www/qqwing.html > target/www/qqwing.html
 cp doc/www/css/*.css target/www/
+cp target/jsmin/qqwing-html-$version.min.js target/www
 
 cd target/www
 bte *.bte
