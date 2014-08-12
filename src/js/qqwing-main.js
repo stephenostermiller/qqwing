@@ -357,7 +357,6 @@ try {
 		if (printedSomething && printStyle == qqwing.PrintStyle.CSV){
 			console.log("");
 		}
-
 	}
 
 	var applicationDoneTime = getMicroseconds();
