@@ -78,7 +78,7 @@ public class QQWing {
 
 	/**
 	 * The 81 integers that make up a sudoku puzzle.
-	 * Givens are 1-9, unknows are 0.
+	 * Givens are 1-9, unknowns are 0.
 	 * Once initialized, this puzzle remains as is.
 	 * The answer is worked out in "solution".
 	 */
@@ -1706,7 +1706,10 @@ public class QQWing {
 							if (numberGenerated >= numberToGenerate) done = true;
 						}
 					}
+				}
 
+				// Check havePuzzle again, it may have changed based on difficulty
+				if (havePuzzle){
 					// With a puzzle now in hand and possibly solved
 					// print out the solution, stats, etc.
 					printedSomething = true;

@@ -305,6 +305,10 @@ int main(int argc, char *argv[]){
 						if (numberGenerated >= numberToGenerate) done = true;
 					}
 				}
+			}
+
+			// Check havePuzzle again, it may have changed based on difficulty
+			if (havePuzzle){
 
 				// With a puzzle now in hand and possibly solved
 				// print out the solution, stats, etc.
