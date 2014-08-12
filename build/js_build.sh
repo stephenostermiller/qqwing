@@ -52,6 +52,8 @@ buildjs qqwing-$version.js qqwing-object-start.js qqwing-private-static.js qqwin
 
 buildjs qqwing-main-$version.js qqwing-$version.js qqwing-main.js
 
+buildjs qqwing-html-$version.js qqwing-$version.js qqwing-html.js
+
 buildjs qqwing-test-$version.js qqwing-object-start.js qqwing-object-end.js qqwing-public-static.js qqwing-private-static.js qqwing-test.js
 
 echo
