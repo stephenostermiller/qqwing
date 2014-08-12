@@ -2,11 +2,11 @@
 all: dist test website
 
 .PHONY: dist
-dist: jar tgz rpm deb jsmin
+dist: jar tgz rpm deb jsgz
 	@build/show_dist.sh
 
 .PHONY: compile
-compile: javacompile cppcompile
+compile: javacompile cppcompile jsmin
 
 .PHONY: javaversion
 javaversion: notroot neaten
@@ -36,6 +36,10 @@ jscompile: neaten
 jsmin: jscompile
 	@build/js_minimize.sh
 
+.PHONY: jsgz
+jsgz: jsmin
+	@build/js_archive.sh
+
 .PHONY: tgz
 tgz: cppcompile
 	@build/cpp_dist.sh
@@ -64,7 +68,7 @@ neaten:
 test: testunit testapp
 
 .PHONY: testunit
-testunit: testjavaunit
+testunit: testjavaunit testjsunit
 
 .PHONY: testjavaunit
 testjavaunit: javacompile javatestcompile
