@@ -36,6 +36,8 @@ name=bugsLinkText %><%/bte.grp %></li>
 <li><%bte.grp onDefault=ok %><%bte.inc
 name=licenseLinkText %><%/bte.grp %></li>
 <li><%bte.grp onDefault=ok %><%bte.inc
+name=gensolveLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
 name=playLinkText %><%/bte.grp %></li>
 </ul>
 </div>
@@ -56,4 +58,5 @@ name=playLinkText %><%/bte.grp %></li>
 <%bte.tpl name=licenseLinkText %><a href="license.html">License</a><%/bte.tpl%>
 <%bte.tpl name=playLinkText %><a href="play.html">Play Online</a><%/bte.tpl%>
 <%bte.tpl name=bugsLinkText %><a href="bugs.html">Bugs/Features</a><%/bte.tpl%>
+<%bte.tpl name=gensolveLinkText %><a href="qqwing.html">Generate/Solve Sudoku Online</a><%/bte.tpl%>
 <%/bte.doc%>
