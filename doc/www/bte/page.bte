@@ -32,6 +32,8 @@ name=cppSourceLinkText %><%/bte.grp %></li>
 <li><%bte.grp onDefault=ok %><%bte.inc
 name=javaSourceLinkText %><%/bte.grp %></li>
 <li><%bte.grp onDefault=ok %><%bte.inc
+name=jsSourceLinkText %><%/bte.grp %></li>
+<li><%bte.grp onDefault=ok %><%bte.inc
 name=bugsLinkText %><%/bte.grp %></li>
 <li><%bte.grp onDefault=ok %><%bte.inc
 name=licenseLinkText %><%/bte.grp %></li>
@@ -55,6 +57,7 @@ name=playLinkText %><%/bte.grp %></li>
 <%bte.tpl name=instructionsLinkText %><a href="instructions.html">Instructions</a><%/bte.tpl%>
 <%bte.tpl name=cppSourceLinkText %><a href="qqwing.cpp.html">C++ Source Code</a><%/bte.tpl%>
 <%bte.tpl name=javaSourceLinkText %><a href="QQWing.java.html">Java Source Code</a><%/bte.tpl%>
+<%bte.tpl name=jsSourceLinkText %><a href="qqwing-main.js.html">JavaScript Source Code</a><%/bte.tpl%>
 <%bte.tpl name=licenseLinkText %><a href="license.html">License</a><%/bte.tpl%>
 <%bte.tpl name=playLinkText %><a href="play.html">Play Online</a><%/bte.tpl%>
 <%bte.tpl name=bugsLinkText %><a href="bugs.html">Bugs/Features</a><%/bte.tpl%>
