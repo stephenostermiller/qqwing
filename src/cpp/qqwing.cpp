@@ -666,7 +666,7 @@ namespace qqwing {
 
 	bool SudokuBoard::colBoxReduction(int round){
 		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int col=0; col<9; col++){
+			for (int col=0; col<NUM_POSS; col++){
 				int colStart = columnToFirstCell(col);
 				bool inOneBox = true;
 				int colBox = -1;
@@ -715,7 +715,7 @@ namespace qqwing {
 
 	bool SudokuBoard::rowBoxReduction(int round){
 		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int row=0; row<9; row++){
+			for (int row=0; row<NUM_POSS; row++){
 				int rowStart = rowToFirstCell(row);
 				bool inOneBox = true;
 				int rowBox = -1;
@@ -764,13 +764,13 @@ namespace qqwing {
 
 	bool SudokuBoard::pointingRowReduction(int round){
 		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int section=0; section<9; section++){
+			for (int section=0; section<NUM_POSS; section++){
 				int secStart = sectionToFirstCell(section);
 				bool inOneRow = true;
 				int boxRow = -1;
 				for (int j=0; j<3; j++){
 					{for (int i=0; i<3; i++){
-						int secVal=secStart+i+(9*j);
+						int secVal=secStart+i+(NUM_POSS*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
 							if (boxRow == -1 || boxRow == j){
@@ -786,7 +786,7 @@ namespace qqwing {
 					int row = cellToRow(secStart) + boxRow;
 					int rowStart = rowToFirstCell(row);
 
-					{for (int i=0; i<9; i++){
+					{for (int i=0; i<NUM_POSS; i++){
 						int position = rowStart+i;
 						int section2 = cellToSection(position);
 						int valPos = getPossibilityIndex(valIndex,position);
@@ -807,13 +807,13 @@ namespace qqwing {
 
 	bool SudokuBoard::pointingColumnReduction(int round){
 		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int section=0; section<9; section++){
+			for (int section=0; section<NUM_POSS; section++){
 				int secStart = sectionToFirstCell(section);
 				bool inOneCol = true;
 				int boxCol = -1;
 				{for (int i=0; i<3; i++){
 					for (int j=0; j<3; j++){
-						int secVal=secStart+i+(9*j);
+						int secVal=secStart+i+(NUM_POSS*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
 							if (boxCol == -1 || boxCol == i){
@@ -829,8 +829,8 @@ namespace qqwing {
 					int col = cellToColumn(secStart) + boxCol;
 					int colStart = columnToFirstCell(col);
 
-					{for (int i=0; i<9; i++){
-						int position = colStart+(9*i);
+					{for (int i=0; i<NUM_POSS; i++){
+						int position = colStart+(NUM_POSS*i);
 						int section2 = cellToSection(position);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (section != section2 && possibilities[valPos] == 0){
@@ -882,12 +882,12 @@ namespace qqwing {
 	}
 
 	bool SudokuBoard::hiddenPairInColumn(int round){
-		for (int column=0; column<9; column++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int column=0; column<NUM_POSS; column++){
+			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
 				int r1 = -1;
 				int r2 = -1;
 				int valCount = 0;
-				for (int row=0; row<9; row++){
+				for (int row=0; row<NUM_POSS; row++){
 					int position = rowColumnToCell(row,column);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -900,11 +900,11 @@ namespace qqwing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<NUM_POSS; valIndex2++){
 						int r3 = -1;
 						int r4 = -1;
 						int valCount2 = 0;
-						for (int row=0; row<9; row++){
+						for (int row=0; row<NUM_POSS; row++){
 							int position = rowColumnToCell(row,column);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -918,7 +918,7 @@ namespace qqwing {
 						}
 						if (valCount2==2 && r1==r3 && r2==r4){
 							bool doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<NUM_POSS; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = rowColumnToCell(r1,column);
 									int position2 = rowColumnToCell(r2,column);
@@ -947,12 +947,12 @@ namespace qqwing {
 	}
 
 	bool SudokuBoard::hiddenPairInSection(int round){
-		for (int section=0; section<9; section++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int section=0; section<NUM_POSS; section++){
+			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
 				int si1 = -1;
 				int si2 = -1;
 				int valCount = 0;
-				for (int secInd=0; secInd<9; secInd++){
+				for (int secInd=0; secInd<NUM_POSS; secInd++){
 					int position = sectionToCell(section,secInd);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -965,11 +965,11 @@ namespace qqwing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<NUM_POSS; valIndex2++){
 						int si3 = -1;
 						int si4 = -1;
 						int valCount2 = 0;
-						for (int secInd=0; secInd<9; secInd++){
+						for (int secInd=0; secInd<NUM_POSS; secInd++){
 							int position = sectionToCell(section,secInd);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -983,7 +983,7 @@ namespace qqwing {
 						}
 						if (valCount2==2 && si1==si3 && si2==si4){
 							bool doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<NUM_POSS; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = sectionToCell(section,si1);
 									int position2 = sectionToCell(section,si2);
@@ -1012,12 +1012,12 @@ namespace qqwing {
 	}
 
 	bool SudokuBoard::hiddenPairInRow(int round){
-		for (int row=0; row<9; row++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int row=0; row<NUM_POSS; row++){
+			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
 				int c1 = -1;
 				int c2 = -1;
 				int valCount = 0;
-				for (int column=0; column<9; column++){
+				for (int column=0; column<NUM_POSS; column++){
 					int position = rowColumnToCell(row,column);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -1030,11 +1030,11 @@ namespace qqwing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<NUM_POSS; valIndex2++){
 						int c3 = -1;
 						int c4 = -1;
 						int valCount2 = 0;
-						for (int column=0; column<9; column++){
+						for (int column=0; column<NUM_POSS; column++){
 							int position = rowColumnToCell(row,column);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -1048,7 +1048,7 @@ namespace qqwing {
 						}
 						if (valCount2==2 && c1==c3 && c2==c4){
 							bool doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<NUM_POSS; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = rowColumnToCell(row,c1);
 									int position2 = rowColumnToCell(row,c2);
@@ -1089,7 +1089,7 @@ namespace qqwing {
 						if (possibilities2 == 2 && arePossibilitiesSame(position, position2)){
 							if (row == cellToRow(position2)){
 								bool doneSomething = false;
-								for (int column2=0; column2<9; column2++){
+								for (int column2=0; column2<NUM_POSS; column2++){
 									int position3 = rowColumnToCell(row,column2);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
@@ -1102,7 +1102,7 @@ namespace qqwing {
 							}
 							if (column == cellToColumn(position2)){
 								bool doneSomething = false;
-								for (int row2=0; row2<9; row2++){
+								for (int row2=0; row2<NUM_POSS; row2++){
 									int position3 = rowColumnToCell(row2,column);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
@@ -1118,7 +1118,7 @@ namespace qqwing {
 								int secStart = cellToSectionStartCell(position);
 								{for (int i=0; i<3; i++){
 									for (int j=0; j<3; j++){
-										int position3=secStart+i+(9*j);
+										int position3=secStart+i+(NUM_POSS*j);
 										if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 											doneSomething = true;
 										}
@@ -1211,7 +1211,7 @@ namespace qqwing {
 				int lastPosition = 0;
 				{for (int i=0; i<3; i++){
 					for (int j=0; j<3; j++){
-						int position = secPos + i + 9*j;
+						int position = secPos + i + NUM_POSS*j;
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (possibilities[valPos] == 0){
 							count++;
@@ -1277,7 +1277,7 @@ namespace qqwing {
 
 		// Take this value out of the possibilities for everything in the row
 		solutionRound[position] = round;
-		int rowStart = cellToRow(position)*9;
+		int rowStart = cellToRow(position)*NUM_POSS;
 		for (int col=0; col<COL_HEIGHT; col++){
 			int rowVal=rowStart+col;
 			int valPos = getPossibilityIndex(valIndex,rowVal);
@@ -1289,8 +1289,8 @@ namespace qqwing {
 
 		// Take this value out of the possibilities for everything in the column
 		int colStart = cellToColumn(position);
-		{for (int i=0; i<9; i++){
-			int colVal=colStart+(9*i);
+		{for (int i=0; i<NUM_POSS; i++){
+			int colVal=colStart+(NUM_POSS*i);
 			int valPos = getPossibilityIndex(valIndex,colVal);
 			//cout << "Col Start: " << colStart << " Col Value: " << colVal << " Value Position: " << valPos << endl;
 			if (possibilities[valPos] == 0){
@@ -1302,7 +1302,7 @@ namespace qqwing {
 		int secStart = cellToSectionStartCell(position);
 		{for (int i=0; i<3; i++){
 			for (int j=0; j<3; j++){
-				int secVal=secStart+i+(9*j);
+				int secVal=secStart+i+(NUM_POSS*j);
 				int valPos = getPossibilityIndex(valIndex,secVal);
 				//cout << "Sec Start: " << secStart << " Sec Value: " << secVal << " Value Position: " << valPos << endl;
 				if (possibilities[valPos] == 0){
@@ -1312,7 +1312,7 @@ namespace qqwing {
 		}}
 
 		//This position itself is determined, it should have possibilities.
-		{for (int valIndex=0; valIndex<9; valIndex++){
+		{for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
 			int valPos = getPossibilityIndex(valIndex,position);
 			if (possibilities[valPos] == 0){
 				possibilities[valPos] = round;
@@ -1344,7 +1344,7 @@ namespace qqwing {
 				if (printStyle == READABLE || printStyle == COMPACT){
 					cout << endl;
 				}
-			} else if (i%9==8){
+			} else if (i%NUM_POSS==NUM_POSS-1){
 				if (printStyle == READABLE || printStyle == COMPACT){
 					cout << endl;
 				}
@@ -1569,7 +1569,7 @@ namespace qqwing {
 	 * of that row.
 	 */
 	static inline int rowToFirstCell(int row){
-		return 9*row;
+		return NUM_POSS*row;
 	}
 
 	/**
