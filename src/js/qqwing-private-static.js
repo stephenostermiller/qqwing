@@ -57,7 +57,7 @@ var cellToSection = function(cell){
  * of that row.
  */
 var rowToFirstCell = function(row){
-	return 9*row;
+	return qqwing.NUM_POSS*row;
 };
 
 /**
