@@ -259,8 +259,8 @@ var onlyValueInSection = function(round){
 		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var count = 0;
 			var lastPosition = 0;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
+			for (var i=0; i<GRID_SIZE; i++){
+				for (var j=0; j<GRID_SIZE; j++){
 					var position = secPos + i + qqwing.ROW_COL_SEC_SIZE*j;
 					var valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -340,8 +340,8 @@ var pointingRowReduction = function(round){
 			var secStart = sectionToFirstCell(section);
 			var inOneRow = true;
 			var boxRow = -1;
-			for (var j=0; j<3; j++){
-				for (var i=0; i<3; i++){
+			for (var j=0; j<GRID_SIZE; j++){
+				for (var i=0; i<GRID_SIZE; i++){
 					var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 					var valPos = getPossibilityIndex(valIndex,secVal);
 					if(possibilities[valPos] == 0){
@@ -383,9 +383,9 @@ var rowBoxReduction = function(round){
 			var rowStart = rowToFirstCell(row);
 			var inOneBox = true;
 			var rowBox = -1;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
-					var column = i*3+j;
+			for (var i=0; i<GRID_SIZE; i++){
+				for (var j=0; j<GRID_SIZE; j++){
+					var column = i*GRID_SIZE+j;
 					var position = rowColumnToCell(row, column);
 					var valPos = getPossibilityIndex(valIndex,position);
 					if(possibilities[valPos] == 0){
@@ -399,12 +399,12 @@ var rowBoxReduction = function(round){
 			}
 			if (inOneBox && rowBox != -1){
 				var doneSomething = false;
-				var column = 3*rowBox;
+				var column = GRID_SIZE*rowBox;
 				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 				var secStartRow = cellToRow(secStart);
 				var secStartCol = cellToColumn(secStart);
-				for (var i=0; i<3; i++){
-					for (var j=0; j<3; j++){
+				for (var i=0; i<GRID_SIZE; i++){
+					for (var j=0; j<GRID_SIZE; j++){
 						var row2 = secStartRow+i;
 						var col2 = secStartCol+j;
 						var position = rowColumnToCell(row2, col2);
@@ -431,9 +431,9 @@ var colBoxReduction = function(round){
 			var rowStart = rowToFirstCell(row);
 			var inOneBox = true;
 			var rowBox = -1;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
-					var column = i*3+j;
+			for (var i=0; i<GRID_SIZE; i++){
+				for (var j=0; j<GRID_SIZE; j++){
+					var column = i*GRID_SIZE+j;
 					var position = rowColumnToCell(row, column);
 					var valPos = getPossibilityIndex(valIndex,position);
 					if(possibilities[valPos] == 0){
@@ -447,12 +447,12 @@ var colBoxReduction = function(round){
 			}
 			if (inOneBox && rowBox != -1){
 				var doneSomething = false;
-				var column = 3*rowBox;
+				var column = GRID_SIZE*rowBox;
 				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 				var secStartRow = cellToRow(secStart);
 				var secStartCol = cellToColumn(secStart);
-				for (var i=0; i<3; i++){
-					for (var j=0; j<3; j++){
+				for (var i=0; i<GRID_SIZE; i++){
+					for (var j=0; j<GRID_SIZE; j++){
 						var row2 = secStartRow+i;
 						var col2 = secStartCol+j;
 						var position = rowColumnToCell(row2, col2);
@@ -479,8 +479,8 @@ var pointingColumnReduction = function(round){
 			var secStart = sectionToFirstCell(section);
 			var inOneRow = true;
 			var boxRow = -1;
-			for (var j=0; j<3; j++){
-				for (var i=0; i<3; i++){
+			for (var j=0; j<GRID_SIZE; j++){
+				for (var i=0; i<GRID_SIZE; i++){
 					var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 					var valPos = getPossibilityIndex(valIndex,secVal);
 					if(possibilities[valPos] == 0){
@@ -752,8 +752,8 @@ var mark = function(position, round, value){
 
 	// Take this value out of the possibilities for everything in section
 	var secStart = cellToSectionStartCell(position);
-	for (var i=0; i<3; i++){
-		for (var j=0; j<3; j++){
+	for (var i=0; i<GRID_SIZE; i++){
+		for (var j=0; j<GRID_SIZE; j++){
 			var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 			var valPos = getPossibilityIndex(valIndex,secVal);
 			if (possibilities[valPos] == 0){
@@ -831,8 +831,8 @@ var handleNakedPairs = function(round){
 						if (section == cellToSectionStartCell(position2)){
 							var doneSomething = false;
 							var secStart = cellToSectionStartCell(position);
-							for (var i=0; i<3; i++){
-								for (var j=0; j<3; j++){
+							for (var i=0; i<GRID_SIZE; i++){
+								for (var j=0; j<GRID_SIZE; j++){
 									var position3=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
@@ -923,7 +923,7 @@ var sudokuToString = function(puz){
 					s += "-------|-------|-------\n";
 				}
 			}
-		} else if (i%3==2){
+		} else if (i%GRID_SIZE==GRID_SIZE-1){
 			if (printStyle == qqwing.PrintStyle.READABLE){
 				s += " |";
 			}

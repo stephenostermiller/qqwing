@@ -670,9 +670,9 @@ namespace qqwing {
 				int colStart = columnToFirstCell(col);
 				bool inOneBox = true;
 				int colBox = -1;
-				{for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int row = i*3+j;
+				{for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int row = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, col);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -687,12 +687,12 @@ namespace qqwing {
 				}}
 				if (inOneBox && colBox != -1){
 					bool doneSomething = false;
-					int row = 3*colBox;
+					int row = GRID_SIZE*colBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, col));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					{for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					{for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -719,9 +719,9 @@ namespace qqwing {
 				int rowStart = rowToFirstCell(row);
 				bool inOneBox = true;
 				int rowBox = -1;
-				{for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int column = i*3+j;
+				{for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int column = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, column);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -736,12 +736,12 @@ namespace qqwing {
 				}}
 				if (inOneBox && rowBox != -1){
 					bool doneSomething = false;
-					int column = 3*rowBox;
+					int column = GRID_SIZE*rowBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					{for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					{for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -768,8 +768,8 @@ namespace qqwing {
 				int secStart = sectionToFirstCell(section);
 				bool inOneRow = true;
 				int boxRow = -1;
-				for (int j=0; j<3; j++){
-					{for (int i=0; i<3; i++){
+				for (int j=0; j<GRID_SIZE; j++){
+					{for (int i=0; i<GRID_SIZE; i++){
 						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
@@ -811,8 +811,8 @@ namespace qqwing {
 				int secStart = sectionToFirstCell(section);
 				bool inOneCol = true;
 				int boxCol = -1;
-				{for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
+				{for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
 						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
@@ -1116,8 +1116,8 @@ namespace qqwing {
 							if (section == cellToSectionStartCell(position2)){
 								bool doneSomething = false;
 								int secStart = cellToSectionStartCell(position);
-								{for (int i=0; i<3; i++){
-									for (int j=0; j<3; j++){
+								{for (int i=0; i<GRID_SIZE; i++){
+									for (int j=0; j<GRID_SIZE; j++){
 										int position3=secStart+i+(ROW_COL_SEC_SIZE*j);
 										if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 											doneSomething = true;
@@ -1209,8 +1209,8 @@ namespace qqwing {
 			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int count = 0;
 				int lastPosition = 0;
-				{for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
+				{for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
 						int position = secPos + i + ROW_COL_SEC_SIZE*j;
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (possibilities[valPos] == 0){
@@ -1300,8 +1300,8 @@ namespace qqwing {
 
 		// Take this value out of the possibilities for everything in section
 		int secStart = cellToSectionStartCell(position);
-		{for (int i=0; i<3; i++){
-			for (int j=0; j<3; j++){
+		{for (int i=0; i<GRID_SIZE; i++){
+			for (int j=0; j<GRID_SIZE; j++){
 				int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 				int valPos = getPossibilityIndex(valIndex,secVal);
 				//cout << "Sec Start: " << secStart << " Sec Value: " << secVal << " Value Position: " << valPos << endl;
@@ -1353,7 +1353,7 @@ namespace qqwing {
 						cout << "-------|-------|-------" << endl;
 					}
 				}
-			} else if (i%3==2){
+			} else if (i%GRID_SIZE==GRID_SIZE-1){
 				if (printStyle == READABLE){
 					cout << " |";
 				}
