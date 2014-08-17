@@ -323,16 +323,16 @@ this.generatePuzzleSymmetry = function(symmetry){
 				var positionsym3 = -1;
 				switch (symmetry){
 					case qqwing.Symmetry.ROTATE90:
-						positionsym2 = rowColumnToCell(qqwing.COL_HEIGHT-1-cellToColumn(position),cellToRow(position));
-						positionsym3 = rowColumnToCell(cellToColumn(position),qqwing.ROW_LENGTH-1-cellToRow(position));
+						positionsym2 = rowColumnToCell(qqwing.ROW_COL_SEC-1-cellToColumn(position),cellToRow(position));
+						positionsym3 = rowColumnToCell(cellToColumn(position),qqwing.ROW_COL_SEC-1-cellToRow(position));
 					case qqwing.Symmetry.ROTATE180:
-						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
+						positionsym1 = rowColumnToCell(qqwing.ROW_COL_SEC-1-cellToRow(position),qqwing.ROW_COL_SEC-1-cellToColumn(position));
 					break;
 					case qqwing.Symmetry.MIRROR:
-						positionsym1 = rowColumnToCell(cellToRow(position),qqwing.COL_HEIGHT-1-cellToColumn(position));
+						positionsym1 = rowColumnToCell(cellToRow(position),qqwing.ROW_COL_SEC-1-cellToColumn(position));
 					break;
 					case qqwing.Symmetry.FLIP:
-						positionsym1 = rowColumnToCell(qqwing.ROW_LENGTH-1-cellToRow(position),cellToColumn(position));
+						positionsym1 = rowColumnToCell(qqwing.ROW_COL_SEC-1-cellToRow(position),cellToColumn(position));
 					break;
 				}
 				// try backing out the value and
