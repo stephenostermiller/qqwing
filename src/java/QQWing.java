@@ -62,9 +62,11 @@ public class QQWing {
 	public static final int BOARD_SIZE = (ROW_COL_SEC_SIZE*ROW_COL_SEC_SIZE);
 	public static final int POSSIBILITY_SIZE = (BOARD_SIZE*ROW_COL_SEC_SIZE);
 
-	public static final int NONE = 1;
-	public static final int GENERATE = 2;
-	public static final int SOLVE = 3;
+	private enum Action {
+		NONE,
+		GENERATE,
+		SOLVE
+	};
 
 	public static Random r;
 	/**
@@ -1461,7 +1463,7 @@ public class QQWing {
 			boolean printInstructions = false;
 			boolean timer = false;
 			boolean countSolutions = false;
-			int action = NONE;
+			Action action = Action.NONE;
 			boolean logHistory = false;
 			PrintStyle printStyle = PrintStyle.READABLE;
 			int numberToGenerate = 1;
@@ -1500,7 +1502,7 @@ public class QQWing {
 				} else if (argv[i].equals("--nocount-solutions")){
 					countSolutions = false;
 				} else if (argv[i].equals("--generate")){
-					action = GENERATE;
+					action = Action.GENERATE;
 					printPuzzle = true;
 					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
 						try {
@@ -1555,7 +1557,7 @@ public class QQWing {
 					}
 					i++;
 				} else if (argv[i].equals("--solve")){
-					action = SOLVE;
+					action = Action.SOLVE;
 					printSolution = true;
 				} else if (argv[i].equals("--log-history")){
 					logHistory = true;
@@ -1593,7 +1595,7 @@ public class QQWing {
 				}
 			}
 
-			if (action == NONE){
+			if (action == Action.NONE){
 				System.out.println("Either --solve or --generate must be specified.");
 				printHelp();
 				System.exit(1);
@@ -1636,7 +1638,7 @@ public class QQWing {
 				// Record whether the puzzle was possible or not,
 				// so that we don't try to solve impossible givens.
 				boolean havePuzzle = false;
-				if (action == GENERATE){
+				if (action == Action.GENERATE){
 					// Generate a puzzle
 					havePuzzle = ss.generatePuzzleSymmetry(symmetry);
 					if (!havePuzzle && printPuzzle){
@@ -1693,7 +1695,7 @@ public class QQWing {
 					}
 
 					// Bail out if it didn't meet the difficulty standards for generation
-					if (action == GENERATE){
+					if (action == Action.GENERATE){
 						if (difficulty!=Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
 							havePuzzle = false;
 						} else {
@@ -1804,7 +1806,7 @@ public class QQWing {
 			// Print out the time it took to do everything
 			if (timer){
 				double t = ((double)(applicationDoneTime - applicationStartTime))/1000000.0;
-				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==GENERATE?"generated":"solved")+" in "+t+" seconds.");
+				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==Action.GENERATE?"generated":"solved")+" in "+t+" seconds.");
 			}
 		} catch (Exception e){
 			e.printStackTrace(System.out);
