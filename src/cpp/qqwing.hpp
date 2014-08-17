@@ -33,10 +33,10 @@
 		class LogItem;
 
 		const int GRID_SIZE = 3;
-		const int ROW_COL_SEC = GRID_SIZE*GRID_SIZE;
-		const int SEC_GROUP_SIZE = ROW_COL_SEC*GRID_SIZE;
-		const int BOARD_SIZE = ROW_COL_SEC*ROW_COL_SEC;
-		const int POSSIBILITY_SIZE = BOARD_SIZE*ROW_COL_SEC;
+		const int ROW_COL_SEC_SIZE = GRID_SIZE*GRID_SIZE;
+		const int SEC_GROUP_SIZE = ROW_COL_SEC_SIZE*GRID_SIZE;
+		const int BOARD_SIZE = ROW_COL_SEC_SIZE*ROW_COL_SEC_SIZE;
+		const int POSSIBILITY_SIZE = BOARD_SIZE*ROW_COL_SEC_SIZE;
 
 		/**
 		 * The version of QQwing, e.g. 1.2.3

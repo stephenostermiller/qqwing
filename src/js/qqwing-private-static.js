@@ -22,7 +22,7 @@
  * the column (0-8) in which that cell resides.
  */
 var cellToColumn = function(cell){
-	return cell%qqwing.ROW_COL_SEC;
+	return cell%qqwing.ROW_COL_SEC_SIZE;
 };
 
 /**
@@ -30,7 +30,7 @@ var cellToColumn = function(cell){
  * the row (0-8) in which it resides.
  */
 var cellToRow = function(cell){
-	return Math.floor(cell/qqwing.ROW_COL_SEC);
+	return Math.floor(cell/qqwing.ROW_COL_SEC_SIZE);
 };
 
 /**
@@ -57,7 +57,7 @@ var cellToSection = function(cell){
  * of that row.
  */
 var rowToFirstCell = function(row){
-	return qqwing.ROW_COL_SEC*row;
+	return qqwing.ROW_COL_SEC_SIZE*row;
 };
 
 /**
@@ -81,7 +81,7 @@ var sectionToFirstCell = function(section){
  * calculate the offset into the possibility array (0-728).
  */
 var getPossibilityIndex = function(valueIndex, cell){
-	return valueIndex+(qqwing.ROW_COL_SEC*cell);
+	return valueIndex+(qqwing.ROW_COL_SEC_SIZE*cell);
 };
 
 /**
@@ -89,7 +89,7 @@ var getPossibilityIndex = function(valueIndex, cell){
  * cell (0-80).
  */
 var rowColumnToCell = function(row, column){
-	return (row*qqwing.ROW_COL_SEC)+column;
+	return (row*qqwing.ROW_COL_SEC_SIZE)+column;
 };
 
 /**
@@ -98,7 +98,7 @@ var rowColumnToCell = function(row, column){
  */
 var sectionToCell = function(section, offset){
 	return sectionToFirstCell(section)
-			+ Math.floor(offset/qqwing.GRID_SIZE)*qqwing.ROW_COL_SEC
+			+ Math.floor(offset/qqwing.GRID_SIZE)*qqwing.ROW_COL_SEC_SIZE
 			+ (offset%qqwing.GRID_SIZE);
 };
 
