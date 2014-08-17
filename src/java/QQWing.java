@@ -736,9 +736,9 @@ public class QQWing {
 				int colStart = columnToFirstCell(col);
 				boolean inOneBox = true;
 				int colBox = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int row = i*3+j;
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int row = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, col);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -752,12 +752,12 @@ public class QQWing {
 				}
 				if (inOneBox && colBox != -1){
 					boolean doneSomething = false;
-					int row = 3*colBox;
+					int row = GRID_SIZE*colBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, col));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -784,9 +784,9 @@ public class QQWing {
 				int rowStart = rowToFirstCell(row);
 				boolean inOneBox = true;
 				int rowBox = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int column = i*3+j;
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int column = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, column);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -800,12 +800,12 @@ public class QQWing {
 				}
 				if (inOneBox && rowBox != -1){
 					boolean doneSomething = false;
-					int column = 3*rowBox;
+					int column = GRID_SIZE*rowBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -832,8 +832,8 @@ public class QQWing {
 				int secStart = sectionToFirstCell(section);
 				boolean inOneRow = true;
 				int boxRow = -1;
-				for (int j=0; j<3; j++){
-					for (int i=0; i<3; i++){
+				for (int j=0; j<GRID_SIZE; j++){
+					for (int i=0; i<GRID_SIZE; i++){
 						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
@@ -875,8 +875,8 @@ public class QQWing {
 				int secStart = sectionToFirstCell(section);
 				boolean inOneCol = true;
 				int boxCol = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
 						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
@@ -1273,8 +1273,8 @@ public class QQWing {
 			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int count = 0;
 				int lastPosition = 0;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
 						int position = secPos + i + ROW_COL_SEC_SIZE*j;
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (possibilities[valPos] == 0){
@@ -1367,8 +1367,8 @@ public class QQWing {
 
 		// Take this value out of the possibilities for everything in section
 		int secStart = cellToSectionStartCell(position);
-		for (int i=0; i<3; i++){
-			for (int j=0; j<3; j++){
+		for (int i=0; i<GRID_SIZE; i++){
+			for (int j=0; j<GRID_SIZE; j++){
 				int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 				int valPos = getPossibilityIndex(valIndex,secVal);
 				//System.out.println("Sec Start: "+secStart+" Sec Value: "+secVal+" Value Position: "+valPos);
@@ -1420,7 +1420,7 @@ public class QQWing {
 						System.out.println("-------|-------|-------");
 					}
 				}
-			} else if (i%3==2){
+			} else if (i%GRID_SIZE==GRID_SIZE-1){
 				if (printStyle == PrintStyle.READABLE){
 					System.out.print(" |");
 				}
