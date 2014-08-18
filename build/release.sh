@@ -48,7 +48,7 @@ sed -i 's/UNRELEASED/RELEASED/g' build/debian-changelog.txt
 cp debian/changelog build/debian-changelog.txt
 rm -rf debian
 
-sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac
+sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac src/js/qqwing-main.js
 
 libcurrent=`grep QQWING_CURRENT= build/configure.ac | grep -oE '[0-9]+'`
 let "nextlibcurrent=libcurrent+1"
@@ -69,19 +69,19 @@ do
 			libcurrent=$nextlibcurrent
 			librevision=0
 			libage=0
-			nextlib=1
+			nextlib="$libcurrent.$librevision.$libage"
 			;;
 		"2" )
 			libcurrent=$libcurrent
 			librevision=$nextlibrevision
 			libage=0
-			nextlib=1
+			nextlib="$libcurrent.$librevision.$libage"
 			;;
 		"3" )
 			libcurrent=$libcurrent
 			librevision=$librevision
 			libage=$nextlibage
-			nextlib=1
+			nextlib="$libcurrent.$librevision.$libage"
 			;;
 	esac
 done
@@ -91,4 +91,4 @@ sed -ri "s/QQWING_CURRENT=.*/QQWING_CURRENT=$libcurrent/g;s/QQWING_REVISION=.*/Q
 make clean
 make
 
-echo "Changed to next version: $nextversion"
+echo "Changed to next version: $nextversion (C++ library version $nextlib)"
