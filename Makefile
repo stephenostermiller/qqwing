@@ -110,6 +110,10 @@ cpptest: testcppapp
 .PHONY: jstest
 jstest: testjsunit testjsapp
 
+.PHONY: release
+release: neaten
+	@build/release.sh
+
 .PHONY: clean
 clean:
 	rm -rf target/
