@@ -55,9 +55,9 @@ public class QQWingTest {
 
 	private static void sectionCellConversion(){
 		HashSet<Integer> set = new HashSet<>();
-		for (int section=0; section<QQWing.SEC_SIZE; section++){
+		for (int section=0; section<QQWing.ROW_COL_SEC_SIZE; section++){
 			int sectionStartCell = -1;
-			for (int offset=0; offset<QQWing.SEC_SIZE; offset++){
+			for (int offset=0; offset<QQWing.ROW_COL_SEC_SIZE; offset++){
 				int cell = QQWing.sectionToCell(section,offset);
 				if (offset == 0) sectionStartCell = cell;
 				assertRange(cell,0,QQWing.BOARD_SIZE);
@@ -71,8 +71,8 @@ public class QQWingTest {
 
 	private static void rowColumnCellConversion(){
 		HashSet<Integer> set = new HashSet<>();
-		for (int row=0; row<QQWing.ROW_LENGTH; row++){
-			for (int col=0; col<QQWing.COL_HEIGHT; col++){
+		for (int row=0; row<QQWing.ROW_COL_SEC_SIZE; row++){
+			for (int col=0; col<QQWing.ROW_COL_SEC_SIZE; col++){
 				int cell = QQWing.rowColumnToCell(row,col);
 				assertRange(cell,0,QQWing.BOARD_SIZE);
 				assertUnique(cell, set);
@@ -86,7 +86,7 @@ public class QQWingTest {
 
 	private static void possibilityConversion(){
 		HashSet<Integer> set = new HashSet<>();
-		for (int value=0; value<QQWing.SEC_SIZE; value++){
+		for (int value=0; value<QQWing.ROW_COL_SEC_SIZE; value++){
 			for (int cell=0; cell<QQWing.BOARD_SIZE; cell++){
 				assertUnique(QQWing.getPossibilityIndex(value, cell), set);
 			}
