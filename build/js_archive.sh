@@ -2,7 +2,8 @@
 set -e
 
 version=`build/version.sh`
-archive="target/qqwing-js-$version.tar.gz"
+gzname="qqwing-js-$version.tar.gz"
+archive="target/$gzname"
 
 if [ -e $archive ]
 then
@@ -14,6 +15,11 @@ then
 fi
 
 version=`build/version.sh`
-rm -f $archive
+rm -rf $archive target/jsgz
+mkdir -p target/jsgz/qqwing-$version
+cp doc/COPYING target/js/qqwing-$version.js target/js/qqwing-main-$version.js target/jsmin/qqwing-$version.min.js target/jsmin/qqwing-main-$version.min.js target/jsgz/qqwing-$version
+cp doc/JSREADME target/jsgz/qqwing-$version/README
+cd target/jsgz
 echo "creating $archive"
-tar cfz $archive target/js/qqwing-$version.js target/js/qqwing-main-$version.js target/jsmin/qqwing-$version.min.js target/jsmin/qqwing-main-$version.min.js
+tar cfz $gzname qqwing-$version
+mv $gzname ../
