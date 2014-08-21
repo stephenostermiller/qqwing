@@ -11,7 +11,6 @@ function generate(form){
 
 		if (dat.printStyle == qqwing.PrintStyle.CSV) output+=csvHeader(dat, true, dat.printSolution);
 
-
 		while(numberGenerated<form.generatenumber.value){
 			var puzzleStartTime = getMicroseconds();
 			dat.qqwing.setRecordHistory(dat.printHistory || dat.printInstructions || dat.printStats || dat.difficulty!=qqwing.Difficulty.UNKNOWN);
