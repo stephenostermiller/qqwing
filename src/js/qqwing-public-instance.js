@@ -48,68 +48,54 @@ this.LogItem = function(r, t, v, p){
 		println(this.toString());
 	};
 
-	this.getType =function(){
+	this.getType = function(){
 		return type;
 	};
 
+	this.getColumn = function(){
+		if (position == -1) return -1;
+		return cellToColumn(position);
+	};
+
+	this.getRow = function(){
+		if (position == -1) return -1;
+		return cellToRow(position);
+	}
+
+	this.getPosition = function(){
+		return position;
+	}
+
+	this.getValue = function(){
+		return value;
+	}
+
+	this.getDescription = function(){
+		switch(this.getType()){
+			case qqwing.LogType.GIVEN: return "Mark given";
+			case qqwing.LogType.ROLLBACK: return "Roll back round";
+			case qqwing.LogType.GUESS: return "Mark guess (start round)";
+			case qqwing.LogType.HIDDEN_SINGLE_ROW: return "Mark single possibility for value in row";
+			case qqwing.LogType.HIDDEN_SINGLE_COLUMN: return "Mark single possibility for value in column";
+			case qqwing.LogType.HIDDEN_SINGLE_SECTION: return "Mark single possibility for value in section";
+			case qqwing.LogType.SINGLE: return "Mark only possibility for cell";
+			case qqwing.LogType.NAKED_PAIR_ROW: return "Remove possibilities for naked pair in row";
+			case qqwing.LogType.NAKED_PAIR_COLUMN: return "Remove possibilities for naked pair in column";
+			case qqwing.LogType.NAKED_PAIR_SECTION: return "Remove possibilities for naked pair in section";
+			case qqwing.LogType.POINTING_PAIR_TRIPLE_ROW: return "Remove possibilities for row because all values are in one section";
+			case qqwing.LogType.POINTING_PAIR_TRIPLE_COLUMN: return "Remove possibilities for column because all values are in one section";
+			case qqwing.LogType.ROW_BOX: return "Remove possibilities for section because all values are in one row";
+			case qqwing.LogType.COLUMN_BOX: return "Remove possibilities for section because all values are in one column";
+			case qqwing.LogType.HIDDEN_PAIR_ROW: return "Remove possibilities from hidden pair in row";
+			case qqwing.LogType.HIDDEN_PAIR_COLUMN: return "Remove possibilities from hidden pair in column";
+			case qqwing.LogType.HIDDEN_PAIR_SECTION: return "Remove possibilities from hidden pair in section";
+			default: return "!!! Performed unknown optimization !!!";
+		}
+	}
+
 	this.toString = function(){
 		var s = "Round: " + this.getRound() + " - ";
-		switch(this.getType()){
-			case qqwing.LogType.GIVEN:{
-				s += "Mark given";
-			} break;
-			case qqwing.LogType.ROLLBACK:{
-				s += "Roll back round";
-			} break;
-			case qqwing.LogType.GUESS:{
-				s += "Mark guess (start round)";
-			} break;
-			case qqwing.LogType.HIDDEN_SINGLE_ROW:{
-				s += "Mark single possibility for value in row";
-			} break;
-			case qqwing.LogType.HIDDEN_SINGLE_COLUMN:{
-				s += "Mark single possibility for value in column";
-			} break;
-			case qqwing.LogType.HIDDEN_SINGLE_SECTION:{
-				s += "Mark single possibility for value in section";
-			} break;
-			case qqwing.LogType.SINGLE:{
-				s += "Mark only possibility for cell";
-			} break;
-			case qqwing.LogType.NAKED_PAIR_ROW:{
-				s += "Remove possibilities for naked pair in row";
-			} break;
-			case qqwing.LogType.NAKED_PAIR_COLUMN:{
-				s += "Remove possibilities for naked pair in column";
-			} break;
-			case qqwing.LogType.NAKED_PAIR_SECTION:{
-				s += "Remove possibilities for naked pair in section";
-			} break;
-			case qqwing.LogType.POINTING_PAIR_TRIPLE_ROW: {
-				s += "Remove possibilities for row because all values are in one section";
-			} break;
-			case qqwing.LogType.POINTING_PAIR_TRIPLE_COLUMN: {
-				s += "Remove possibilities for column because all values are in one section";
-			} break;
-			case qqwing.LogType.ROW_BOX: {
-				s += "Remove possibilities for section because all values are in one row";
-			} break;
-			case qqwing.LogType.COLUMN_BOX: {
-				s += "Remove possibilities for section because all values are in one column";
-			} break;
-			case qqwing.LogType.HIDDEN_PAIR_ROW: {
-				s += "Remove possibilities from hidden pair in row";
-			} break;
-			case qqwing.LogType.HIDDEN_PAIR_COLUMN: {
-				s += "Remove possibilities from hidden pair in column";
-			} break;
-			case qqwing.LogType.HIDDEN_PAIR_SECTION: {
-				s += "Remove possibilities from hidden pair in section";
-			} break;
-			default:{
-				s += "!!! Performed unknown optimization !!!";
-			} break;
-		}
+		s += this.getDescription();
 		if (value > 0 || position > -1){
 			s += " (";
 			var printed = false;
@@ -247,12 +233,28 @@ this.isSolved = function(){
 	return true;
 };
 
-this.printSolveHistory = function(){
-	printHistory.call(this, solveHistory);
+this.getSolveHistory = function(){
+	if (this.isSolved()){
+		return solveHistory;
+	} else {
+		return "No solve history - Puzzle is not possible to solve.";
+	}
 };
 
-this.getSolveHistory = function(){
-	return getHistory.call(this, solveHistory);
+this.getSolveHistoryString = function(){
+	if (this.isSolved()){
+		return getHistoryString.call(this, solveHistory);
+	} else {
+		return "No solve history - Puzzle is not possible to solve.";
+	}
+};
+
+this.printSolveHistory = function(){
+	if (this.isSolved()){
+		printHistory(solveHistory);
+	} else {
+		println("No solve history - Puzzle is not possible to solve.");
+	}
 };
 
 this.setRecordHistory = function(recHistory){
@@ -472,12 +474,19 @@ this.getBacktrackCount = function(){
 	return getLogCount.call(this, solveHistory, qqwing.LogType.ROLLBACK);
 };
 
-
 this.getSolveInstructions = function(){
 	if (this.isSolved()){
-		return getHistory.call(this, solveInstructions);
+		return solveInstructions;
 	} else {
-		println("No solve instructions - Puzzle is not possible to solve.");
+		return "No solve instructions - Puzzle is not possible to solve.";
+	}
+};
+
+this.getSolveInstructionsString = function(){
+	if (this.isSolved()){
+		return getHistoryString.call(this, solveInstructions);
+	} else {
+		return "No solve instructions - Puzzle is not possible to solve.";
 	}
 };
 
