@@ -949,10 +949,10 @@ var clearPuzzle = function(){
 };
 
 var printHistory = function(v){
-	printnoln(getHistory(v));
+	printnoln(getHistoryString(v));
 };
 
-var getHistory = function(v){
+var getHistoryString = function(v){
 	var s = "";
 	if (!recordHistory){
 		s += "History was not recorded.";
