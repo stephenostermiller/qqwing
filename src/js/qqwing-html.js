@@ -11,7 +11,6 @@ function generate(form){
 
 		if (dat.printStyle == qqwing.PrintStyle.CSV) output+=csvHeader(dat, true, dat.printSolution);
 
-
 		while(numberGenerated<form.generatenumber.value){
 			var puzzleStartTime = getMicroseconds();
 			dat.qqwing.setRecordHistory(dat.printHistory || dat.printInstructions || dat.printStats || dat.difficulty!=qqwing.Difficulty.UNKNOWN);
@@ -22,8 +21,8 @@ function generate(form){
 				numberGenerated++;
 				output += dat.qqwing.getPuzzleString();
 				if (dat.printSolution) output += dat.qqwing.getSolutionString();
-				if (dat.printHistory) output += dat.qqwing.getSolveHistory();
-				if (dat.printInstructions) output += dat.qqwing.getSolveInstructions();
+				if (dat.printHistory) output += dat.qqwing.getSolveHistoryString();
+				if (dat.printInstructions) output += dat.qqwing.getSolveInstructionsString();
 				var puzzleDoneTime = getMicroseconds();
 				if (dat.timer){
 					var t = (puzzleDoneTime - puzzleStartTime)/1000.0;
@@ -132,8 +131,8 @@ function solve(form){
 				output += printStyle==qqwing.PrintStyle.CSV?",":"\n";
 			} else {
 				output += dat.qqwing.getSolutionString();
-				if (dat.printHistory) output += dat.qqwing.getSolveHistory();
-				if (dat.printInstructions) output += dat.qqwing.getSolveInstructions();
+				if (dat.printHistory) output += dat.qqwing.getSolveHistoryString();
+				if (dat.printInstructions) output += dat.qqwing.getSolveInstructionsString();
 				if (dat.countSolutions){
 					var solutions = dat.qqwing.countSolutions();
 					if (dat.printStyle == qqwing.PrintStyle.CSV){

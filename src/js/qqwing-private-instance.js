@@ -69,9 +69,9 @@ for (var i=0; i<qqwing.BOARD_SIZE; i++){
  * some random order to be used when trying each
  * position in turn during guesses.
  */
-var randomPossibilityArray = new Array(qqwing.NUM_POSS);
+var randomPossibilityArray = new Array(qqwing.ROW_COL_SEC_SIZE);
 
-for (var i=0; i<qqwing.NUM_POSS; i++){
+for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
 	randomPossibilityArray[i] = i;
 }
 
@@ -169,7 +169,7 @@ var onlyPossibilityForCell = function(round){
 		if (solution[position] == 0){
 			var count = 0;
 			var lastValue = 0;
-			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
 					count++;
@@ -193,12 +193,12 @@ var onlyPossibilityForCell = function(round){
  * for one cell.  This type of cell is often called a "hidden single"
  */
 var onlyValueInRow = function(round){
-	for (var row=0; row<qqwing.ROW_LENGTH; row++){
-		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+	for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var count = 0;
 			var lastPosition = 0;
-			for (var col=0; col<qqwing.COL_HEIGHT; col++){
-				var position = (row*qqwing.ROW_LENGTH)+col;
+			for (var col=0; col<qqwing.ROW_COL_SEC_SIZE; col++){
+				var position = (row*qqwing.ROW_COL_SEC_SIZE)+col;
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
 					count++;
@@ -223,11 +223,11 @@ var onlyValueInRow = function(round){
  * for one cell.  This type of cell is often called a "hidden single"
  */
 var onlyValueInColumn = function(round){
-	for (var col=0; col<qqwing.COL_HEIGHT; col++){
-		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+	for (var col=0; col<qqwing.ROW_COL_SEC_SIZE; col++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var count = 0;
 			var lastPosition = 0;
-			for (var row=0; row<qqwing.ROW_LENGTH; row++){
+			for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
 				var position = rowColumnToCell(row,col);
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
@@ -254,14 +254,14 @@ var onlyValueInColumn = function(round){
  * for one cell.  This type of cell is often called a "hidden single"
  */
 var onlyValueInSection = function(round){
-	for (var sec=0; sec<qqwing.SEC_COUNT; sec++){
+	for (var sec=0; sec<qqwing.ROW_COL_SEC_SIZE; sec++){
 		var secPos = sectionToFirstCell(sec);
-		for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var count = 0;
 			var lastPosition = 0;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
-					var position = secPos + i + 9*j;
+			for (var i=0; i<qqwing.GRID_SIZE; i++){
+				for (var j=0; j<qqwing.GRID_SIZE; j++){
+					var position = secPos + i + qqwing.ROW_COL_SEC_SIZE*j;
 					var valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
 						count++;
@@ -283,7 +283,7 @@ var onlyValueInSection = function(round){
 var guess = function(round, guessNumber){
 	var localGuessCount = 0;
 	var position = findPositionWithFewestPossibilities.call(this);
-	for (var i=0; i<qqwing.NUM_POSS; i++){
+	for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
 		var valIndex = randomPossibilityArray[i];
 		var valPos = getPossibilityIndex(valIndex,position);
 		if (possibilities[valPos] == 0){
@@ -303,7 +303,7 @@ var isImpossible = function(){
 	for (var position=0; position<qqwing.BOARD_SIZE; position++){
 		if (solution[position] == 0){
 			var count = 0;
-			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0) count++;
 			}
@@ -335,14 +335,14 @@ var rollbackRound = function(round){
 };
 
 var pointingRowReduction = function(round){
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
-		for (var section=0; section<9; section++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
+		for (var section=0; section<qqwing.ROW_COL_SEC_SIZE; section++){
 			var secStart = sectionToFirstCell(section);
 			var inOneRow = true;
 			var boxRow = -1;
-			for (var j=0; j<3; j++){
-				for (var i=0; i<3; i++){
-					var secVal=secStart+i+(9*j);
+			for (var j=0; j<qqwing.GRID_SIZE; j++){
+				for (var i=0; i<qqwing.GRID_SIZE; i++){
+					var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 					var valPos = getPossibilityIndex(valIndex,secVal);
 					if(possibilities[valPos] == 0){
 						if (boxRow == -1 || boxRow == j){
@@ -358,7 +358,7 @@ var pointingRowReduction = function(round){
 				var row = cellToRow(secStart) + boxRow;
 				var rowStart = rowToFirstCell(row);
 
-				for (var i=0; i<9; i++){
+				for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
 					var position = rowStart+i;
 					var section2 = cellToSection(position);
 					var valPos = getPossibilityIndex(valIndex,position);
@@ -378,14 +378,14 @@ var pointingRowReduction = function(round){
 };
 
 var rowBoxReduction = function(round){
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
-		for (var row=0; row<9; row++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
+		for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
 			var rowStart = rowToFirstCell(row);
 			var inOneBox = true;
 			var rowBox = -1;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
-					var column = i*3+j;
+			for (var i=0; i<qqwing.GRID_SIZE; i++){
+				for (var j=0; j<qqwing.GRID_SIZE; j++){
+					var column = i*qqwing.GRID_SIZE+j;
 					var position = rowColumnToCell(row, column);
 					var valPos = getPossibilityIndex(valIndex,position);
 					if(possibilities[valPos] == 0){
@@ -399,12 +399,12 @@ var rowBoxReduction = function(round){
 			}
 			if (inOneBox && rowBox != -1){
 				var doneSomething = false;
-				var column = 3*rowBox;
+				var column = qqwing.GRID_SIZE*rowBox;
 				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 				var secStartRow = cellToRow(secStart);
 				var secStartCol = cellToColumn(secStart);
-				for (var i=0; i<3; i++){
-					for (var j=0; j<3; j++){
+				for (var i=0; i<qqwing.GRID_SIZE; i++){
+					for (var j=0; j<qqwing.GRID_SIZE; j++){
 						var row2 = secStartRow+i;
 						var col2 = secStartCol+j;
 						var position = rowColumnToCell(row2, col2);
@@ -426,14 +426,14 @@ var rowBoxReduction = function(round){
 };
 
 var colBoxReduction = function(round){
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
-		for (var row=0; row<9; row++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
+		for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
 			var rowStart = rowToFirstCell(row);
 			var inOneBox = true;
 			var rowBox = -1;
-			for (var i=0; i<3; i++){
-				for (var j=0; j<3; j++){
-					var column = i*3+j;
+			for (var i=0; i<qqwing.GRID_SIZE; i++){
+				for (var j=0; j<qqwing.GRID_SIZE; j++){
+					var column = i*qqwing.GRID_SIZE+j;
 					var position = rowColumnToCell(row, column);
 					var valPos = getPossibilityIndex(valIndex,position);
 					if(possibilities[valPos] == 0){
@@ -447,12 +447,12 @@ var colBoxReduction = function(round){
 			}
 			if (inOneBox && rowBox != -1){
 				var doneSomething = false;
-				var column = 3*rowBox;
+				var column = qqwing.GRID_SIZE*rowBox;
 				var secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 				var secStartRow = cellToRow(secStart);
 				var secStartCol = cellToColumn(secStart);
-				for (var i=0; i<3; i++){
-					for (var j=0; j<3; j++){
+				for (var i=0; i<qqwing.GRID_SIZE; i++){
+					for (var j=0; j<qqwing.GRID_SIZE; j++){
 						var row2 = secStartRow+i;
 						var col2 = secStartCol+j;
 						var position = rowColumnToCell(row2, col2);
@@ -474,14 +474,14 @@ var colBoxReduction = function(round){
 };
 
 var pointingColumnReduction = function(round){
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
-		for (var section=0; section<9; section++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
+		for (var section=0; section<qqwing.ROW_COL_SEC_SIZE; section++){
 			var secStart = sectionToFirstCell(section);
 			var inOneRow = true;
 			var boxRow = -1;
-			for (var j=0; j<3; j++){
-				for (var i=0; i<3; i++){
-					var secVal=secStart+i+(9*j);
+			for (var j=0; j<qqwing.GRID_SIZE; j++){
+				for (var i=0; i<qqwing.GRID_SIZE; i++){
+					var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 					var valPos = getPossibilityIndex(valIndex,secVal);
 					if(possibilities[valPos] == 0){
 						if (boxRow == -1 || boxRow == j){
@@ -497,7 +497,7 @@ var pointingColumnReduction = function(round){
 				var row = cellToRow(secStart) + boxRow;
 				var rowStart = rowToFirstCell(row);
 
-				for (var i=0; i<9; i++){
+				for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
 					var position = rowStart+i;
 					var section2 = cellToSection(position);
 					var valPos = getPossibilityIndex(valIndex,position);
@@ -517,12 +517,12 @@ var pointingColumnReduction = function(round){
 };
 
 var hiddenPairInRow = function(round){
-	for (var row=0; row<9; row++){
-		for (var valIndex=0; valIndex<9; valIndex++){
+	for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var c1 = -1;
 			var c2 = -1;
 			var valCount = 0;
-			for (var column=0; column<9; column++){
+			for (var column=0; column<qqwing.ROW_COL_SEC_SIZE; column++){
 				var position = rowColumnToCell(row,column);
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
@@ -535,11 +535,11 @@ var hiddenPairInRow = function(round){
 				}
 			}
 			if (valCount==2){
-				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+				for (var valIndex2=valIndex+1; valIndex2<qqwing.ROW_COL_SEC_SIZE; valIndex2++){
 					var c3 = -1;
 					var c4 = -1;
 					var valCount2 = 0;
-					for (var column=0; column<9; column++){
+					for (var column=0; column<qqwing.ROW_COL_SEC_SIZE; column++){
 						var position = rowColumnToCell(row,column);
 						var valPos = getPossibilityIndex(valIndex2,position);
 						if (possibilities[valPos] == 0){
@@ -553,7 +553,7 @@ var hiddenPairInRow = function(round){
 					}
 					if (valCount2==2 && c1==c3 && c2==c4){
 						var doneSomething = false;
-						for (var valIndex3=0; valIndex3<9; valIndex3++){
+						for (var valIndex3=0; valIndex3<qqwing.ROW_COL_SEC_SIZE; valIndex3++){
 							if (valIndex3 != valIndex && valIndex3 != valIndex2){
 								var position1 = rowColumnToCell(row,c1);
 								var position2 = rowColumnToCell(row,c2);
@@ -582,12 +582,12 @@ var hiddenPairInRow = function(round){
 };
 
 var hiddenPairInColumn = function(round){
-	for (var column=0; column<9; column++){
-		for (var valIndex=0; valIndex<9; valIndex++){
+	for (var column=0; column<qqwing.ROW_COL_SEC_SIZE; column++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var r1 = -1;
 			var r2 = -1;
 			var valCount = 0;
-			for (var row=0; row<9; row++){
+			for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
 				var position = rowColumnToCell(row,column);
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
@@ -600,11 +600,11 @@ var hiddenPairInColumn = function(round){
 				}
 			}
 			if (valCount==2){
-				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+				for (var valIndex2=valIndex+1; valIndex2<qqwing.ROW_COL_SEC_SIZE; valIndex2++){
 					var r3 = -1;
 					var r4 = -1;
 					var valCount2 = 0;
-					for (var row=0; row<9; row++){
+					for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
 						var position = rowColumnToCell(row,column);
 						var valPos = getPossibilityIndex(valIndex2,position);
 						if (possibilities[valPos] == 0){
@@ -618,7 +618,7 @@ var hiddenPairInColumn = function(round){
 					}
 					if (valCount2==2 && r1==r3 && r2==r4){
 						var doneSomething = false;
-						for (var valIndex3=0; valIndex3<9; valIndex3++){
+						for (var valIndex3=0; valIndex3<qqwing.ROW_COL_SEC_SIZE; valIndex3++){
 							if (valIndex3 != valIndex && valIndex3 != valIndex2){
 								var position1 = rowColumnToCell(r1,column);
 								var position2 = rowColumnToCell(r2,column);
@@ -647,12 +647,12 @@ var hiddenPairInColumn = function(round){
 };
 
 var hiddenPairInSection = function(round){
-	for (var section=0; section<9; section++){
-		for (var valIndex=0; valIndex<9; valIndex++){
+	for (var section=0; section<qqwing.ROW_COL_SEC_SIZE; section++){
+		for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 			var si1 = -1;
 			var si2 = -1;
 			var valCount = 0;
-			for (var secInd=0; secInd<9; secInd++){
+			for (var secInd=0; secInd<qqwing.ROW_COL_SEC_SIZE; secInd++){
 				var position = sectionToCell(section,secInd);
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0){
@@ -665,11 +665,11 @@ var hiddenPairInSection = function(round){
 				}
 			}
 			if (valCount==2){
-				for (var valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+				for (var valIndex2=valIndex+1; valIndex2<qqwing.ROW_COL_SEC_SIZE; valIndex2++){
 					var si3 = -1;
 					var si4 = -1;
 					var valCount2 = 0;
-					for (var secInd=0; secInd<9; secInd++){
+					for (var secInd=0; secInd<qqwing.ROW_COL_SEC_SIZE; secInd++){
 						var position = sectionToCell(section,secInd);
 						var valPos = getPossibilityIndex(valIndex2,position);
 						if (possibilities[valPos] == 0){
@@ -683,7 +683,7 @@ var hiddenPairInSection = function(round){
 					}
 					if (valCount2==2 && si1==si3 && si2==si4){
 						var doneSomething = false;
-						for (var valIndex3=0; valIndex3<9; valIndex3++){
+						for (var valIndex3=0; valIndex3<qqwing.ROW_COL_SEC_SIZE; valIndex3++){
 							if (valIndex3 != valIndex && valIndex3 != valIndex2){
 								var position1 = sectionToCell(section,si1);
 								var position2 = sectionToCell(section,si2);
@@ -731,8 +731,8 @@ var mark = function(position, round, value){
 
 	// Take this value out of the possibilities for everything in the row
 	solutionRound[position] = round;
-	var rowStart = cellToRow(position)*9;
-	for (var col=0; col<qqwing.COL_HEIGHT; col++){
+	var rowStart = cellToRow(position)*qqwing.ROW_COL_SEC_SIZE;
+	for (var col=0; col<qqwing.ROW_COL_SEC_SIZE; col++){
 		var rowVal=rowStart+col;
 		var valPos = getPossibilityIndex(valIndex,rowVal);
 		if (possibilities[valPos] == 0){
@@ -742,8 +742,8 @@ var mark = function(position, round, value){
 
 	// Take this value out of the possibilities for everything in the column
 	var colStart = cellToColumn(position);
-	for (var i=0; i<9; i++){
-		var colVal=colStart+(9*i);
+	for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
+		var colVal=colStart+(qqwing.ROW_COL_SEC_SIZE*i);
 		var valPos = getPossibilityIndex(valIndex,colVal);
 		if (possibilities[valPos] == 0){
 			possibilities[valPos] = round;
@@ -752,9 +752,9 @@ var mark = function(position, round, value){
 
 	// Take this value out of the possibilities for everything in section
 	var secStart = cellToSectionStartCell(position);
-	for (var i=0; i<3; i++){
-		for (var j=0; j<3; j++){
-			var secVal=secStart+i+(9*j);
+	for (var i=0; i<qqwing.GRID_SIZE; i++){
+		for (var j=0; j<qqwing.GRID_SIZE; j++){
+			var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 			var valPos = getPossibilityIndex(valIndex,secVal);
 			if (possibilities[valPos] == 0){
 				possibilities[valPos] = round;
@@ -763,7 +763,7 @@ var mark = function(position, round, value){
 	}
 
 	//This position itself is determined, it should have possibilities.
-	for (var valIndex=0; valIndex<9; valIndex++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 		var valPos = getPossibilityIndex(valIndex,position);
 		if (possibilities[valPos] == 0){
 			possibilities[valPos] = round;
@@ -778,7 +778,7 @@ var findPositionWithFewestPossibilities = function(){
 		var position = randomBoardArray[i];
 		if (solution[position] == 0){
 			var count = 0;
-			for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+			for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 				var valPos = getPossibilityIndex(valIndex,position);
 				if (possibilities[valPos] == 0) count++;
 			}
@@ -804,7 +804,7 @@ var handleNakedPairs = function(round){
 					if (possibilities2 == 2 && arePossibilitiesSame(position, position2)){
 						if (row == cellToRow(position2)){
 							var doneSomething = false;
-							for (var column2=0; column2<9; column2++){
+							for (var column2=0; column2<qqwing.ROW_COL_SEC_SIZE; column2++){
 								var position3 = rowColumnToCell(row,column2);
 								if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 									doneSomething = true;
@@ -817,7 +817,7 @@ var handleNakedPairs = function(round){
 						}
 						if (column == cellToColumn(position2)){
 							var doneSomething = false;
-							for (var row2=0; row2<9; row2++){
+							for (var row2=0; row2<qqwing.ROW_COL_SEC_SIZE; row2++){
 								var position3 = rowColumnToCell(row2,column);
 								if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 									doneSomething = true;
@@ -831,9 +831,9 @@ var handleNakedPairs = function(round){
 						if (section == cellToSectionStartCell(position2)){
 							var doneSomething = false;
 							var secStart = cellToSectionStartCell(position);
-							for (var i=0; i<3; i++){
-								for (var j=0; j<3; j++){
-									var position3=secStart+i+(9*j);
+							for (var i=0; i<qqwing.GRID_SIZE; i++){
+								for (var j=0; j<qqwing.GRID_SIZE; j++){
+									var position3=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
 									}
@@ -854,7 +854,7 @@ var handleNakedPairs = function(round){
 
 var countPossibilities = function(position){
 	var count = 0;
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 		var valPos = getPossibilityIndex(valIndex,position);
 		if (possibilities[valPos] == 0) count++;
 	}
@@ -862,7 +862,7 @@ var countPossibilities = function(position){
 };
 
 var arePossibilitiesSame = function(position1, position2){
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 		var valPos1 = getPossibilityIndex(valIndex,position1);
 		var valPos2 = getPossibilityIndex(valIndex,position2);
 		if ((possibilities[valPos1] == 0 || possibilities[valPos2] == 0) && (possibilities[valPos1] != 0 || possibilities[valPos2] != 0)){
@@ -882,7 +882,7 @@ var addHistoryItem = function(l){
 
 var shuffleRandomArrays = function(){
 	shuffleArray(randomBoardArray, qqwing.BOARD_SIZE);
-	shuffleArray(randomPossibilityArray, qqwing.NUM_POSS);
+	shuffleArray(randomPossibilityArray, qqwing.ROW_COL_SEC_SIZE);
 };
 
 /**
@@ -914,7 +914,7 @@ var sudokuToString = function(puz){
 			if (printStyle == qqwing.PrintStyle.READABLE || printStyle == qqwing.PrintStyle.COMPACT){
 				s += "\n";
 			}
-		} else if (i%9==8){
+		} else if (i%qqwing.ROW_COL_SEC_SIZE==qqwing.ROW_COL_SEC_SIZE-1){
 			if (printStyle == qqwing.PrintStyle.READABLE || printStyle == qqwing.PrintStyle.COMPACT){
 				s += "\n";
 			}
@@ -923,7 +923,7 @@ var sudokuToString = function(puz){
 					s += "-------|-------|-------\n";
 				}
 			}
-		} else if (i%3==2){
+		} else if (i%qqwing.GRID_SIZE==qqwing.GRID_SIZE-1){
 			if (printStyle == qqwing.PrintStyle.READABLE){
 				s += " |";
 			}
@@ -949,10 +949,10 @@ var clearPuzzle = function(){
 };
 
 var printHistory = function(v){
-	printnoln(getHistory(v));
+	printnoln(getHistoryString(v));
 };
 
-var getHistory = function(v){
+var getHistoryString = function(v){
 	var s = "";
 	if (!recordHistory){
 		s += "History was not recorded.";
@@ -980,7 +980,7 @@ var getHistory = function(v){
 
 var removePossibilitiesInOneFromTwo = function(position1, position2, round){
 	var doneSomething = false;
-	for (var valIndex=0; valIndex<qqwing.NUM_POSS; valIndex++){
+	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 		var valPos1 = getPossibilityIndex(valIndex,position1);
 		var valPos2 = getPossibilityIndex(valIndex,position2);
 		if (possibilities[valPos1] == 0 && possibilities[valPos2] == 0){

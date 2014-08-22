@@ -48,9 +48,47 @@ sed -i 's/UNRELEASED/RELEASED/g' build/debian-changelog.txt
 cp debian/changelog build/debian-changelog.txt
 rm -rf debian
 
-sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac
+sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac src/js/qqwing-main.js
+
+libcurrent=`grep QQWING_CURRENT= build/configure.ac | grep -oE '[0-9]+'`
+let "nextlibcurrent=libcurrent+1"
+librevision=`grep QQWING_REVISION= build/configure.ac | grep -oE '[0-9]+'`
+let "nextlibrevision=librevision+1"
+libage=`grep QQWING_AGE= build/configure.ac | grep -oE '[0-9]+'`
+let "nextlibage=libage+1"
+nextlib="0"
+while [ $nextlib == "0" ]
+do
+	echo "Current C++ library version: $libcurrent.$librevision.$libage"
+	echo "1) Methods removed or binary compat broken ($nextlibcurrent.0.0)"
+	echo "2) Methods added ($libcurrent.$nextlibrevision.0)"
+	echo "3) No changes ($libcurrent.$librevision.$nextlibage)"
+	read lib_release_type
+	case $lib_release_type in
+		"1" )
+			libcurrent=$nextlibcurrent
+			librevision=0
+			libage=0
+			nextlib="$libcurrent.$librevision.$libage"
+			;;
+		"2" )
+			libcurrent=$libcurrent
+			librevision=$nextlibrevision
+			libage=0
+			nextlib="$libcurrent.$librevision.$libage"
+			;;
+		"3" )
+			libcurrent=$libcurrent
+			librevision=$librevision
+			libage=$nextlibage
+			nextlib="$libcurrent.$librevision.$libage"
+			;;
+	esac
+done
+
+sed -ri "s/QQWING_CURRENT=.*/QQWING_CURRENT=$libcurrent/g;s/QQWING_REVISION=.*/QQWING_REVISION=$librevision/g;s/QQWING_AGE=.*/QQWING_AGE=$libage/g" build/configure.ac
 
 make clean
 make
 
-echo "Changed to next version: $nextversion"
+echo "Changed to next version: $nextversion (C++ library version $nextlib)"

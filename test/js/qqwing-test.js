@@ -42,9 +42,9 @@ console.log("");
 
 function sectionCellConversion(){
 	var set = {};
-	for (var section=0; section<qqwing.SEC_SIZE; section++){
+	for (var section=0; section<qqwing.ROW_COL_SEC_SIZE; section++){
 		var sectionStartCell = -1;
-		for (var offset=0; offset<qqwing.SEC_SIZE; offset++){
+		for (var offset=0; offset<qqwing.ROW_COL_SEC_SIZE; offset++){
 			var cell = sectionToCell(section,offset);
 			if (offset == 0) sectionStartCell = cell;
 			assertRange(cell,0,qqwing.BOARD_SIZE);
@@ -58,8 +58,8 @@ function sectionCellConversion(){
 
 function rowColumnCellConversion(){
 	var set = {};
-	for (var row=0; row<qqwing.ROW_LENGTH; row++){
-		for (var col=0; col<qqwing.COL_HEIGHT; col++){
+	for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
+		for (var col=0; col<qqwing.ROW_COL_SEC_SIZE; col++){
 			var cell = rowColumnToCell(row,col);
 			assertRange(cell,0,qqwing.BOARD_SIZE);
 			assertUnique(cell, set);
@@ -73,7 +73,7 @@ function rowColumnCellConversion(){
 
 function possibilityConversion(){
 	var set = {};
-	for (var value=0; value<qqwing.SEC_SIZE; value++){
+	for (var value=0; value<qqwing.ROW_COL_SEC_SIZE; value++){
 		for (var cell=0; cell<qqwing.BOARD_SIZE; cell++){
 			assertUnique(getPossibilityIndex(value, cell), set);
 		}

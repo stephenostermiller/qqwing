@@ -21,9 +21,15 @@ for file in doc/www/bte/*.bte
 do
 	sed "s/VERSION/$version/g" $file > target/www/${file##*/}
 done
-sed "s/VERSION/$version/g"  doc/www/qqwing.html > target/www/qqwing.html
+for file in doc/www/*.html
+do
+	name=${file##*/}
+	sed "s/VERSION/$version/g" $file > target/www/$name
+done
+
 cp doc/www/css/*.css target/www/
 cp target/jsmin/qqwing-html-$version.min.js target/www
+cp target/jsmin/qqwing-play-$version.min.js target/www
 
 cd target/www
 bte *.bte
