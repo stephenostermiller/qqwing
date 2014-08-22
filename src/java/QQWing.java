@@ -57,18 +57,16 @@ public class QQWing {
 	};
 
 	public static final int GRID_SIZE = 3;
-	public static final int ROW_LENGTH = (GRID_SIZE*GRID_SIZE);
-	public static final int COL_HEIGHT = (GRID_SIZE*GRID_SIZE);
-	public static final int SEC_SIZE = (GRID_SIZE*GRID_SIZE);
-	public static final int SEC_COUNT = (GRID_SIZE*GRID_SIZE);
-	public static final int SEC_GROUP_SIZE = (SEC_SIZE*GRID_SIZE);
-	public static final int NUM_POSS = (GRID_SIZE*GRID_SIZE);
-	public static final int BOARD_SIZE = (ROW_LENGTH*COL_HEIGHT);
-	public static final int POSSIBILITY_SIZE = (BOARD_SIZE*NUM_POSS);
+	public static final int ROW_COL_SEC_SIZE = (GRID_SIZE*GRID_SIZE);
+	public static final int SEC_GROUP_SIZE = (ROW_COL_SEC_SIZE*GRID_SIZE);
+	public static final int BOARD_SIZE = (ROW_COL_SEC_SIZE*ROW_COL_SEC_SIZE);
+	public static final int POSSIBILITY_SIZE = (BOARD_SIZE*ROW_COL_SEC_SIZE);
 
-	public static final int NONE = 1;
-	public static final int GENERATE = 2;
-	public static final int SOLVE = 3;
+	private enum Action {
+		NONE,
+		GENERATE,
+		SOLVE
+	};
 
 	public static Random r;
 	/**
@@ -167,7 +165,7 @@ public class QQWing {
 		recordHistory = false;
 		printStyle = PrintStyle.READABLE;
 		randomBoardArray = new int[BOARD_SIZE];
-		randomPossibilityArray = new int[NUM_POSS];
+		randomPossibilityArray = new int[ROW_COL_SEC_SIZE];
 		solveHistory = new ArrayList<LogItem>();
 		solveInstructions = new ArrayList<LogItem>();
 
@@ -175,7 +173,7 @@ public class QQWing {
 				randomBoardArray[i] = i;
 		}
 
-		for (int i=0; i<NUM_POSS; i++){
+		for (int i=0; i<ROW_COL_SEC_SIZE; i++){
 				randomPossibilityArray[i] = i;
 		}
 	}
@@ -364,8 +362,8 @@ public class QQWing {
 		for (int i=0; i<POSSIBILITY_SIZE; i++){
 			if (possibilities[i] == 0){
 				if (possibilityToMark == randomPossibility){
-					int position = i/NUM_POSS;
-					int value = i%NUM_POSS+1;
+					int position = i/ROW_COL_SEC_SIZE;
+					int value = i%ROW_COL_SEC_SIZE+1;
 					mark(position, round, value);
 					return;
 				}
@@ -376,7 +374,7 @@ public class QQWing {
 
 	void shuffleRandomArrays(){
 		shuffleArray(randomBoardArray, BOARD_SIZE);
-		shuffleArray(randomPossibilityArray, NUM_POSS);
+		shuffleArray(randomPossibilityArray, ROW_COL_SEC_SIZE);
 	}
 
 	void clearPuzzle() throws Exception {
@@ -433,7 +431,7 @@ public class QQWing {
 
 		// Remove one value at a time and see if
 		// the puzzle still has only one solution.
-		// If it does, leave it0 out the point because
+		// If it does, leave it out the point because
 		// it is not needed.
 		for (int i=0; i<BOARD_SIZE; i++){
 			// check all the positions, but in shuffled order
@@ -444,16 +442,16 @@ public class QQWing {
 				int positionsym3 = -1;
 				switch (symmetry){
 					case ROTATE90:
-						positionsym2 = rowColumnToCell(COL_HEIGHT-1-cellToColumn(position),cellToRow(position));
-						positionsym3 = rowColumnToCell(cellToColumn(position),ROW_LENGTH-1-cellToRow(position));
+						positionsym2 = rowColumnToCell(ROW_COL_SEC_SIZE-1-cellToColumn(position),cellToRow(position));
+						positionsym3 = rowColumnToCell(cellToColumn(position),ROW_COL_SEC_SIZE-1-cellToRow(position));
 					case ROTATE180:
-						positionsym1 = rowColumnToCell(ROW_LENGTH-1-cellToRow(position),COL_HEIGHT-1-cellToColumn(position));
+						positionsym1 = rowColumnToCell(ROW_COL_SEC_SIZE-1-cellToRow(position),ROW_COL_SEC_SIZE-1-cellToColumn(position));
 					break;
 					case MIRROR:
-						positionsym1 = rowColumnToCell(cellToRow(position),COL_HEIGHT-1-cellToColumn(position));
+						positionsym1 = rowColumnToCell(cellToRow(position),ROW_COL_SEC_SIZE-1-cellToColumn(position));
 					break;
 					case FLIP:
-						positionsym1 = rowColumnToCell(ROW_LENGTH-1-cellToRow(position),cellToColumn(position));
+						positionsym1 = rowColumnToCell(ROW_COL_SEC_SIZE-1-cellToRow(position),cellToColumn(position));
 					break;
 				}
 				// try backing out the value and
@@ -667,7 +665,7 @@ public class QQWing {
 		for (int position=0; position<BOARD_SIZE; position++){
 			if (solution[position] == 0){
 				int count = 0;
-				for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+				for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0) count++;
 				}
@@ -686,7 +684,7 @@ public class QQWing {
 			int position = randomBoardArray[i];
 			if (solution[position] == 0){
 				int count = 0;
-				for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+				for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0) count++;
 				}
@@ -702,7 +700,7 @@ public class QQWing {
 	boolean guess(int round, int guessNumber) throws Exception {
 		int localGuessCount = 0;
 		int position = findPositionWithFewestPossibilities();
-		for (int i=0; i<NUM_POSS; i++){
+		for (int i=0; i<ROW_COL_SEC_SIZE; i++){
 			int valIndex = randomPossibilityArray[i];
 			int valPos = getPossibilityIndex(valIndex,position);
 			if (possibilities[valPos] == 0){
@@ -735,14 +733,14 @@ public class QQWing {
 	}
 
 	boolean colBoxReduction(int round){
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int col=0; col<9; col++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
+			for (int col=0; col<ROW_COL_SEC_SIZE; col++){
 				int colStart = columnToFirstCell(col);
 				boolean inOneBox = true;
 				int colBox = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int row = i*3+j;
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int row = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, col);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -756,12 +754,12 @@ public class QQWing {
 				}
 				if (inOneBox && colBox != -1){
 					boolean doneSomething = false;
-					int row = 3*colBox;
+					int row = GRID_SIZE*colBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, col));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -783,14 +781,14 @@ public class QQWing {
 	}
 
 	boolean rowBoxReduction(int round){
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int row=0; row<9; row++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
+			for (int row=0; row<ROW_COL_SEC_SIZE; row++){
 				int rowStart = rowToFirstCell(row);
 				boolean inOneBox = true;
 				int rowBox = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int column = i*3+j;
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int column = i*GRID_SIZE+j;
 						int position = rowColumnToCell(row, column);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if(possibilities[valPos] == 0){
@@ -804,12 +802,12 @@ public class QQWing {
 				}
 				if (inOneBox && rowBox != -1){
 					boolean doneSomething = false;
-					int column = 3*rowBox;
+					int column = GRID_SIZE*rowBox;
 					int secStart = cellToSectionStartCell(rowColumnToCell(row, column));
 					int secStartRow = cellToRow(secStart);
 					int secStartCol = cellToColumn(secStart);
-					for (int i=0; i<3; i++){
-						for (int j=0; j<3; j++){
+					for (int i=0; i<GRID_SIZE; i++){
+						for (int j=0; j<GRID_SIZE; j++){
 							int row2 = secStartRow+i;
 							int col2 = secStartCol+j;
 							int position = rowColumnToCell(row2, col2);
@@ -831,14 +829,14 @@ public class QQWing {
 	}
 
 	boolean pointingRowReduction(int round){
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int section=0; section<9; section++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
+			for (int section=0; section<ROW_COL_SEC_SIZE; section++){
 				int secStart = sectionToFirstCell(section);
 				boolean inOneRow = true;
 				int boxRow = -1;
-				for (int j=0; j<3; j++){
-					for (int i=0; i<3; i++){
-						int secVal=secStart+i+(9*j);
+				for (int j=0; j<GRID_SIZE; j++){
+					for (int i=0; i<GRID_SIZE; i++){
+						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
 							if (boxRow == -1 || boxRow == j){
@@ -854,7 +852,7 @@ public class QQWing {
 					int row = cellToRow(secStart) + boxRow;
 					int rowStart = rowToFirstCell(row);
 
-					for (int i=0; i<9; i++){
+					for (int i=0; i<ROW_COL_SEC_SIZE; i++){
 						int position = rowStart+i;
 						int section2 = cellToSection(position);
 						int valPos = getPossibilityIndex(valIndex,position);
@@ -874,14 +872,14 @@ public class QQWing {
 	}
 
 	boolean pointingColumnReduction(int round){
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
-			for (int section=0; section<9; section++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
+			for (int section=0; section<ROW_COL_SEC_SIZE; section++){
 				int secStart = sectionToFirstCell(section);
 				boolean inOneCol = true;
 				int boxCol = -1;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int secVal=secStart+i+(9*j);
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 						int valPos = getPossibilityIndex(valIndex,secVal);
 						if(possibilities[valPos] == 0){
 							if (boxCol == -1 || boxCol == i){
@@ -897,8 +895,8 @@ public class QQWing {
 					int col = cellToColumn(secStart) + boxCol;
 					int colStart = columnToFirstCell(col);
 
-					for (int i=0; i<9; i++){
-						int position = colStart+(9*i);
+					for (int i=0; i<ROW_COL_SEC_SIZE; i++){
+						int position = colStart+(ROW_COL_SEC_SIZE*i);
 						int section2 = cellToSection(position);
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (section != section2 && possibilities[valPos] == 0){
@@ -918,7 +916,7 @@ public class QQWing {
 
 	int countPossibilities(int position){
 		int count = 0;
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 			int valPos = getPossibilityIndex(valIndex,position);
 			if (possibilities[valPos] == 0) count++;
 		}
@@ -926,7 +924,7 @@ public class QQWing {
 	}
 
 	boolean arePossibilitiesSame(int position1, int position2){
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 			int valPos1 = getPossibilityIndex(valIndex,position1);
 			int valPos2 = getPossibilityIndex(valIndex,position2);
 			if ((possibilities[valPos1] == 0 || possibilities[valPos2] == 0) && (possibilities[valPos1] != 0 || possibilities[valPos2] != 0)){
@@ -938,7 +936,7 @@ public class QQWing {
 
 	boolean removePossibilitiesInOneFromTwo(int position1, int position2, int round){
 		boolean doneSomething = false;
-		for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+		for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 			int valPos1 = getPossibilityIndex(valIndex,position1);
 			int valPos2 = getPossibilityIndex(valIndex,position2);
 			if (possibilities[valPos1] == 0 && possibilities[valPos2] == 0){
@@ -950,12 +948,12 @@ public class QQWing {
 	}
 
 	boolean hiddenPairInColumn(int round){
-		for (int column=0; column<9; column++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int column=0; column<ROW_COL_SEC_SIZE; column++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int r1 = -1;
 				int r2 = -1;
 				int valCount = 0;
-				for (int row=0; row<9; row++){
+				for (int row=0; row<ROW_COL_SEC_SIZE; row++){
 					int position = rowColumnToCell(row,column);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -968,11 +966,11 @@ public class QQWing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<ROW_COL_SEC_SIZE; valIndex2++){
 						int r3 = -1;
 						int r4 = -1;
 						int valCount2 = 0;
-						for (int row=0; row<9; row++){
+						for (int row=0; row<ROW_COL_SEC_SIZE; row++){
 							int position = rowColumnToCell(row,column);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -986,7 +984,7 @@ public class QQWing {
 						}
 						if (valCount2==2 && r1==r3 && r2==r4){
 							boolean doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<ROW_COL_SEC_SIZE; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = rowColumnToCell(r1,column);
 									int position2 = rowColumnToCell(r2,column);
@@ -1015,12 +1013,12 @@ public class QQWing {
 	}
 
 	boolean hiddenPairInSection(int round){
-		for (int section=0; section<9; section++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int section=0; section<ROW_COL_SEC_SIZE; section++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int si1 = -1;
 				int si2 = -1;
 				int valCount = 0;
-				for (int secInd=0; secInd<9; secInd++){
+				for (int secInd=0; secInd<ROW_COL_SEC_SIZE; secInd++){
 					int position = sectionToCell(section,secInd);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -1033,11 +1031,11 @@ public class QQWing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<ROW_COL_SEC_SIZE; valIndex2++){
 						int si3 = -1;
 						int si4 = -1;
 						int valCount2 = 0;
-						for (int secInd=0; secInd<9; secInd++){
+						for (int secInd=0; secInd<ROW_COL_SEC_SIZE; secInd++){
 							int position = sectionToCell(section,secInd);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -1051,7 +1049,7 @@ public class QQWing {
 						}
 						if (valCount2==2 && si1==si3 && si2==si4){
 							boolean doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<ROW_COL_SEC_SIZE; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = sectionToCell(section,si1);
 									int position2 = sectionToCell(section,si2);
@@ -1080,12 +1078,12 @@ public class QQWing {
 	}
 
 	boolean hiddenPairInRow(int round){
-		for (int row=0; row<9; row++){
-			for (int valIndex=0; valIndex<9; valIndex++){
+		for (int row=0; row<ROW_COL_SEC_SIZE; row++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int c1 = -1;
 				int c2 = -1;
 				int valCount = 0;
-				for (int column=0; column<9; column++){
+				for (int column=0; column<ROW_COL_SEC_SIZE; column++){
 					int position = rowColumnToCell(row,column);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -1098,11 +1096,11 @@ public class QQWing {
 					}
 				}
 				if (valCount==2){
-					for (int valIndex2=valIndex+1; valIndex2<9; valIndex2++){
+					for (int valIndex2=valIndex+1; valIndex2<ROW_COL_SEC_SIZE; valIndex2++){
 						int c3 = -1;
 						int c4 = -1;
 						int valCount2 = 0;
-						for (int column=0; column<9; column++){
+						for (int column=0; column<ROW_COL_SEC_SIZE; column++){
 							int position = rowColumnToCell(row,column);
 							int valPos = getPossibilityIndex(valIndex2,position);
 							if (possibilities[valPos] == 0){
@@ -1116,7 +1114,7 @@ public class QQWing {
 						}
 						if (valCount2==2 && c1==c3 && c2==c4){
 							boolean doneSomething = false;
-							for (int valIndex3=0; valIndex3<9; valIndex3++){
+							for (int valIndex3=0; valIndex3<ROW_COL_SEC_SIZE; valIndex3++){
 								if (valIndex3 != valIndex && valIndex3 != valIndex2){
 									int position1 = rowColumnToCell(row,c1);
 									int position2 = rowColumnToCell(row,c2);
@@ -1157,7 +1155,7 @@ public class QQWing {
 						if (possibilities2 == 2 && arePossibilitiesSame(position, position2)){
 							if (row == cellToRow(position2)){
 								boolean doneSomething = false;
-								for (int column2=0; column2<9; column2++){
+								for (int column2=0; column2<ROW_COL_SEC_SIZE; column2++){
 									int position3 = rowColumnToCell(row,column2);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
@@ -1170,7 +1168,7 @@ public class QQWing {
 							}
 							if (column == cellToColumn(position2)){
 								boolean doneSomething = false;
-								for (int row2=0; row2<9; row2++){
+								for (int row2=0; row2<ROW_COL_SEC_SIZE; row2++){
 									int position3 = rowColumnToCell(row2,column);
 									if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 										doneSomething = true;
@@ -1186,7 +1184,7 @@ public class QQWing {
 								int secStart = cellToSectionStartCell(position);
 								for (int i=0; i<3; i++){
 									for (int j=0; j<3; j++){
-										int position3=secStart+i+(9*j);
+										int position3=secStart+i+(ROW_COL_SEC_SIZE*j);
 										if (position3 != position && position3 != position2 && removePossibilitiesInOneFromTwo(position, position3, round)){
 											doneSomething = true;
 										}
@@ -1212,12 +1210,12 @@ public class QQWing {
 	 * for one cell.  This type of cell is often called a "hidden single"
 	 */
 	boolean onlyValueInRow(int round) throws Exception {
-		for (int row=0; row<ROW_LENGTH; row++){
-			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+		for (int row=0; row<ROW_COL_SEC_SIZE; row++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int count = 0;
 				int lastPosition = 0;
-				for (int col=0; col<COL_HEIGHT; col++){
-					int position = (row*ROW_LENGTH)+col;
+				for (int col=0; col<ROW_COL_SEC_SIZE; col++){
+					int position = (row*ROW_COL_SEC_SIZE)+col;
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
 						count++;
@@ -1242,11 +1240,11 @@ public class QQWing {
 	 * for one cell.  This type of cell is often called a "hidden single"
 	 */
 	boolean onlyValueInColumn(int round) throws Exception {
-		for (int col=0; col<COL_HEIGHT; col++){
-			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+		for (int col=0; col<ROW_COL_SEC_SIZE; col++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int count = 0;
 				int lastPosition = 0;
-				for (int row=0; row<ROW_LENGTH; row++){
+				for (int row=0; row<ROW_COL_SEC_SIZE; row++){
 					int position = rowColumnToCell(row,col);
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
@@ -1272,14 +1270,14 @@ public class QQWing {
 	 * for one cell.  This type of cell is often called a "hidden single"
 	 */
 	boolean onlyValueInSection(int round) throws Exception {
-		for (int sec=0; sec<SEC_COUNT; sec++){
+		for (int sec=0; sec<ROW_COL_SEC_SIZE; sec++){
 			int secPos = sectionToFirstCell(sec);
-			for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+			for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 				int count = 0;
 				int lastPosition = 0;
-				for (int i=0; i<3; i++){
-					for (int j=0; j<3; j++){
-						int position = secPos + i + 9*j;
+				for (int i=0; i<GRID_SIZE; i++){
+					for (int j=0; j<GRID_SIZE; j++){
+						int position = secPos + i + ROW_COL_SEC_SIZE*j;
 						int valPos = getPossibilityIndex(valIndex,position);
 						if (possibilities[valPos] == 0){
 							count++;
@@ -1308,7 +1306,7 @@ public class QQWing {
 			if (solution[position] == 0){
 				int count = 0;
 				int lastValue = 0;
-				for (int valIndex=0; valIndex<NUM_POSS; valIndex++){
+				for (int valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 					int valPos = getPossibilityIndex(valIndex,position);
 					if (possibilities[valPos] == 0){
 						count++;
@@ -1348,8 +1346,8 @@ public class QQWing {
 
 		// Take this value out of the possibilities for everything in the row
 		solutionRound[position] = round;
-		int rowStart = cellToRow(position)*9;
-		for (int col=0; col<COL_HEIGHT; col++){
+		int rowStart = cellToRow(position)*ROW_COL_SEC_SIZE;
+		for (int col=0; col<ROW_COL_SEC_SIZE; col++){
 			int rowVal=rowStart+col;
 			int valPos = getPossibilityIndex(valIndex,rowVal);
 			//System.out.println("Row Start: "+rowStart+" Row Value: "+rowVal+" Value Position: "+valPos);
@@ -1360,8 +1358,8 @@ public class QQWing {
 
 		// Take this value out of the possibilities for everything in the column
 		int colStart = cellToColumn(position);
-		for (int i=0; i<9; i++){
-			int colVal=colStart+(9*i);
+		for (int i=0; i<ROW_COL_SEC_SIZE; i++){
+			int colVal=colStart+(ROW_COL_SEC_SIZE*i);
 			int valPos = getPossibilityIndex(valIndex,colVal);
 			//System.out.println("Col Start: "+colStart+" Col Value: "+colVal+" Value Position: "+valPos);
 			if (possibilities[valPos] == 0){
@@ -1371,9 +1369,9 @@ public class QQWing {
 
 		// Take this value out of the possibilities for everything in section
 		int secStart = cellToSectionStartCell(position);
-		for (int i=0; i<3; i++){
-			for (int j=0; j<3; j++){
-				int secVal=secStart+i+(9*j);
+		for (int i=0; i<GRID_SIZE; i++){
+			for (int j=0; j<GRID_SIZE; j++){
+				int secVal=secStart+i+(ROW_COL_SEC_SIZE*j);
 				int valPos = getPossibilityIndex(valIndex,secVal);
 				//System.out.println("Sec Start: "+secStart+" Sec Value: "+secVal+" Value Position: "+valPos);
 				if (possibilities[valPos] == 0){
@@ -1383,7 +1381,7 @@ public class QQWing {
 		}
 
 		//This position itself is determined, it should have possibilities.
-		for (valIndex=0; valIndex<9; valIndex++){
+		for (valIndex=0; valIndex<ROW_COL_SEC_SIZE; valIndex++){
 			int valPos = getPossibilityIndex(valIndex,position);
 			if (possibilities[valPos] == 0){
 				possibilities[valPos] = round;
@@ -1415,7 +1413,7 @@ public class QQWing {
 				if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
 					System.out.println();
 				}
-			} else if (i%9==8){
+			} else if (i%ROW_COL_SEC_SIZE==ROW_COL_SEC_SIZE-1){
 				if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
 					System.out.println();
 				}
@@ -1424,7 +1422,7 @@ public class QQWing {
 						System.out.println("-------|-------|-------");
 					}
 				}
-			} else if (i%3==2){
+			} else if (i%GRID_SIZE==GRID_SIZE-1){
 				if (printStyle == PrintStyle.READABLE){
 					System.out.print(" |");
 				}
@@ -1465,7 +1463,7 @@ public class QQWing {
 			boolean printInstructions = false;
 			boolean timer = false;
 			boolean countSolutions = false;
-			int action = NONE;
+			Action action = Action.NONE;
 			boolean logHistory = false;
 			PrintStyle printStyle = PrintStyle.READABLE;
 			int numberToGenerate = 1;
@@ -1504,7 +1502,7 @@ public class QQWing {
 				} else if (argv[i].equals("--nocount-solutions")){
 					countSolutions = false;
 				} else if (argv[i].equals("--generate")){
-					action = GENERATE;
+					action = Action.GENERATE;
 					printPuzzle = true;
 					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
 						try {
@@ -1559,7 +1557,7 @@ public class QQWing {
 					}
 					i++;
 				} else if (argv[i].equals("--solve")){
-					action = SOLVE;
+					action = Action.SOLVE;
 					printSolution = true;
 				} else if (argv[i].equals("--log-history")){
 					logHistory = true;
@@ -1597,7 +1595,7 @@ public class QQWing {
 				}
 			}
 
-			if (action == NONE){
+			if (action == Action.NONE){
 				System.out.println("Either --solve or --generate must be specified.");
 				printHelp();
 				System.exit(1);
@@ -1640,7 +1638,7 @@ public class QQWing {
 				// Record whether the puzzle was possible or not,
 				// so that we don't try to solve impossible givens.
 				boolean havePuzzle = false;
-				if (action == GENERATE){
+				if (action == Action.GENERATE){
 					// Generate a puzzle
 					havePuzzle = ss.generatePuzzleSymmetry(symmetry);
 					if (!havePuzzle && printPuzzle){
@@ -1697,7 +1695,7 @@ public class QQWing {
 					}
 
 					// Bail out if it didn't meet the difficulty standards for generation
-					if (action == GENERATE){
+					if (action == Action.GENERATE){
 						if (difficulty!=Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
 							havePuzzle = false;
 						} else {
@@ -1808,7 +1806,7 @@ public class QQWing {
 			// Print out the time it took to do everything
 			if (timer){
 				double t = ((double)(applicationDoneTime - applicationStartTime))/1000000.0;
-				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==GENERATE?"generated":"solved")+" in "+t+" seconds.");
+				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==Action.GENERATE?"generated":"solved")+" in "+t+" seconds.");
 			}
 		} catch (Exception e){
 			e.printStackTrace(System.out);
@@ -1949,7 +1947,7 @@ public class QQWing {
 	 * the column (0-8) in which that cell resides.
 	 */
 	static int cellToColumn(int cell){
-		return cell%COL_HEIGHT;
+		return cell%ROW_COL_SEC_SIZE;
 	}
 
 	/**
@@ -1957,7 +1955,7 @@ public class QQWing {
 	 * the row (0-8) in which it resides.
 	 */
 	static int cellToRow(int cell){
-		return cell/ROW_LENGTH;
+		return cell/ROW_COL_SEC_SIZE;
 	}
 
 	/**
@@ -2015,7 +2013,7 @@ public class QQWing {
 	 * calculate the offset into the possibility array (0-728).
 	 */
 	static int getPossibilityIndex(int valueIndex, int cell){
-		return valueIndex+(NUM_POSS*cell);
+		return valueIndex+(ROW_COL_SEC_SIZE*cell);
 	}
 
 	/**
@@ -2023,7 +2021,7 @@ public class QQWing {
 	 * cell (0-80).
 	 */
 	static int rowColumnToCell(int row, int column){
-		return (row*COL_HEIGHT)+column;
+		return (row*ROW_COL_SEC_SIZE)+column;
 	}
 
 	/**
@@ -2033,7 +2031,7 @@ public class QQWing {
 	static int sectionToCell(int section, int offset){
 		return (
 			sectionToFirstCell(section)
-			+ ((offset/GRID_SIZE)*SEC_SIZE)
+			+ ((offset/GRID_SIZE)*ROW_COL_SEC_SIZE)
 			+ (offset%GRID_SIZE)
 		);
 	}

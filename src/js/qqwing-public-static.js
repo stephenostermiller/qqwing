@@ -61,11 +61,7 @@ qqwing.LogType = {
 };
 
 qqwing.GRID_SIZE = 3;
-qqwing.ROW_LENGTH = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
-qqwing.COL_HEIGHT = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
-qqwing.SEC_SIZE = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
-qqwing.SEC_COUNT = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
-qqwing.SEC_GROUP_SIZE = qqwing.SEC_SIZE*qqwing.GRID_SIZE;
-qqwing.NUM_POSS = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
-qqwing.BOARD_SIZE = qqwing.ROW_LENGTH*qqwing.COL_HEIGHT;
-qqwing.POSSIBILITY_SIZE = qqwing.BOARD_SIZE*qqwing.NUM_POSS;
+qqwing.ROW_COL_SEC_SIZE = qqwing.GRID_SIZE*qqwing.GRID_SIZE;
+qqwing.SEC_GROUP_SIZE = qqwing.ROW_COL_SEC_SIZE*qqwing.GRID_SIZE;
+qqwing.BOARD_SIZE = qqwing.ROW_COL_SEC_SIZE*qqwing.ROW_COL_SEC_SIZE;
+qqwing.POSSIBILITY_SIZE = qqwing.BOARD_SIZE*qqwing.ROW_COL_SEC_SIZE;
