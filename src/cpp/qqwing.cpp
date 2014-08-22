@@ -362,7 +362,7 @@ namespace qqwing {
 
 		// Remove one value at a time and see if
 		// the puzzle still has only one solution.
-		// If it does, leave it0 out the point because
+		// If it does, leave it out the point because
 		// it is not needed.
 		{for (int i=0; i<BOARD_SIZE; i++){
 			// check all the positions, but in shuffled order
