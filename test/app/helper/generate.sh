@@ -77,3 +77,15 @@ then
 	exit 1
 fi
 
+solutions=`echo "$puzzle" | $QQWING --solve --one-line --count-solutions | tail -n 1`
+expected="The solution to the puzzle is unique."
+if [ "$solutions" != "$expected" ]
+then
+	echo
+	echo "Solution is not unique for this puzzle"
+	echo "qqwing:   $QQWING"
+	echo "test: $test"
+	echo "Solving:  $puzzle"
+	echo "$solutions"
+	exit 1
+fi
