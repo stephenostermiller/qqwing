@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class QQWing {
 
-	private static final String QQWING_VERSION = "1.1.3";
+	private static final String QQWING_VERSION = "1.2.0";
 
 	private enum PrintStyle {
 		ONE_LINE,
