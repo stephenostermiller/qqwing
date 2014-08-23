@@ -2,7 +2,7 @@
 <%bte.tpl name=pageTitle %>QQwing - Sudoku Generator and Solver<%/bte.tpl%>
 <%bte.tpl name=description %>A fast command line program written in C++ for generating and solving Soduku puzzles.<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
-<%bte.tpl name=homeLinkText %><b>QQwing Home</b><%/bte.tpl%>
+<%bte.tpl name=homeLinkText %><b>QQwing home</b><%/bte.tpl%>
 <%bte.tpl name=pageContent %>
 <h1>QQwing</h1>
 <p>QQwing is a Sudoku puzzle generator and solver.  It offers the following features.</p>

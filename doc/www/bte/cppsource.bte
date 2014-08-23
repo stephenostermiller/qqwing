@@ -2,7 +2,7 @@
 <%bte.tpl name=pageTitle %><%bte.grp onNoResolve=ok %><%bte.inc name="title"%><%/bte.grp%><%/bte.tpl%>
 <%bte.tpl name=description %>Colored C++ source code for QQwing<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator source code, sudoku solver source code, C++<%/bte.tpl%>
-<%bte.tpl name=cppSourceLinkText %><b>C++ Source Code</b><%/bte.tpl%>
+<%bte.tpl name=cppSourceLinkText %><b>C++ source code</b><%/bte.tpl%>
 
 <%bte.tpl name=pageContent %>
 
