@@ -22,12 +22,12 @@ for my $file (@ARGV){
 	my $done = 0;
 	my $line;
 	my $style = "";
-	my $sawblank = 0;
-	my $printedsomething = 0;
 	while (!$done and $line = <FILE>){
 		if ($style eq ""){
-			if ($line =~ /^\#\!/){
-				# ignore first line with hash bang
+			if ($line =~ /^\<\!\-\-/){
+				$style = "<!--";
+			} elsif ($line =~ /^[\#\<]\!/){
+				# ignore first line with hash bang or doctype
 			} elsif ($line =~ /^$/){
 				# ignore blank lines
 			} elsif ($line =~ /^\/\*/){
@@ -45,20 +45,15 @@ for my $file (@ARGV){
 			}
 		}
 		if (!$done and $style ne ""){
-			my $text = $line;
-			$text =~ s/^\# //g if ($style eq '#');
-			$text =~ s/^((\/\*)|( ?\*\/?)) ?//g if ($style eq '/*');
-			if ($text =~ /^[ \t\r\n]*$/){
-				$sawblank=1;
-			} else {
-				print "\n" if ($printedsomething and $sawblank);
-				print "$text";
-				$printedsomething=1;
-				$sawblank=0;
-			}
+			print "$line";
 		}
 		if ($style eq "/*"){
 			if ($line =~ /\*\//){
+				$done = 1;
+			}
+		}
+		if ($style eq "<!--"){
+			if ($line =~ /\-\-\>/){
 				$done = 1;
 			}
 		}

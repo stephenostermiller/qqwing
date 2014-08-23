@@ -15,19 +15,17 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 set -e
-set -o pipefail
 
-expected="Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not foo"
-actual=`$QQWING --symmetry foo || true`
+mkdir -p target
 
-if [ "$expected" != "$actual" ]
+copyright_time_file="target/src.copyright"
+
+if [ ! -e $copyright_time_file ]
 then
-	echo
-	echo "Test: $0"
-	echo "qqwing: $QQWING"
-	echo "Expected: $expected"
-	echo "Actual:   $actual"
-	exit 1
+	touch --date 1980-01-01 $copyright_time_file
 fi
+
+find build/ doc/ src/ test/ -type f -newer $copyright_time_file | grep -E '(\.(css|hpp|cpp|html|java|pl|js|sh)|Makefile)$' |  xargs build/src-copyright-fix.sh
+
+touch $copyright_time_file

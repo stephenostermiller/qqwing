@@ -9,7 +9,7 @@ dist: jar tgz rpm deb jsgz
 compile: javacompile cppcompile jsmin
 
 .PHONY: javaversion
-javaversion: notroot neaten
+javaversion: notroot src
 	@build/java_version.sh
 
 .PHONY: javacompile
@@ -21,7 +21,7 @@ jar: javacompile
 	@build/jar_build.sh
 
 .PHONY: cppconfigure
-cppconfigure: notroot neaten
+cppconfigure: notroot src
 	@build/cpp_configure.sh
 
 .PHONY: cppcompile
@@ -29,7 +29,7 @@ cppcompile: cppconfigure
 	@build/cpp_compile.sh
 
 .PHONY: jscompile
-jscompile: neaten
+jscompile: src
 	@build/js_build.sh
 
 .PHONY: jsmin
@@ -59,6 +59,13 @@ install: cppcompile
 .PHONY: notroot
 notroot:
 	@build/not_root_check.sh
+
+.PHONY: src
+src: copyright neaten
+
+.PHONY: copyright
+copyright:
+	@build/src-copyright-check.sh
 
 .PHONY: neaten
 neaten:
@@ -111,7 +118,7 @@ cpptest: testcppapp
 jstest: testjsunit testjsapp
 
 .PHONY: release
-release: neaten
+release: src
 	@build/release.sh
 
 .PHONY: clean
