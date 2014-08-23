@@ -26,6 +26,6 @@ then
 	touch --date 1980-01-01 $copyright_time_file
 fi
 
-find build/ doc/ src/ test/ -type f -newer $copyright_time_file | grep -E '(\.(css|hpp|cpp|html|java|pl|js|sh)|Makefile)$' |  xargs build/src-copyright-fix.sh
+find build/ doc/ src/ test/ Makefile -type f -newer $copyright_time_file | grep -E '(\.(css|hpp|cpp|html|java|pl|js|sh)|Makefile)$' |  xargs build/src-copyright-fix.sh
 
 touch $copyright_time_file
