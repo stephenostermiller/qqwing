@@ -408,9 +408,9 @@ namespace qqwing {
 				if (countSolutions(2, true) > 1){
 					// Put it back in, it is needed
 					puzzle[position] = savedValue;
-					if (positionsym1 >= 0) puzzle[positionsym1] = savedSym1;
-					if (positionsym2 >= 0) puzzle[positionsym2] = savedSym2;
-					if (positionsym3 >= 0) puzzle[positionsym3] = savedSym3;
+					if (positionsym1 >= 0 && savedSym1 != 0) puzzle[positionsym1] = savedSym1;
+					if (positionsym2 >= 0 && savedSym2 != 0) puzzle[positionsym2] = savedSym2;
+					if (positionsym3 >= 0 && savedSym3 != 0) puzzle[positionsym3] = savedSym3;
 				}
 			}
 		}}
