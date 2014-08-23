@@ -1,6 +1,7 @@
 qqwing (1.2.0-1) RELEASED; urgency=medium
 
   * Fix bug that caused generated puzzles with symmetry not to be unique
+  * Remove duplicated constants and unused methods from library
   * Javascript version with online generator
   * The JavaScript port powers the online playing board 
 
