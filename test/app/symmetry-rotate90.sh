@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 set -e
-test/app/helper/test-symmetry.pl rotate90 `$QQWING --generate --one-line --symmetry rotate90`
+
+puzzle=`$QQWING --generate --one-line --symmetry rotate90`
+test/app/helper/test-symmetry.pl rotate90 $puzzle
+test/app/helper/generate.sh $0 "" $puzzle
