@@ -542,6 +542,7 @@ function clearHint(){
 	hintArray = null;
 	hintPosition = -1;
 	document.gameform.hintButton.disabled=false;
+	document.gameform.hintButton.value="I need a hint";
 	document.getElementById("hint").innerHTML="";
 }
 
@@ -563,11 +564,18 @@ function hint(){
 			}
 		}
 	}
-	if (!hint && hintArray && hintArray.length){
-		var next = hintArray.shift();
-		hint = next.getDescription();
-		if (next.getValue() > 0) hint += " - " + next.getValue();
-		hintPosition = next.getPosition();
+	if (!hint && hintArray){
+		if (hintArray.length){
+			var next = hintArray.shift();
+			hint = next.getDescription();
+			if (next.getValue() > 0) hint += " - " + next.getValue();
+			hintPosition = next.getPosition();
+		}
+		if (!hintArray.length) {
+			document.gameform.hintButton.disabled=true;
+		} else {
+			document.gameform.hintButton.value="I need another hint";
+		}
 	}
 	document.getElementById("hint").innerHTML=hint;
 	draw();
