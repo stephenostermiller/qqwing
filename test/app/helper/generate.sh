@@ -21,8 +21,12 @@ set -o pipefail
 
 test="$1"
 options="$2"
+puzzle="$3"
 
-puzzle=`$QQWING --generate --one-line $options`
+if [ "z$puzzle" == "z" ]
+then
+	puzzle=`$QQWING --generate --one-line $options`
+fi
 
 if ! echo "$puzzle" | grep -qE '^[0-9\.]{81}$'
 then
