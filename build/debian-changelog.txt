@@ -1,5 +1,6 @@
-qqwing (1.2.0-1) UNRELEASED; urgency=medium
+qqwing (1.2.0-1) RELEASED; urgency=medium
 
+  * Fix bug that caused generated puzzles with symmetry not to be unique
   * Javascript version with online generator
   * The JavaScript port powers the online playing board 
 

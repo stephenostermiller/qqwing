@@ -60,7 +60,7 @@ then
 	rm -rf debian/
 	exit 1
 fi
-sed -i 's/UNRELEASED/RELEASED/g' build/debian-changelog.txt
+sed -i 's/UNRELEASED/RELEASED/g' debian/changelog
 cp debian/changelog build/debian-changelog.txt
 rm -rf debian
 
