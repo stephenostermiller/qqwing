@@ -51,15 +51,15 @@ name=playLinkText %><%/bte.grp %></li>
 
 </body>
 </html><%/bte.tpl%>
-<%bte.tpl name=homeLinkText %><a href="./">QQwing Home</a><%/bte.tpl%>
+<%bte.tpl name=homeLinkText %><a href="./">QQwing home</a><%/bte.tpl%>
 <%bte.tpl name=downloadLinkText %><a href="download.html">Download</a><%/bte.tpl%>
 <%bte.tpl name=installLinkText %><a href="install.html">Installation</a><%/bte.tpl%>
 <%bte.tpl name=instructionsLinkText %><a href="instructions.html">Instructions</a><%/bte.tpl%>
-<%bte.tpl name=cppSourceLinkText %><a href="qqwing.cpp.html">C++ Source Code</a><%/bte.tpl%>
-<%bte.tpl name=javaSourceLinkText %><a href="QQWing.java.html">Java Source Code</a><%/bte.tpl%>
-<%bte.tpl name=jsSourceLinkText %><a href="qqwing-main.js.html">JavaScript Source Code</a><%/bte.tpl%>
+<%bte.tpl name=cppSourceLinkText %><a href="qqwing.cpp.html">C++ source code</a><%/bte.tpl%>
+<%bte.tpl name=javaSourceLinkText %><a href="QQWing.java.html">Java source code</a><%/bte.tpl%>
+<%bte.tpl name=jsSourceLinkText %><a href="qqwing-main.js.html">JavaScript source code</a><%/bte.tpl%>
 <%bte.tpl name=licenseLinkText %><a href="license.html">License</a><%/bte.tpl%>
-<%bte.tpl name=playLinkText %><a href="play.html">Play Online</a><%/bte.tpl%>
-<%bte.tpl name=bugsLinkText %><a href="bugs.html">Bugs/Features</a><%/bte.tpl%>
-<%bte.tpl name=gensolveLinkText %><a href="qqwing.html">Generate/Solve Sudoku Online</a><%/bte.tpl%>
+<%bte.tpl name=playLinkText %><a href="sudoku.html">Play online</a><%/bte.tpl%>
+<%bte.tpl name=bugsLinkText %><a href="bugs.html">Bugs and features</a><%/bte.tpl%>
+<%bte.tpl name=gensolveLinkText %><a href="qqwing.html">Generate and solve sudoku online</a><%/bte.tpl%>
 <%/bte.doc%>
