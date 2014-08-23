@@ -1,5 +1,5 @@
 <%bte.doc output="false"%>
-<%bte.tpl name=page %><!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<%bte.tpl name=page %><!DOCTYPE html>
 <html>
 <head><title><%bte.inc name=pageTitle %></title><%bte.grp onNoResolve=warning %>
 <meta name="description" content="<%bte.inc name=description %>"><%/bte.grp %><%bte.grp onNoResolve=warning %>
