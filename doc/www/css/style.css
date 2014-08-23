@@ -44,12 +44,10 @@ a:link:hover {
 }
 #head{
 	margin: 0px;
-	padding:0cm 3cm 0cm 3cm;
-	border:1px solid #598059;
-	border-bottom:20px solid #647D8F;
-	height:60px;
-	font:monospaced;
-
+	padding: 0cm 3em;
+	border: 1px solid #598059;
+	border-bottom: 20px solid #647D8F;
+	font: monospace;
 }
 
 #content {
@@ -61,7 +59,7 @@ a:link:hover {
 #menu {
 	position: absolute;
 	left: 0px;
-	top:81px;
+	top:120px;
 	width: 180px;
 	margin: 0px;
 	padding: 3px;
