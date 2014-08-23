@@ -1,6 +1,6 @@
 /*
  * qqwing - Sudoku solver and generator
- * Copyright (C) 2014 Stephen Ostermiller
+ * Copyright (C) 2005-2014 Stephen Ostermiller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ var boardcolors = new Array(qqwing.BOARD_SIZE);
 var possibilities = new Array(qqwing.POSSIBILITY_SIZE);
 var startTime = 0;
 var gameType = "blank";
-var nextGameType = "blank";
 var usedHint = false;
 var stats = new Array();
 var qq = new qqwing();
@@ -526,7 +525,7 @@ var generateNewGame = function(){
 		setTimeout(generateNewGame, 100);
 	} else {
 		clearBoard();
-		gameType = nextGameType;
+		gameType = getDifficulty();
 		newGame(qq.getPuzzleString());
 		draw();
 		document.getElementById('newgamemessage').innerHTML="";
