@@ -107,4 +107,10 @@ sed -ri "s/QQWING_CURRENT=.*/QQWING_CURRENT=$libcurrent/g;s/QQWING_REVISION=.*/Q
 make clean
 make
 
+git commit -a
+git tag -a "v$nextversion" -m "Release version $nextversion"
+
 echo "Changed to next version: $nextversion (C++ library version $nextlib)"
+echo "Push to origin and github now:"
+echo "  git push origin master && git push origin --tags"
+echo "  git push github master && git push github --tags"
