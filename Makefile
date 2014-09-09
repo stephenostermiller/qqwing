@@ -122,7 +122,7 @@ testjsapp: jsmin
 	@build/test-app-run.sh js
 
 .PHONY: website
-website:
+website: jsgz
 	@build/build_website.sh
 
 .PHONY: javatest
