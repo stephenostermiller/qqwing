@@ -28,12 +28,5 @@ fi
 
 mkdir -p target/jsmin
 echo "Minimizing js sources"
-for file in target/js/*.js
-do
-	output=${file/js/jsmin}
-	output=${output/.js/.min.js}
-	yui-compressor --type js --charset UTF-8 -o $output $file
-	echo -n '.'
-done
-echo
+yui-compressor --type js --charset UTF-8 -o '\/js\/(.*)\.js$:/jsmin/$1.min.js' target/js/*.js
 touch target/jsminimize
