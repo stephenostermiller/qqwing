@@ -123,7 +123,7 @@ testjsapp: jsmin
 
 .PHONY: website
 website: jsgz
-	@build/build_website.sh
+	@build/website-build.sh
 
 .PHONY: javatest
 javatest: testjavaunit testjavaapp
