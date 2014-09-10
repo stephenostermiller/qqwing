@@ -18,7 +18,7 @@
 
 set -e
 
-mkdir -p target
+mkdir -p target/www target/www-debug
 
 if [ -e target/website ]
 then
@@ -30,8 +30,6 @@ then
 fi
 
 version=`build/version.sh`
-
-mkdir -p target/www
 
 for file in doc/www/bte/*.bte
 do
@@ -57,6 +55,11 @@ tohtml ../../target/js/qqwing-main-$version.js -s "" -f -i whitespace -t jssourc
 rm *.bte
 cp ../qqwing*.* .
 cd ../..
+
+cp target/www/*.html target/www/*.css target/www-debug
+cp -v target/js/qqwing-html-$version.js target/www-debug
+cp -v target/js/qqwing-play-$version.js target/www-debug
+sed -i 's/.min././g' target/www-debug/*.html
 
 echo "Website built in target/www"
 touch target/website
