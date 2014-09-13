@@ -4,9 +4,7 @@
 <head><title><%bte.inc name=pageTitle %></title><%bte.grp onNoResolve=warning %>
 <meta name="description" content="<%bte.inc name=description %>"><%/bte.grp %><%bte.grp onNoResolve=warning %>
 <meta name="keywords" content="<%bte.inc name=keywords %>"><%/bte.grp %>
-<link rel="stylesheet" media="screen" title="Web View" href="style.css" type="text/css">
-<link rel="stylesheet" media="print" href="printable.css" type="text/css">
-<link rel="alternate stylesheet" media="screen" title="Print Preview" href="printable.css" type="text/css">
+<link rel="stylesheet" href="style.css" type="text/css">
 <%bte.grp onNoResolve=ok %><%bte.inc name=headContent %><%/bte.grp %>
 </head>
 <body>
@@ -46,7 +44,6 @@ name=playLinkText %><%/bte.grp %></li>
 
 <div id=foot>
 <p>Copyright &copy; <a href="http://ostermiller.org/contact.pl?regarding=QQwing" class=mail>Stephen Ostermiller</a> 2005-2014</p>
-<p style="text-align:right;font-size:smaller"><a href="http://ostermiller.org/">ostermiller.org</a> (<a href="http://ostermiller.org/siteindex.html">site index</a>)</p>
 </div>
 
 </body>

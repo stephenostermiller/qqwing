@@ -38,6 +38,11 @@ function stringToStats(statString){
 	}
 }
 
+function init(){
+	initStats();
+	newUrlGame();
+}
+
 function initStats(){
 	var c = getCookie("sudokuStats");
 	var ar = c.split("||");
@@ -61,7 +66,7 @@ function initStats(){
 var difficultyLevels = new Array("simple","easy","intermediate","expert");
 
 function drawStats(){
-	var statsDiv = document.getElementById("stats");
+	var statsDiv = el("stats");
 	var advMsg = "";
 	var s = "<table border=1><tr><th>Difficulty</th><th># Solved</th><th>Average Solve Time</th><th># Solved w/ Hint</th><th># Abandoned</th></tr>"
 	for (var i=0; i<difficultyLevels.length; i++){
@@ -152,7 +157,7 @@ function ensureNum(n){
 function draw(){
 	drawStats();
 	determineSquareSize();
-	document.getElementById("game").innerHTML=getFullHtml();
+	el("game").innerHTML=getFullHtml();
 }
 
 function clickValue(event, cell, value){
@@ -161,7 +166,7 @@ function clickValue(event, cell, value){
 		removePossibility(cell,value);
 	} else {
 		mark(cell,value,getColor());
-		document.getElementById("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in</a>";
+		el("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in</a>";
 	}
 	draw();
 	detectComplete();
@@ -175,7 +180,7 @@ function clickset(cell){
 }
 
 function setCurrentGameLink(){
-	document.getElementById("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in.</a>";
+	el("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in.</a>";
 }
 
 function removePossibility(cell, value){
@@ -377,7 +382,7 @@ var largeSquareFontSize;
 function determineSquareSize(){
 	var h = getWindowHeight();
 	var z = 100000;
-	var g = document.getElementById("testcell");
+	var g = el("testcell");
 	var f = 100;
 	var lastz = 0;
 	while (z > h && z != lastz){
@@ -521,19 +526,19 @@ var generateNewGame = function(){
 	qq.setRecordHistory(true);
 	qq.solve();
 	if (qq.getDifficultyAsString().toLowerCase() != getDifficulty()){
-		document.getElementById('newgamemessage').innerHTML=document.getElementById('newgamemessage').innerHTML+" .";
+		el('newgamemessage').innerHTML=el('newgamemessage').innerHTML+" .";
 		setTimeout(generateNewGame, 100);
 	} else {
 		clearBoard();
 		gameType = getDifficulty();
 		newGame(qq.getPuzzleString());
 		draw();
-		document.getElementById('newgamemessage').innerHTML="";
+		el('newgamemessage').innerHTML="";
 	}
 }
 
 function newQQwingGame(){
-	document.getElementById('newgamemessage').innerHTML="Loading new game . . .";
+	el('newgamemessage').innerHTML="Loading new game . . .";
 	setTimeout(generateNewGame, 100);
 }
 
@@ -543,7 +548,7 @@ function clearHint(){
 	hintPosition = -1;
 	document.gameform.hintButton.disabled=false;
 	document.gameform.hintButton.value="I need a hint";
-	document.getElementById("hint").innerHTML="";
+	el("hint").innerHTML="";
 }
 
 function hint(){
@@ -577,7 +582,7 @@ function hint(){
 			document.gameform.hintButton.value="I need another hint";
 		}
 	}
-	document.getElementById("hint").innerHTML=hint;
+	el("hint").innerHTML=hint;
 	draw();
 }
 
@@ -587,8 +592,8 @@ function clearBoard(){
 	for (var boardindex=0; boardindex<qqwing.BOARD_SIZE; boardindex++) board[boardindex]=0;
 	for (var boardcolorsindex=0; boardcolorsindex<qqwing.BOARD_SIZE; boardcolorsindex++) boardcolors[boardcolorsindex]=0;
 	for (var possibilitiesindex=0; possibilitiesindex<qqwing.POSSIBILITY_SIZE; possibilitiesindex++) possibilities[possibilitiesindex]=0;
-	document.getElementById("begingamelink").innerHTML="";
-	document.getElementById("currentgamelink").innerHTML="";
+	el("begingamelink").innerHTML="";
+	el("currentgamelink").innerHTML="";
 	usedHint = false;
 	pauseTime = 0;
 	gameType='blank';
@@ -603,6 +608,7 @@ function clearColor(color){
 		}
 	}
 	setCurrentGameLink();
+	draw();
 }
 
 function newGame(s){
@@ -614,7 +620,7 @@ function newGame(s){
 			count++;
 		}
 	}
-	document.getElementById("begingamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for the this game</a>";
+	el("begingamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for the this game</a>";
 }
 
 function getGameUrl(){
@@ -685,7 +691,7 @@ var pauseColor = "";
 
 function pauseGame(){
 	pauseStart = (new Date()).getTime();
-	var eg = document.getElementById("entiregame");
+	var eg = el("entiregame");
 	pauseDifficultyIndex = document.gameform.difficultyselect.selectedIndex;
 	pauseColor = getColor();
 	pauseState = eg.innerHTML;
@@ -693,13 +699,17 @@ function pauseGame(){
 }
 
 function resumeGame(){
-	document.getElementById("entiregame").innerHTML = "<div style='color:red;'><div style='height:3in;'></div><h1>Please wait, the game will resume shortly...</h1><div style='height:3in;'></div></div>";
+	el("entiregame").innerHTML = "<div style='color:red;'><div style='height:3in;'></div><h1>Please wait, the game will resume shortly...</h1><div style='height:3in;'></div></div>";
 	setTimeout("finishResume()", 10000);
 }
 
 function finishResume(){
 	pauseTime += (new Date()).getTime()-pauseStart;
-	document.getElementById("entiregame").innerHTML = pauseState;
+	el("entiregame").innerHTML = pauseState;
 	document.gameform.difficultyselect.selectedIndex = pauseDifficultyIndex;
 	setColor(pauseColor);
+}
+
+function el(elementid){
+	return document.getElementById(elementid);
 }
