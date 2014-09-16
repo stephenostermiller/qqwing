@@ -4,35 +4,113 @@
 <%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
 <%bte.tpl name=downloadLinkText %><b>Download</b><%/bte.tpl%>
 <%bte.tpl name=pageContent %>
-<h1>QQwing Download</h1>
 
-<h2>Version VERSION</h2>
+<p>QQWing is Sudoku generating and solving software that has been ported to 3 programming
+languages: C++, Java, and JavaScript.   Various versions are available to run on different
+platforms and different environments.</p>
 
-<h3>Source Code</h3>
+<p>The latest version of QQWing is VERSION.  Downloads for some platforms may be several versions old.</p>
 
-<h4>C+ Source Tarball</h4>
-<a href="qqwing-VERSION.tar.gz">qqwing-VERSION.tar.gz</a> - <a href="install.html#targz">.tar.gz installation instructions</a>
+<h2>Full source code (<a href="license.html">GNU Public License 2.0</a>)</h2>
+<div class=downloadsection>
+	<div class=downloadsubsection>
+		<div>
+			<a class=button href="https://github.com/stephenostermiller/qqwing/archive/vVERSION.zip">VERSION full source (zip)</a>
+			<a class=button href="https://github.com/stephenostermiller/qqwing/archive/vVERSION.zip">VERSION full source (tar.gz)</a>
+		</div>
+		<p><a href="https://github.com/stephenostermiller/qqwing">Browse the entire source tree on GitHub</a></p>
+		<p>
+			View the major source files on this site:
+			<a href="qqwing.cpp.html">qqwing.cpp</a>,
+			<a href="main.cpp.html">main.cpp</a>,
+			<a href="qqwing.hpp.html">qqwing.hpp</a>,
+			<a href="QQWing.java.html">QQWing.java</a>,
+			<a href="qqwing-main.js.html">qqwing-main.js</a>
+		</p>
+	</div>
+</div>
 
-<h4>Source RPM</h4>
-<a href="qqwing-VERSION-1.src.rpm">qqwing-VERSION-1.src.rpm</a> - <a href="install.html#srpm">.src.rpm installation instructions</a>
+<h2>Java QQWing</h2>
+<p>The Java version of QQWing is about 10% slower than the C++ version.   It can be run from the command line,
+or used as a library from other Java programs to generate or solve Sudoku puzzles.</p>
+<div class=downloadsection>
+	<div class=downloadsubsection>
+		<a class=button href="qqwing-VERSION.jar">VERSION Java archive (jar)</a>
+		<ol>
+		<li>Requires the <a href="https://www.java.com/en/download/index.jsp">Java runtime environment (JRE)</a></li>
+		<li>Run: <code>java -jar qqwing-VERSION.jar --help</code></li>
+		</ol>
+	</div>
+</div>
 
-<h4>Java Jar</h4>
-<a href="qqwing-VERSION.jar">qqwing-VERSION.jar</a> - <a href="install.html#jar">.jar installation instructions</a>
+<h2>JavaScript QQWing</h2>
+<p>The Javascript version of QQWing can run in web pages to power Sudoku puzzles on web pages.   The "play", "generate",
+and "solve" on this website are powered by this version.  QQWing in JavaScript is very slow compared to the Java or C++ versions, however.</p>
+<div class=downloadsection>
+	<div class=downloadsubsection>
+		<a class=button href="qqwing-js-VERSION.tar.gz">VERSION JavaScript (tar.gz)</a>
+		<ol>
+		<li>Requires <a href="http://nodejs.org/">NodeJS</a> to run from the command line.</li>
+		<li>Run: <code>node qqwing-main-VERSION.min.js --help</code></li>
+		</ol>
+	</div>
+</div>
 
-<h4>JavaScript Archive</h4>
-<a href="qqwing-js-VERSION.tar.gz">qqwing-js-VERSION.tar.gz</a> - <a href="install.html#js">JavaScript installation instructions</a>
+<h2>Native QQWing built from C++</h2>
+<p>This is the fastest version of QQWing.  If you are planning to generate thousands of Sudoku puzzles, you will want this version.
+It also can be used as a library to power other Sudoku applications.
+(See: <a href="https://wiki.gnome.org/Apps/Sudoku">Gnome Sudoku</a>, which uses the QQWing C++ library.)</p>
+<div class=downloadsection>
+	<div class=downloadsubsection>
+		<h3>Windows</h2>
+		<a class=button href="qqwing-1.0.1-1.windows.bin.zip">1.0.1 Windows binary (zip)</a>
+		<ol>
+		<li>Extract qqwing-1.0.1-1.windows.bin.zip using your favorite zip extraction tool</li>
+		<li>Run command: <code>qqwing.exe --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
+		</ol>
+	</div>
 
-<h3>Binaries</h3>
+	<div class=downloadsubsection>
+		<h3>Redhat or Fedora Linux</h3>
+		<a class=button href="qqwing-1.0.3-1.i686.rpm">1.0.3 32 bit (rpm)</a> or <a class=button href="qqwing-VERSION-1.x86_64.rpm">VERSION 64 bit (rpm)</a>
+		<ol>
+		<li>Install: <code>sudo rpm --upgrade --verbose qqwing-*.rpm</code></li>
+		<li>Run: <code>qqwing --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
+		</ol>
 
-<h4>Windows Binary</h4>
-<a href="qqwing-1.0.1-1.windows.bin.zip">qqwing-1.0.1-1.windows.bin.zip</a> - <a href="install.html#exe">windows installation instructions</a>
+		<a class=button href="qqwing-VERSION-1.src.rpm">VERSION Source RPM (rpm)</a>
+		<ol>
+		<li>Build: <code>rpmbuild --rebuild qqwing-VERSION-1.src.rpm</code></li>
+		<li>A binary RPM file for your system will have created in you system's rpm directory (often a sub-directory of /usr/src/redhat/).  Use the installation instructions above for installing it.</li>
+		<li>If no binary RPM for your system is available for download, please contact Stephen, to have your binary put on the QQwing website.</li>
+		</ol>
+	</div>
 
-<h4>i686 Linux Binary</h4>
-<a href="qqwing-1.0.3-1.i686.rpm">qqwing-1.0.3-1.i686.rpm</a> - <a href="install.html#rpm">binary .rpm installation instructions</a>
+	<div class=downloadsubsection>
+		<h3>Debian or Ubuntu Linux</h3>
+		<a class=button href="qqwing_VERSION-1_amd64.deb">VERSION 64 bit (deb)</a>
+		<ol>
+		<li>Install: <code>sudo dpkg --install qqwing_*.deb</code></li>
+		<li>Run: <code>qqwing --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
+		</ol>
+	</div>
 
-<h4>64 Bit Linux Binary</h4>
-<a href="qqwing-VERSION-1.x86_64.rpm">qqwing-VERSION-1.x86_64.rpm</a> - <a href="install.html#rpm">binary .rpm installation instructions</a><br>
-<a href="qqwing_VERSION-1_amd64.deb">qqwing_VERSION-1_amd64.deb</a> - <a href="install.html#deb">binary .deb installation instructions</a>
-
+	<div class=downloadsubsection>
+		<h3>Any platform C++ Source</h3>
+		<a class=button href="qqwing-VERSION.tar.gz">VERSION C++ Source (tar.gz)</a>
+		<ol>
+		<li>Extract: <code>tar xfvz qqwing-VERSION.tar.gz</code></li>
+		<li>Build: <code>cd qqwing-VERSION</code></li>
+		<li><code>./configure</code></li>
+		<li><code>make</code></li>
+		<li><code>sudo make install</code></li>
+		<li>Run: <code>qqwing --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
+		</ol>
+	</div>
+</div>
 <%/bte.tpl%>
 <%/bte.doc%>
