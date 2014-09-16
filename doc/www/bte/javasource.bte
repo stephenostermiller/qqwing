@@ -3,6 +3,9 @@
 <%bte.tpl name=description %>Colored Java source code for QQwing<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator source code, sudoku solver source code, java<%/bte.tpl%>
 <%bte.tpl name=javaSourceLinkText %><b>Java source code</b><%/bte.tpl%>
+<%bte.tpl name=headContent %>
+	<link rel="stylesheet" href="syntax.css" type="text/css">
+<%/bte.tpl%>
 
 <%bte.tpl name=pageContent %>
 

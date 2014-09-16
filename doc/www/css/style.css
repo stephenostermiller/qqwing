@@ -16,10 +16,11 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-html, body, div, form, ul, ol, table, tr, td, input, pre {
+html, body, div, form, table, tr, td, input, pre {
 	padding:0;
 	margin:0;
 	font-family: inherit;
+	font-size: inherit;
 }
 pre {
 	font-family: "Courier New", Courier, monospace;
@@ -51,6 +52,8 @@ a:link:hover {
 	vertical-align: top;
 }
 #mainmenu {
+	margin:0;
+	padding:0;
 	display: inline-block;
 	list-style-type: none;
 	vertical-align: top;
@@ -90,4 +93,15 @@ a.mail {
 .mainbutton {
 	padding: 1em 3em;
 	font-size: 150%;
+}
+.downloadsection {
+	padding-left: 3em;
+}
+.downloadsubsection {
+	margin-bottom: 1em;
+	border: 1px solid gray;
+	padding: 0.5em;
+}
+code {
+	background: #DDDDDD;
 }
