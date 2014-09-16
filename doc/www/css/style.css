@@ -16,12 +16,19 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-html, body, div, form, ul, ol, table, tr, td, input {
+html, body, div, form, ul, ol, table, tr, td, input, pre {
 	padding:0;
 	margin:0;
 	font-family: inherit;
 }
-
+pre {
+	font-family: "Courier New", Courier, monospace;
+	overflow: auto;
+}
+textarea {
+	width: 99%;
+	height: 10em;
+}
 body {
 	padding:0px;
 	margin:0px;
