@@ -4,14 +4,15 @@
 <%bte.tpl name=keywords %>qqwing,generate sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=generateLinkText %><b>Generate</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
+	<link rel="stylesheet" href="gensolve.css" type="text/css">
 	<script src="qqwing-html-VERSION.min.js"></script>
 <%/bte.tpl%>
 <%bte.tpl name=pageContent %>
 	<noscript >You must have JavaScript enabled to generate soduku puzzles online.</noscript>
 
 	<form name=generateform onsubmit="return false;">
-		<div>How many? <input type=number name=generatenumber value=1 min=1></div>
-		<div>Difficulty:
+		<div class=optionsection>How many? <input type=number name=generatenumber value=1 min=1></div>
+		<div class=optionsection>Difficulty:
 			<select name=difficultyselect>
 				<option value=0>Any</option>
 				<option value=1>Simple</option>
@@ -20,7 +21,7 @@
 				<option value=4>Expert</option>
 			</select>
 		</div>
-		<div>Symmetry:
+		<div class=optionsection>Symmetry:
 			<select name=symmetryselect>
 				<option value=0>None</option>
 				<option value=1>Rotate 90&deg;</option>
@@ -30,27 +31,29 @@
 				<option value=5>Random</option>
 			</select>
 		</div>
-		<div>Output format:
+		<div class=optionsection>Output format:
 			<select name=outputselect>
 				<option value=2>Readable</option>
-				<option value=0>One line</option>
 				<option value=1>Compact</option>
+				<option value=0>One line</option>
 				<option value=3>CSV</option>
 			</select>
 		</div>
-		<div>
+		<div class=optionsection>
 			<label><input type=checkbox name=printsolution> Solution</label>
 			<label><input type=checkbox name=printhistory> History</label>
 			<label><input type=checkbox name=printinstructions> Instructions</label>
 			<label><input type=checkbox name=timer> Timer</label>
 			<label><input type=checkbox name=printstats checked> Rating</label>
 		</div>
-		<div><input name=generatebutton type=submit class=button value=Generate onclick="generate(this.form);"></div>
+		<div class=optionsection><input name=generatebutton type=submit class=button value=Generate onclick="generate(this.form);"></div>
 
 	</form>
 
 	<div id=working></div>
 
 	<pre id=output></pre>
+
+	<div id=downloadavailable>A command line version of QQWing that can generate and solve Soduku puzzles much faster is <a href="download.html">available for download</a>.</div>
 <%/bte.tpl%>
 <%/bte.doc%>
