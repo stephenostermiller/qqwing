@@ -16,7 +16,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 html, body, div, form, ul, ol, table, tr, td, input {
 	padding:0;
 	margin:0;
@@ -68,7 +67,7 @@ a:link:hover {
 	margin: 0.25em;
 	vertical-align: top;
 }
-#titlelinks {
+.gamecontrollinks {
 	list-style-type: none;
 }
 #mainmenu {
@@ -77,7 +76,7 @@ a:link:hover {
 	vertical-align: top;
 }
 
-#mainmenu li, #titlelinks li {
+#mainmenu li, .gamecontrollinks li {
 	display: inline-block;
 	padding: 1.25em 1em;
 }
@@ -156,11 +155,26 @@ a.mail {
 	padding:1cm;
 }
 
-#newgamediv, #endgamescreen, #gamelinks, #newgamemessage, #pausescreen, #resumescreen{
+#newgamediv, #endgamescreen, #gamelinks, #newgamemessage, #pausescreen, #resumescreen, #options {
 	text-align: center;
+}
+#gamelinks {
+	margin: 1em 0;
+}
+#newgamemessage {
+	max-width: 30em;
+	margin: 3em auto;
+	font-size: 200%;
+	text-align: left;
+}
+#resumescreen{
+	margin: 3em 0;
 }
 #endgamescreen, #resumescreen {
 	font-size: 200%;
+}
+#endgamescreen {
+	margin: 1em 0;
 }
 *.unselectable {
 	-moz-user-select: -moz-none;
@@ -181,6 +195,9 @@ a.mail {
 #game .given {
 	color: #BF9060;
 }
+#game .hintcell,#hint {
+	background-color: #FCFAA4;
+}
 #gamecolumns {
 	display: table;
 	margin: 0 auto;
@@ -198,10 +215,14 @@ a.mail {
 #optionsarea {
 	width: 15em;
 	padding-left: 1em;
+	text-align: left;
 }
 #optionsarea .button {
-	padding: 0.25em 1em;
+	padding: 0.25em 0.5em;
 	font-size: 100%;
+}
+#markingcolors {
+	margin: 1em 0;
 }
 #markingcolors input {
 	margin: 0 0.5em;
@@ -218,4 +239,14 @@ a.mail {
 #entiregame {
 	min-height: 100vh;
 	text-align: center;
+}
+#hint {
+	font-size: 120%;
+	padding: 1em;
+	margin: 1em 0;
+	border-radius: 0.5em;
+}
+#instructions {
+	max-width: 40em;
+	margin: 1em auto;
 }
