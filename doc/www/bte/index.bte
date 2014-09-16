@@ -4,6 +4,7 @@
 <%bte.tpl name=keywords %>qqwing,play sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=playLinkText %><b>Play</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
+	<link rel="stylesheet" href="play.css" type="text/css">
 	<script src=qqwing-play-VERSION.min.js></script>
 <%/bte.tpl%>
 <%bte.tpl name=bodyAttributes %>onload="init()" onunload="recordgaveup()"<%/bte.tpl%>
