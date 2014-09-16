@@ -40,7 +40,7 @@ function stringToStats(statString){
 
 function init(){
 	initStats();
-	newUrlGame();
+	if (!newUrlGame()) showScreen('title');
 }
 
 function initStats(){
@@ -68,7 +68,7 @@ var difficultyLevels = new Array("simple","easy","intermediate","expert");
 function drawStats(){
 	var statsDiv = el("stats");
 	var advMsg = "";
-	var s = "<table border=1><tr><th>Difficulty</th><th># Solved</th><th>Average Solve Time</th><th># Solved w/ Hint</th><th># Abandoned</th></tr>"
+	var s = "<table><tr><th>Difficulty</th><th># Solved</th><th>Average Solve Time</th><th># Solved w/ Hint</th><th># Abandoned</th></tr>"
 	for (var i=0; i<difficultyLevels.length; i++){
 		var d = difficultyLevels[i];
 		var stat = getStat(d);
@@ -86,6 +86,14 @@ function drawStats(){
 	s+="</table>"
 	s+=advMsg;
 	statsDiv.innerHTML = s;
+}
+
+function haveStats(){
+	for (var i=0; i<difficultyLevels.length; i++){
+		var d = difficultyLevels[i];
+		if (stats[d] != null  && stats[d].time) return true;
+	}
+	return false;
 }
 
 function fillDifficultySelect(){
@@ -166,8 +174,8 @@ function clickValue(event, cell, value){
 		removePossibility(cell,value);
 	} else {
 		mark(cell,value,getColor());
-		el("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in</a>";
 	}
+
 	draw();
 	detectComplete();
 }
@@ -175,12 +183,7 @@ function clickValue(event, cell, value){
 function clickset(cell){
 	clearHint();
 	unmark(cell);
-	setCurrentGameLink();
 	draw();
-}
-
-function setCurrentGameLink(){
-	el("currentgamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for everything currently filled in.</a>";
 }
 
 function removePossibility(cell, value){
@@ -297,7 +300,8 @@ function detectComplete(){
 			hintS=" although you needed a hint.";
 		}
 		var gamet = getGameTime();
-		alert("Sudoku solved in " + toPrettyTime(gamet) + hintS);
+		el('endgamemessage').innerHTML = "Sudoku solved in " + toPrettyTime(gamet) + hintS;
+		showScreen('over');
 		var s = getStat(gameType);
 		if (!usedHint){
 			s.wincount++;
@@ -367,7 +371,7 @@ function getFullHtml(){
 	var s="<table>";
 	for (var section=0; section<9; section++){
 		if (section%3==0) s+="<tr>";
-		s+="<td style='border:1px solid black;margin:1px;padding:1px;'>";
+		s+="<td class=sodukusection>";
 		s+=getSectionHtml(section);
 		s+=("</td>");
 		if (section%3==2) s+="</tr>";
@@ -423,7 +427,7 @@ function getSectionHtml(section){
 		if (offset%3==0) s+="<tr>";
 		var cell = sectionToCell(section, offset);
 		var hintstyle = (cell==hintPosition)?"background-color:#C0F5BC;":"";
-		s+="<td style='"+hintstyle+"border:1px solid black;margin:1px;padding:1px;width:"+squareSize+"px;height:"+squareSize+"px;' align=center class=unselectable unselectable=on>";
+		s+="<td style='"+hintstyle+"width:"+squareSize+"px;height:"+squareSize+"px;' align=center class='cell unselectable' unselectable=on>";
 		s+=getCellHtml(cell);
 		s+="</td>";
 		if (offset%3==2) s+="</tr>";
@@ -463,8 +467,10 @@ function getCellHtml(cell){
 		} else {
 			s+= "<div style='"+largeSquareFontSize+"font-weight:bold;background-color:red;color:orange' class=unselectable unselectable=on>X</div>";
 		}
-	} else {
+	} else if (boardcolors[cell]){
 		s+= "<div style='"+largeSquareFontSize+"font-weight:bold;cursor:pointer;cursor:hand;color:"+boardcolors[cell]+";' onmouseup='clickset("+cell+")' class=unselectable unselectable=on>"+board[cell]+"</div>";
+	} else {
+		s+= "<div style='"+largeSquareFontSize+"font-weight:bold;' class='unselectable given' unselectable=on>"+board[cell]+"</div>";
 	}
 	return s;
 
@@ -529,6 +535,7 @@ var generateNewGame = function(){
 		el('newgamemessage').innerHTML=el('newgamemessage').innerHTML+" .";
 		setTimeout(generateNewGame, 100);
 	} else {
+		showScreen('game');
 		clearBoard();
 		gameType = getDifficulty();
 		newGame(qq.getPuzzleString());
@@ -538,6 +545,7 @@ var generateNewGame = function(){
 }
 
 function newQQwingGame(){
+	showScreen('loading');
 	el('newgamemessage').innerHTML="Loading new game . . .";
 	setTimeout(generateNewGame, 100);
 }
@@ -547,7 +555,7 @@ function clearHint(){
 	hintArray = null;
 	hintPosition = -1;
 	document.gameform.hintButton.disabled=false;
-	document.gameform.hintButton.value="I need a hint";
+	document.gameform.hintButton.value="Hint";
 	el("hint").innerHTML="";
 }
 
@@ -579,7 +587,7 @@ function hint(){
 		if (!hintArray.length) {
 			document.gameform.hintButton.disabled=true;
 		} else {
-			document.gameform.hintButton.value="I need another hint";
+			document.gameform.hintButton.value="Another hint";
 		}
 	}
 	el("hint").innerHTML=hint;
@@ -593,7 +601,6 @@ function clearBoard(){
 	for (var boardcolorsindex=0; boardcolorsindex<qqwing.BOARD_SIZE; boardcolorsindex++) boardcolors[boardcolorsindex]=0;
 	for (var possibilitiesindex=0; possibilitiesindex<qqwing.POSSIBILITY_SIZE; possibilitiesindex++) possibilities[possibilitiesindex]=0;
 	el("begingamelink").innerHTML="";
-	el("currentgamelink").innerHTML="";
 	usedHint = false;
 	pauseTime = 0;
 	gameType='blank';
@@ -607,16 +614,16 @@ function clearColor(color){
 			unmark(i);
 		}
 	}
-	setCurrentGameLink();
 	draw();
 }
 
 function newGame(s){
+	showScreen('game');
 	var count = 0;
 	for (var ca=0; ca<s.length; ca++){
 		var c = s.charAt(ca);
 		if ((c == '.' || (c >= '0' && c <= '9')) && count < qqwing.BOARD_SIZE){
-			if (c >= '1' && c <= '9') mark(count,c-'0',"purple");
+			if (c >= '1' && c <= '9') mark(count,c-'0',null);
 			count++;
 		}
 	}
@@ -659,6 +666,7 @@ function newUrlGame(){
 	clearBoard();
 	var cgiData = location.search.substring(1,location.search.length);
 	var nameValPairs = new Array();
+	var newgame = false;
 	nameValPairs = cgiData.split('&');
 	for (var i=0; i<nameValPairs.length; i++){
 		var nameValPair;
@@ -667,20 +675,11 @@ function newUrlGame(){
 			var game = nameValPairs[i].substring(5);
 			gameType="url";
 			newGame(game);
+			newgame=true;
 		}
 	}
 	draw();
-}
-
-function clearWhole(){
-	var sure = true;
-	if (gameType != "blank"){
-		sure = confirm ("Are you sure you want to clear the whole board, even the starting squares?")
-	}
-	if (sure){
-		clearBoard();
-		draw();
-	}
+	return newgame;
 }
 
 var pauseStart = 0;
@@ -688,26 +687,55 @@ var pauseTime = 0;
 var pauseState = "";
 var pauseDifficultyIndex = 0;
 var pauseColor = "";
+var resumecountdown=5;
 
 function pauseGame(){
 	pauseStart = (new Date()).getTime();
-	var eg = el("entiregame");
 	pauseDifficultyIndex = document.gameform.difficultyselect.selectedIndex;
 	pauseColor = getColor();
-	pauseState = eg.innerHTML;
-	eg.innerHTML = "<div style='color:red;'><div style='height:3in;'></div><h1>Game is paused</h1><input type=button value='Resume Game' onclick='resumeGame();'><div style='height:3in;'></div></div>";
+	showScreen('pause');
 }
 
 function resumeGame(){
-	el("entiregame").innerHTML = "<div style='color:red;'><div style='height:3in;'></div><h1>Please wait, the game will resume shortly...</h1><div style='height:3in;'></div></div>";
-	setTimeout("finishResume()", 10000);
+	resumecountdown=5;
+	finishResume();
 }
 
 function finishResume(){
-	pauseTime += (new Date()).getTime()-pauseStart;
-	el("entiregame").innerHTML = pauseState;
-	document.gameform.difficultyselect.selectedIndex = pauseDifficultyIndex;
-	setColor(pauseColor);
+	if (resumecountdown > 0){
+		el('resumecount').innerHTML = resumecountdown;
+		showScreen('resume');
+		resumecountdown--;
+		setTimeout(finishResume, 1000);
+	} else {
+		showScreen('game');
+		pauseTime += (new Date()).getTime()-pauseStart;
+	}
+}
+
+function showScreen(screen){
+	el('head').style.display = screen=='game'?'none':'block';
+	el('foot').style.display = screen=='game'?'none':'block';
+	el('entiregame').style.display = screen=='game'?'block':'none';
+	el('titlescreen').style.display = /title|over/.test(screen)?'block':'none';
+	el('pausescreen').style.display = screen=='pause'?'block':'none';
+	el('resumescreen').style.display = screen=='resume'?'block':'none';
+	el('newgamemessage').style.display = screen=='loading'?'block':'none';
+	el('endgamescreen').style.display = screen=='over'?'block':'none';
+	el('statsarea').style.display = (screen!='game'&&haveStats())?'block':'none';
+	el('gamelinks').style.display = (/pause|over/.test(screen))?'block':'none';
+	el('instructions').style.display='none';
+	el('options').style.display='none';
+}
+
+function showInstructions(){
+	var sty = el('instructions').style;
+	sty.display=sty.display=='block'?'none':'block';
+}
+
+function showOptions(){
+	var sty = el('options').style;
+	sty.display=sty.display=='block'?'none':'block';
 }
 
 function el(elementid){
