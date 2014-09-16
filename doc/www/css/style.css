@@ -49,7 +49,11 @@ a:link:hover {
 	display: inline-block;
 	font-size: 200%;
 	margin: 0.25em;
+	padding: 0;
 	vertical-align: top;
+}
+#brand a:link, #brand a:visited {
+	color: white;
 }
 #mainmenu {
 	margin:0;
