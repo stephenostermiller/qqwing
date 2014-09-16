@@ -30,7 +30,6 @@ function generate(form){
 	} else {
 		clearOutput();
 		workingButton = form.generatebutton;
-		console.log(workingButton);
 		workingButton.value = 'Stop';
 		var dat = getOptData(form);
 		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, true, dat.printSolution));
@@ -63,7 +62,7 @@ function generateNum(dat, num){
 				}
 			}
 			if (dat.printStats) output += stats(dat);
-			if (dat.printStyle==qqwing.PrintStyle.CSV) output += "\n";
+			output += "\n";
 			addOutput(output);
 			num--;
 		}
@@ -82,6 +81,7 @@ function generateNum(dat, num){
 
 function clearWorking(){
 	document.getElementById('working').innerHTML = "";
+	document.getElementById('downloadavailable').style.display='block';
 }
 
 function working(){
@@ -90,6 +90,10 @@ function working(){
 
 function clearOutput(){
 	document.getElementById('output').innerHTML = "";
+}
+
+function setError(s){
+	document.getElementById('error').innerHTML = s;
 }
 
 function addOutput(s){
@@ -166,12 +170,16 @@ function solve(form){
 		workingButton = null;
 	} else {
 		clearOutput();
-		workingButton = form.solvebutton;
-		console.log(workingButton);
-		workingButton.value = 'Stop';
+		setError('');
 		var dat = getOptData(form);
-		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, dat.printPuzzle, true));
 		var puzzles = getPuzzles(form.tosolve.value);
+		if (!puzzles.length){
+			setError("No puzzles were found.  Puzzles must be 81 numbers with zeros or periods for the unknowns.   For example: <pre>.47..2....18.5.7.4..59...2...............9..2....713.9.72....3...1......5.38.....</pre>");
+			return;
+		}
+		workingButton = form.solvebutton;
+		workingButton.value = 'Stop';
+		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, dat.printPuzzle, true));
 		solveNum(dat, puzzles);
 	}
 }
@@ -215,7 +223,7 @@ function solveNum(dat, puzzles){
 				}
 			}
 			if (dat.printStats) output += stats(dat);
-			if (dat.printStyle==qqwing.PrintStyle.CSV) output += "\n";
+			output += "\n";
 		}
 		addOutput(output);
 		dat.doneCount++;

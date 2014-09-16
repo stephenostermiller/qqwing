@@ -4,25 +4,28 @@
 <%bte.tpl name=keywords %>qqwing,solve sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=solveLinkText %><b>Solve</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
+	<link rel="stylesheet" href="gensolve.css" type="text/css">
 	<script src="qqwing-html-VERSION.min.js"></script>
 <%/bte.tpl%>
 <%bte.tpl name=pageContent %>
 	<noscript >You must have JavaScript enabled to solve soduku puzzles online.</noscript>
 
+	<div id=error></div>
+
 	<form name=generateform onsubmit="return false;">
-		<div>
+		<div class=optionsection>
 			Enter your puzzles here:
 			<textarea name=tosolve></textarea>
 		</div>
-		<div>Output format:
+		<div class=optionsection>Output format:
 			<select name=outputselect>
 				<option value=2>Readable</option>
-				<option value=0>One line</option>
 				<option value=1>Compact</option>
+				<option value=0>One line</option>
 				<option value=3>CSV</option>
 			</select>
 		</div>
-		<div>
+		<div class=optionsection>
 			<label><input type=checkbox name=printpuzzle> Puzzle</label>
 			<label><input type=checkbox name=countsolutions> Count solutions</label>
 			<label><input type=checkbox name=printhistory> History</label>
@@ -30,11 +33,13 @@
 			<label><input type=checkbox name=timer> Timer</label>
 			<label><input type=checkbox name=printstats checked> Rating</label>
 		</div>
-		<div><input name=solvebutton type=submit class=button value=Solve onclick="solve(this.form);"></div>
+		<div class=optionsection><input name=solvebutton type=submit class=button value=Solve onclick="solve(this.form);"></div>
 	</form>
 
 	<div id=working></div>
 
 	<pre id=output></pre>
+
+	<div id=downloadavailable>A command line version of QQWing that can generate and solve Soduku puzzles much faster is <a href="download.html">available for download</a>.</div>
 <%/bte.tpl%>
 <%/bte.doc%>
