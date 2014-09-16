@@ -39,19 +39,21 @@ or used as a library from other Java programs to generate or solve Sudoku puzzle
 		<ol>
 		<li>Requires the <a href="https://www.java.com/en/download/index.jsp">Java runtime environment (JRE)</a></li>
 		<li>Run: <code>java -jar qqwing-VERSION.jar --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
 		</ol>
 	</div>
 </div>
 
 <h2>JavaScript QQWing</h2>
 <p>The Javascript version of QQWing can run in web pages to power Sudoku puzzles on web pages.   The "play", "generate",
-and "solve" on this website are powered by this version.  QQWing in JavaScript is very slow compared to the Java or C++ versions, however.</p>
+and "solve" on this website are powered it.  QQWing in JavaScript is very slow compared to the Java or C++ versions, however.</p>
 <div class=downloadsection>
 	<div class=downloadsubsection>
 		<a class=button href="qqwing-js-VERSION.tar.gz">VERSION JavaScript (tar.gz)</a>
 		<ol>
 		<li>Requires <a href="http://nodejs.org/">NodeJS</a> to run from the command line.</li>
 		<li>Run: <code>node qqwing-main-VERSION.min.js --help</code></li>
+		<li>See the <a href="instructions.html">command line program instructions</a> for help running QQWing from the command line.</li>
 		</ol>
 	</div>
 </div>
