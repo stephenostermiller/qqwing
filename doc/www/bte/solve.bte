@@ -1,0 +1,40 @@
+<%bte.doc super="page.bte"%>
+<%bte.tpl name=pageTitle %>QQWing - Solve Soduku Puzzles<%/bte.tpl%>
+<%bte.tpl name=description %>Solve Soduku in your web browser using QQWing solving software.<%/bte.tpl%>
+<%bte.tpl name=keywords %>qqwing,solve sudoku,online sudoku<%/bte.tpl%>
+<%bte.tpl name=solveLinkText %><b>Solve</b><%/bte.tpl%>
+<%bte.tpl name=headContent %>
+	<script src="qqwing-html-VERSION.min.js"></script>
+<%/bte.tpl%>
+<%bte.tpl name=pageContent %>
+	<noscript >You must have JavaScript enabled to solve soduku puzzles online.</noscript>
+
+	<form name=generateform onsubmit="return false;">
+		<div>
+			Enter your puzzles here:
+			<textarea name=tosolve></textarea>
+		</div>
+		<div>Output format:
+			<select name=outputselect>
+				<option value=2>Readable</option>
+				<option value=0>One line</option>
+				<option value=1>Compact</option>
+				<option value=3>CSV</option>
+			</select>
+		</div>
+		<div>
+			<label><input type=checkbox name=printpuzzle> Puzzle</label>
+			<label><input type=checkbox name=countsolutions> Count solutions</label>
+			<label><input type=checkbox name=printhistory> History</label>
+			<label><input type=checkbox name=printinstructions> Instructions</label>
+			<label><input type=checkbox name=timer> Timer</label>
+			<label><input type=checkbox name=printstats checked> Rating</label>
+		</div>
+		<div><input name=solvebutton type=submit class=button value=Solve onclick="solve(this.form);"></div>
+	</form>
+
+	<div id=working></div>
+
+	<pre id=output></pre>
+<%/bte.tpl%>
+<%/bte.doc%>
