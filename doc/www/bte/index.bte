@@ -15,32 +15,50 @@
 			<div id=endgamemessage></div>
 		</div>
 
-		<div id=gamelinks>
-			<div id=begingamelink></div>
-			<div id=currentgamelink></div>
+		<div id=pausescreen>
+			<h1>Soduku paused</h1>
+			<div id=elapsedtime></div>
+			<input type=button class="button mainbutton" value="Resume Game" onclick="resumeGame();">
+			<div>
+				<input type=button class=button value="Quit" onclick="recordgaveup();showScreen('title');">
+			</div>
+
+			<ul id=pauselinks class=gamecontrollinks>
+				<li><a href="#" onclick="showInstructions(); return false;">Instructions</a></li>
+			</ul>
 		</div>
 
 		<div id=titlescreen>
 			<div id=newgamediv>
 				<input name=newgamebutton type=button class="button mainbutton" value="New Game" onclick="newQQwingGame()">
 
-				<ul id=titlelinks>
+				<div id=options>
+					<div id=difficultyoption>
+						Difficulty:
+						<select name=difficultyselect></select>
+					</div>
+					<div>
+						Symmetry:
+						<select name=symmetryselect>
+							<option value=0>None</option>
+							<option value=1>Rotational symmetry 90&deg;</option>
+							<option value=2>Rotational symmetry 180&deg;</option>
+							<option value=3>Mirror image left to right</option>
+							<option value=4>Mirror image top and bottom</option>
+							<option value=5 selected>Random</option>
+						</select>
+					</div>
+				</div>
+
+				<ul id=titlelinks class=gamecontrollinks>
 					<li><a href="#" onclick="showOptions(); return false;">Options</a></li>
 					<li><a href="#" onclick="showInstructions(); return false;">Instructions</a></li>
 				</ul>
 			</div>
+		</div>
 
-			<div id=options>
-				Difficulty: <select name=difficultyselect></select>
-				Symmetry: <select name=symmetryselect>
-					<option value=0>None</option>
-					<option value=1>Rotational symmetry 90&deg;</option>
-					<option value=2>Rotational symmetry 180&deg;</option>
-					<option value=3>Mirror image left to right</option>
-					<option value=4>Mirror image top and bottom</option>
-					<option value=5 selected>Random</option>
-				</select>
-			</div>
+		<div id=gamelinks>
+			<div id=begingamelink></div>
 		</div>
 
 		<div id=newgamemessage></div>
@@ -54,33 +72,25 @@
 					<input id=pausebutton type=button class=button value=Pause onclick="pauseGame();">
 					<input id=hintbutton name=hintButton type=button class=button value=Hint onclick="hint();">
 					<div id="hint"></div>
-					<div id=markingcolors>
-						Marking color:
-						<table>
+					<div id=markingcolors><table>
 						<tr><td><label style="color:#3D613D;"><input type=radio name=color value="#3D613D" checked>Green</label></td><td><input type=button value="Clear" style="color:#3D613D;" onclick="clearColor('#3D613D')"></td></tr>
 						<tr><td><label style="color:#204864;"><input type=radio name=color value="#204864">Blue</label></td><td><input type=button value="Clear" style="color:#204864;" onclick="clearColor('#204864')"></td></tr>
 						<tr><td><label style="color:#79215A;"><input type=radio name=color value="#79215A">Purple</label></td><td><input type=button value="Clear" style="color:#79215A;" onclick="clearColor('#79215A')"></td></tr>
 						<tr><td><label style="color:#9C2B2B;"><input type=radio name=color value="#9C2B2B">Red</label></td><td><input type=button value="Clear" style="color:#9C2B2B;" onclick="clearColor('#9C2B2B')"></td></tr>
 						<tr><td><label style="color:#363636;"><input type=radio name=color value="#363636">Black</label></td><td><input type=button value="Clear" style="color:#363636;" onclick="clearColor('#363636')"></td></tr>
 						<tr><td><label style="color:#999999;"><input type=radio name=color value="#999999">Gray</label></td><td><input type=button value="Clear" style="color:#999999;" onclick="clearColor('#999999')"></td></tr>
-						</table>
-					</div>
+					</table></div>
 				</div>
 			</div>
 		</div>
 		<div id=testcell></div>
-		<div id=pausescreen>
-			<h1>Game is paused</h1>
-			<input type=button class="button mainbutton" value="Resume Game" onclick="resumeGame();">
-		</div>
 		<div id=resumescreen>
-			Game will resume in:
-			<div id=resumecount></div>
+			Game will resume in: <span id=resumecount></span>
 		</div>
 
 		<div id=instructions>
-			<p>This Sudoku playing board will help you solve the puzzles.</p>
 			<h3>Instructions for Sudoku</h3>
+			<p>This Sudoku playing board will help you solve the puzzles.</p>
 			<ol>
 			<li>The goal of the game is to choose a number for each square such that no digit appears twice in any row, column, or section.</li>
 			<li>Start a new game with your desired level of difficulty.</li>
@@ -92,7 +102,6 @@
 		</div>
 
 		<div id=statsarea>
-			<h3>Stats</h3>
 			<div id=stats></div>
 		</div>
 	</form>

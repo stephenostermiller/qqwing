@@ -97,11 +97,16 @@ function haveStats(){
 }
 
 function fillDifficultySelect(){
-	for (var i=0; i<difficultyLevels.length; i++){
+	var count = 0;
+	var done = false;
+	for (var i=0; i<difficultyLevels.length && !done; i++){
 		var d = difficultyLevels[i];
 		addDifficultyToSelect(d);
-		if (stats[d] == null || stats[d].wincount == 0) return;
+		count++;
+		if (stats[d] == null || stats[d].wincount == 0) done=true;
 	}
+	console.log(count);
+	el('difficultyoption').style.display=count>1?'block':'none';
 }
 
 function getDiffName(d){
@@ -301,7 +306,6 @@ function detectComplete(){
 		}
 		var gamet = getGameTime();
 		el('endgamemessage').innerHTML = "Sudoku solved in " + toPrettyTime(gamet) + hintS;
-		showScreen('over');
 		var s = getStat(gameType);
 		if (!usedHint){
 			s.wincount++;
@@ -315,6 +319,7 @@ function detectComplete(){
 		pauseTime = 0;
 		startTime = new Date().getTime();
 		fillDifficultySelect();
+		showScreen('over');
 		draw();
 	}
 }
@@ -426,8 +431,8 @@ function getSectionHtml(section){
 	for (var offset=0; offset<9; offset++){
 		if (offset%3==0) s+="<tr>";
 		var cell = sectionToCell(section, offset);
-		var hintstyle = (cell==hintPosition)?"background-color:#C0F5BC;":"";
-		s+="<td style='"+hintstyle+"width:"+squareSize+"px;height:"+squareSize+"px;' align=center class='cell unselectable' unselectable=on>";
+		var hintclass = (cell==hintPosition)?" hintcell":"";
+		s+="<td style='width:"+squareSize+"px;height:"+squareSize+"px;' align=center class='cell unselectable"+hintclass+"' unselectable=on>";
 		s+=getCellHtml(cell);
 		s+="</td>";
 		if (offset%3==2) s+="</tr>";
@@ -555,8 +560,8 @@ function clearHint(){
 	hintArray = null;
 	hintPosition = -1;
 	document.gameform.hintButton.disabled=false;
-	document.gameform.hintButton.value="Hint";
-	el("hint").innerHTML="";
+	document.gameform.hintButton.value='Hint';
+	setHint("");
 }
 
 function hint(){
@@ -587,11 +592,17 @@ function hint(){
 		if (!hintArray.length) {
 			document.gameform.hintButton.disabled=true;
 		} else {
-			document.gameform.hintButton.value="Another hint";
+			document.gameform.hintButton.value="More hints";
 		}
 	}
-	el("hint").innerHTML=hint;
+	setHint(hint);
 	draw();
+}
+
+function setHint(s){
+	var hintdiv = el('hint');
+	hintdiv.innerHTML = s;
+	hintdiv.style.display=s?'block':'none';
 }
 
 function clearBoard(){
@@ -685,14 +696,11 @@ function newUrlGame(){
 var pauseStart = 0;
 var pauseTime = 0;
 var pauseState = "";
-var pauseDifficultyIndex = 0;
-var pauseColor = "";
 var resumecountdown=5;
 
 function pauseGame(){
 	pauseStart = (new Date()).getTime();
-	pauseDifficultyIndex = document.gameform.difficultyselect.selectedIndex;
-	pauseColor = getColor();
+	el('elapsedtime').innerHTML = "Game play time: " + toPrettyTime(getGameTime());
 	showScreen('pause');
 }
 
@@ -722,7 +730,7 @@ function showScreen(screen){
 	el('resumescreen').style.display = screen=='resume'?'block':'none';
 	el('newgamemessage').style.display = screen=='loading'?'block':'none';
 	el('endgamescreen').style.display = screen=='over'?'block':'none';
-	el('statsarea').style.display = (screen!='game'&&haveStats())?'block':'none';
+	el('statsarea').style.display = (!/game|loading|resume/.test(screen)&&haveStats())?'block':'none';
 	el('gamelinks').style.display = (/pause|over/.test(screen))?'block':'none';
 	el('instructions').style.display='none';
 	el('options').style.display='none';
