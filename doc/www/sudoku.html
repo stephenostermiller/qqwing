@@ -18,10 +18,10 @@
   - 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
   -->
 <html><head>
+	<meta http-equiv=content-type content="text/html; charset=UTF-8">
 	<title>Play QQWing Sudoku</title>
 	<meta name=description content="A Sudoku playing board that enforces the rules -- it only allows unique numbers in any row, column, or section">
 	<meta name=keywords content="sudoku, soduku, suduku, sudoko, qqwing">
-	<meta http-equiv=content-type content="text/html; charset=UTF-8">
 	<link rel=stylesheet href=style.css type=text/css><style>
 	*.unselectable {
 		-moz-user-select: -moz-none;
@@ -38,98 +38,13 @@
 	</style>
 	<script src=qqwing-play-VERSION.min.js></script>
 </head><body onload="init()" onunload="recordgaveup()"><form onsubmit="return false" name=gameform>
-	<div id=titlescreen>
-		<h1><a href="http://ostermiller.org/qqwing/">QQWing</a> Sudoku</h1>
-		<div id=newgamediv>
-			<input name=newgamebutton type=button value="New Game" onclick="newQQwingGame()">
-			Options...
-			<div id=options>
-				Difficulty: <select name=difficultyselect></select><br>
-				Symmetry: <select name=symmetryselect>
-					<option value=0>None</option>
-					<option value=1>Rotational symmetry 90&deg;</option>
-					<option value=2>Rotational symmetry 180&deg;</option>
-					<option value=3>Mirror image left to right</option>
-					<option value=4>Mirror image top and bottom</option>
-					<option value=5 selected>Random</option>
-				</select>
-			</div>
-		</div>
 
-	</div>
+			<a href="./">Play</a> |
+			<a href="generate.html">Generate</a> |
+			<a href="solve.html">Solve</a> |
+			<a href="download.html">Download</a> |
+			<a href="license.html">License</a>
 
-	<div id=instructions>
-		<p>This Sudoku playing board will help you solve the puzzles.</p>
-		<h3>Instructions for Sudoku</h3>
-		<ol>
-		<li>The goal of the game is to choose a number for each square such that no digit appears twice in any row, column, or section.</li>
-		<li>Start a new game with your desired level of difficulty.</li>
-		<li>Click on a possibility to choose that number for the square.  The possibility will be removed from other squares in the row, column, and section.</li>
-		<li>Hold down control, alt, or shift to and click on a possibility to remove the possibility from the square, but not mark the square.</li>
-		<li>Click on an assigned number to remove it from the square and put back any possibilities.</li>
-		<li>Use the colors however you wish.  You may find it helpful to switch the color whenever you guess.</li>
-		</ol>
-	</div>
 
-	<h3>Your Sudoku Stats</h3>
-	<div id=stats></div>
-
-	<h3>Sudoku Game Board</h3>
-	<div id=entiregame>
-		<table border=0 valign=top><tr><td valign=top>
-			<div id=game></div>
-		</td><td valign=top width=50>
-			<div id=begingamelink></div><br>
-			<div id=newgamemessage></div><br>
-			<div id=currentgamelink></div><br>
-			<div id=markingcolors>
-				Marking color:<br>
-				<table style="width:3in;">
-				<tr><td><input type=radio name=color value=black id=rblack checked><label for=rblack style="color:black;">Black</label></td><td><input type=button value="Clear Black Squares" style="color:black;" onclick="clearColor('black')"></td></tr>
-				<tr><td><input type=radio name=color value=brown id=rbrown><label for=rbrown style="color:brown;">Brown</label></td><td><input type=button value="Clear Brown Squares" style="color:brown;" onclick="clearColor('brown')"></td></tr>
-				<tr><td><input type=radio name=color value=blue id=rblue><label for=rblue style="color:blue;">Blue</label></td><td><input type=button value="Clear Blue Squares" style="color:blue;" onclick="clearColor('blue')"></td></tr>
-				<tr><td><input type=radio name=color value=green id=rgreen><label for=rgreen style="color:green;">Green</label></td><td><input type=button value="Clear Green Squares" style="color:green;" onclick="clearColor('green')"></td></tr>
-				<tr><td><input type=radio name=color value=red id=rred><label for=rred style="color:red;">Red</label></td><td><input type=button value="Clear Red Squares" style="color:red;" onclick="clearColor('red')"></td></tr>
-				<tr><td><input type=radio name=color value=gray id=rgray><label for=rgray style="color:gray;">Gray</label></td><td><input type=button value="Clear Gray Squares" style="color:gray;" onclick="clearColor('gray')"></td></tr>
-				</table>
-			</div>
-			<div>
-				<input type=button value="Clear Whole Board" onclick="clearWhole();">
-			</div><br>
-			<div id="pausebutton">
-				<input type=button value="Pause Game" onclick="pauseGame();">
-			</div>
-			<div id="hintbutton"><br>
-				<input name=hintButton type=button value="I need a hint!" onclick="hint();">
-			</div><br>
-			<div id="hint"></div>
-		</td></tr></table>
-	</div>
-
-	<noscript style="color:red;">You must have JavaScript enabled to be able to use this Sudoku playing board.</noscript>
-	<h4>Sudoku Source Code</h4>
-	<p>You can see the source code for the JavaScript powering this web page <a href="https://github.com/stephenostermiller/qqwing/blob/master/src/js/qqwing-play.js">on GitHub</a>.</p>
-
-	<h4>This sudoku board makes solving puzzles much easier, is this cheating?</h4>
-
-	<p>This Sudoku playing board should be helpful, but it doesn't solve the puzzles for you.  It only enforces the basic rule of Sudoku: you may not put the same number twice into any row, column, or section.  Even with this helpful page, it is still possible to choose numbers such that the puzzle can not be solved.  Here, all the bookkeeping is done by the Sudoku playing board, freeing your brain up to do the more challenging leaps of logic.  Even so, purists may want to stick to pencil and paper.</p>
-
-	<br clear=all>
-	<hr>
-
-	<h3>License</h3>
-
-	<p>This program is free software; you can redistribute it and/or modify it
-	under the terms of the GNU General Public License as published by the Free
-	Software Foundation; either version 2 of the License, or (at your option)
-	any later version.</p>
-
-	<p>This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-	or FITNESS FOR A PARTICULAR PURPOSE. See the
-	<a href="http://www.gnu.org/copyleft/gpl.html">GNU
-	General Public License</a> for more details.</p>
-
-	<div id="testcell"></div>
 	<div style="padding:0.2cm;"><p>Copyright <a href="http://ostermiller.org/contact.pl?regarding=JavaScript+Sudoku" class=mail>Stephen Ostermiller</a> 2005-2014</p></div>
 </form></body></html>

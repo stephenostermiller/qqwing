@@ -61,5 +61,8 @@ cp -v target/js/qqwing-html-$version.js target/www-debug
 cp -v target/js/qqwing-play-$version.js target/www-debug
 sed -i 's/.min././g' target/www-debug/*.html
 
+sed -ri 's/^[ \t]*//' target/www/*.html target/www/*.css
+sed -ri '/^\s*$/d' target/www/*.html target/www/*.css
+
 echo "Website built in target/www"
 touch target/website
