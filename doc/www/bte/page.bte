@@ -7,6 +7,7 @@
 	<meta name="description" content="<%bte.inc name=description %>"><%/bte.grp %><%bte.grp onNoResolve=warning %>
 	<meta name="keywords" content="<%bte.inc name=keywords %>"><%/bte.grp %>
 	<link rel="stylesheet" href="style.css" type="text/css">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<%bte.grp onNoResolve=ok %><%bte.inc name=headContent %><%/bte.grp %>
 </head>
 <body <%bte.grp onNoResolve=ok %><%bte.inc name=bodyAttributes %><%/bte.grp %>>
