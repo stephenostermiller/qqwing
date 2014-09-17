@@ -32,8 +32,8 @@ function stringToStats(statString){
 	var statList = statString.split("|");
 	for (var i=0; i<statList.length; i++){
 		var sp = statList[i].split(",");
-		if (sp.length == 5){
-			stats[sp[0]] = new Stat(sp[0],parseInt(sp[1]),parseInt(sp[2]),parseInt(sp[3]),parseInt(sp[4]));
+		if (sp.length > 4){
+			stats[sp[0]] = new Stat(sp[0],sp[1],sp[2],sp[3],sp[4],sp.length>5?sp[5]:0);
 		}
 	}
 }
@@ -68,23 +68,23 @@ var difficultyLevels = new Array("simple","easy","intermediate","expert");
 function drawStats(){
 	var statsDiv = el("stats");
 	var advMsg = "";
-	var s = "<table><tr><th>Difficulty</th><th># Solved</th><th>Average Solve Time</th><th># Solved w/ Hint</th><th># Abandoned</th></tr>"
+	var s = "<table>"
 	for (var i=0; i<difficultyLevels.length; i++){
 		var d = difficultyLevels[i];
 		var stat = getStat(d);
 		var n = getDiffName(d);
-		var avgTime = "-";
-		if (stat.wincount > 0){
-			avgTime = toPrettyTime(stat.time/stat.wincount);
-		}
-		s+="<tr><td align=center>"+n+"</td><td align=right>"+stat.wincount+"</td><td align=center>"+avgTime+"</td><td align=right>"+stat.winwithhintcount+"</td><td align=right>"+stat.gaveupcount+"</td></tr>";
-		if (stat.wincount == 0 && d != "expert"){
-			advMsg = "You must solve a "+d+" puzzle without asking for hints to advance and play more difficult games.";
+		var bestTime = stat.besttime>0?toPrettyTime(stat.besttime):"-";
+		if (advMsg){
+			s+="<tr><th>"+n+"</th><td>"+advMsg+"</td></tr>";
 			break;
+		} else {
+			s+="<tr><th>"+n+"</th><td>"+(stat.besttime?"Best: "+toPrettyTime(stat.besttime)+"<br>":"")+"Solved: "+stat.wincount+"</td></tr>";
+			if (stat.wincount == 0 && d != "expert"){
+				advMsg = "You must solve "+d+" puzzles without asking for hints to advance and play more difficult games.";
+			}
 		}
 	}
 	s+="</table>"
-	s+=advMsg;
 	statsDiv.innerHTML = s;
 }
 
@@ -105,7 +105,6 @@ function fillDifficultySelect(){
 		count++;
 		if (stats[d] == null || stats[d].wincount == 0) done=true;
 	}
-	console.log(count);
 	el('difficultyoption').style.display=count>1?'block':'none';
 }
 
@@ -149,21 +148,23 @@ function statsToString(){
 	var s = "";
 	for (var i in stats) {
 		if(s!="") s+="|";
-		s+=stats[i].type+","+stats[i].wincount+","+stats[i].time+","+stats[i].winwithhintcount+","+stats[i].gaveupcount;
+		s+=stats[i].type+","+stats[i].wincount+","+stats[i].time+","+stats[i].winwithhintcount+","+stats[i].gaveupcount+","+stats[i].besttime;
 	}
 	return s;
 }
 
-function Stat(type,wincount,time,winwithhintcount,gaveupcount){
+function Stat(type,wincount,time,winwithhintcount,gaveupcount,besttime){
 	this.type=type;
 	this.wincount=ensureNum(wincount);
 	this.time=ensureNum(time);
 	this.winwithhintcount=ensureNum(winwithhintcount);
 	this.gaveupcount=ensureNum(gaveupcount);
+	this.besttime=ensureNum(besttime);
 }
 
 function ensureNum(n){
 	if (""+n == "NaN") return 0;
+	if (typeof n == 'string') n = parseInt(n);
 	return n;
 }
 
@@ -300,19 +301,21 @@ function detectComplete(){
 		if (board[cell] == 0) complete = false;
 	}
 	if (complete && gameType!="complete"){
-		var hintS="";
-		if (usedHint){
-			hintS=" although you needed a hint.";
-		}
 		var gamet = getGameTime();
-		el('endgamemessage').innerHTML = "Sudoku solved in " + toPrettyTime(gamet) + hintS;
+		var msg = "Sudoku solved in " + toPrettyTime(gamet);
 		var s = getStat(gameType);
 		if (!usedHint){
 			s.wincount++;
 			s.time+=gamet;
+			if (!s.besttime || gamet < s.besttime){
+				s.besttime=gamet;
+				msg += "; your best time!";
+			}
 		} else {
+			msg += " although you needed a hint."
 			s.winwithhintcount++;
 		}
+		el('endgamemessage').innerHTML = msg;
 		saveStats();
 		gameType = "complete";
 		usedHint = false;

@@ -49,11 +49,12 @@
 }
 #stats table {
 	border-collapse: collapse;
-	width: 100%;
+	margin: 1em auto;
+	max-width: 25em;
 }
 #stats th, #stats td {
 	border: 2px solid #CFE6CF;
-	padding: 0.2em;
+	padding: 0.4em;
 }
 #game .given {
 	color: #BF9060;
