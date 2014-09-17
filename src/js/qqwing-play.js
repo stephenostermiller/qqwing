@@ -725,6 +725,8 @@ function showScreen(screen){
 	el('head').style.display = screen=='game'?'none':'block';
 	el('foot').style.display = screen=='game'?'none':'block';
 	el('entiregame').style.display = screen=='game'?'block':'none';
+	el('content').style.padding = (getWindowHeight()<=400&&screen=='game')?"0":"1em 0";
+	document.body.style.backgroundColor = screen=='game'?'white':'#598059';
 	el('titlescreen').style.display = /title|over/.test(screen)?'block':'none';
 	el('pausescreen').style.display = screen=='pause'?'block':'none';
 	el('resumescreen').style.display = screen=='resume'?'block':'none';
