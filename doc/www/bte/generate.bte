@@ -5,7 +5,7 @@
 <%bte.tpl name=generateLinkText %><b>Generate</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
 	<link rel="stylesheet" href="gensolve.css" type="text/css">
-	<script src="qqwing-html-VERSION.min.js"></script>
+	<script src="qqwing-html.js"></script>
 <%/bte.tpl%>
 <%bte.tpl name=pageContent %>
 	<noscript >You must have JavaScript enabled to generate soduku puzzles online.</noscript>
@@ -46,11 +46,10 @@
 			<label><input type=checkbox name=timer> Timer</label>
 			<label><input type=checkbox name=printstats checked> Rating</label>
 		</div>
-		<div class=optionsection><input name=generatebutton type=submit class=button value=Generate onclick="generate(this.form);"></div>
+		<div class=optionsection><span id=working></span> <input name=generatebutton type=submit class=button value=Generate onclick="generate(this.form);"></div>
 
 	</form>
 
-	<div id=working></div>
 
 	<pre id=output></pre>
 
