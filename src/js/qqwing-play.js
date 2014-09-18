@@ -63,13 +63,13 @@ function initStats(){
 	}
 }
 
-var difficultyLevels = new Array("simple","easy","intermediate","expert");
+var difficultyLevels = new Array("simple","easy","intermediate","expert","random");
 
 function drawStats(){
 	var statsDiv = el("stats");
 	var advMsg = "";
 	var s = "<table>"
-	for (var i=0; i<difficultyLevels.length; i++){
+	for (var i=0; i<difficultyLevels.length-1; i++){
 		var d = difficultyLevels[i];
 		var stat = getStat(d);
 		var n = getDiffName(d);
@@ -298,7 +298,7 @@ function detectComplete(){
 	}
 	if (complete && gameType!="complete"){
 		var gamet = getGameTime();
-		var msg = "Sudoku solved in " + toPrettyTime(gamet);
+		var msg = getDiffName(gameType) + " Sudoku solved in " + toPrettyTime(gamet);
 		var s = getStat(gameType);
 		if (!usedHint){
 			s.wincount++;
@@ -535,13 +535,14 @@ var generateNewGame = function(){
 	qq.generatePuzzleSymmetry(getSymmetry());
 	qq.setRecordHistory(true);
 	qq.solve();
-	if (qq.getDifficultyAsString().toLowerCase() != getDifficulty()){
+	var diff = qq.getDifficultyAsString().toLowerCase();
+	if ("random" != getDifficulty() && diff != getDifficulty()){
 		el('newgamemessage').innerHTML=el('newgamemessage').innerHTML+" .";
 		setTimeout(generateNewGame, 100);
 	} else {
 		showScreen('game');
 		clearBoard();
-		gameType = getDifficulty();
+		gameType = diff;
 		newGame(qq.getPuzzleString());
 		draw();
 		el('newgamemessage').innerHTML="";
