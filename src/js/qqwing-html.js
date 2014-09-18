@@ -21,27 +21,12 @@ function getMicroseconds(){
 }
 
 var workingButton = null;
-
-function generate(form){
-	clearWorking();
-	if (workingButton){
-		workingButton.value='Generate';
-		workingButton = null;
-	} else {
-		clearOutput();
-		workingButton = form.generatebutton;
-		workingButton.value = 'Stop';
-		var dat = getOptData(form);
-		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, true, dat.printSolution));
-		generateNum(dat, form.generatenumber.value);
-	}
-}
+var workingImg = null;
+var puzzleStartTime;
 
 function generateNum(dat, num){
 	if (!workingButton) return;
-	working();
 	if (num > 0){
-		var puzzleStartTime = getMicroseconds();
 		dat.qqwing.setRecordHistory(dat.printHistory || dat.printInstructions || dat.printStats || dat.difficulty!=qqwing.Difficulty.UNKNOWN);
 		dat.qqwing.setPrintStyle(dat.printStyle);
 		dat.qqwing.generatePuzzleSymmetry(dat.symmetry);
@@ -60,44 +45,57 @@ function generateNum(dat, num){
 				} else {
 					output += "Time: "+t +" milliseconds\n";
 				}
+				puzzleStartTime = puzzleDoneTime;
 			}
 			if (dat.printStats) output += stats(dat);
 			output += "\n";
 			addOutput(output);
 			num--;
 		}
-		setTimeout(function(){generateNum(dat,num)}, 100);
+		setTimeout(function(){generateNum(dat,num)}, 0);
 	} else {
 		var applicationDoneTime = getMicroseconds();
 		if (dat.timer){
 			var t = (applicationDoneTime - dat.applicationStartTime)/1000000.0;
 			addOutput(dat.doneCount+" puzzle"+((dat.doneCount==1)?"":"s")+" generated in "+t+" seconds.");
 		}
-		workingButton.value='Generate';
-		workingButton = null;
-		clearWorking();
+		clearWorking('Generate');
 	}
 }
 
-function clearWorking(){
-	document.getElementById('working').innerHTML = "";
-	document.getElementById('downloadavailable').style.display='block';
+function clearWorking(s){
+	setError('');
+	if(workingButton && s) {
+		workingButton.value=s;
+		workingButton = null;
+	}
+	if (workingImg) workingImg.parentElement.removeChild(workingImg);
+	workingImg = null;
+	el('downloadavailable').style.display='block';
 }
 
-function working(){
-	document.getElementById('working').appendChild(document.createTextNode('.'));
+function el(elementid){
+	return document.getElementById(elementid);
 }
 
-function clearOutput(){
-	document.getElementById('output').innerHTML = "";
+function startWork(button){
+	el('output').innerHTML = "";
+	if (button) {
+		button.value = 'Stop';
+		workingButton = button;
+	}
+	workingImg = document.createElement("img");
+	workingImg.src = "loading.gif";
+	el('working').appendChild(workingImg);
 }
 
 function setError(s){
-	document.getElementById('error').innerHTML = s;
+	var err = el('error');
+	if (err) err.innerHTML = s;
 }
 
 function addOutput(s){
-	document.getElementById('output').appendChild(document.createTextNode(s));
+	el('output').appendChild(document.createTextNode(s));
 }
 
 function getOptData(form){
@@ -163,22 +161,28 @@ function stats(dat){
 	return s;
 }
 
+function generate(form){
+	clearWorking();
+	if (workingButton){
+		clearWorking('Generate');
+	} else {
+		startWork(form.generatebutton);
+		var dat = getOptData(form);
+		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, true, dat.printSolution));
+		puzzleStartTime = getMicroseconds();
+		generateNum(dat, form.generatenumber.value);
+	}
+}
+
 function solve(form){
 	clearWorking();
 	if (workingButton){
-		workingButton.value='Solve';
-		workingButton = null;
+		clearWorking('Solve');
 	} else {
-		clearOutput();
-		setError('');
 		var dat = getOptData(form);
 		var puzzles = getPuzzles(form.tosolve.value);
-		if (!puzzles.length){
-			setError("No puzzles were found.  Puzzles must be 81 numbers with zeros or periods for the unknowns.   For example: <pre>.47..2....18.5.7.4..59...2...............9..2....713.9.72....3...1......5.38.....</pre>");
-			return;
-		}
-		workingButton = form.solvebutton;
-		workingButton.value = 'Stop';
+		if (!puzzles.length) return setError("No puzzles were found.  Puzzles must be 81 numbers with zeros or periods for the unknowns.   For example: <pre>.47..2....18.5.7.4..59...2...............9..2....713.9.72....3...1......5.38.....</pre>");
+		startWork(form.solvebutton);
 		if (dat.printStyle == qqwing.PrintStyle.CSV) addOutput(csvHeader(dat, dat.printPuzzle, true));
 		solveNum(dat, puzzles);
 	}
@@ -187,9 +191,8 @@ function solve(form){
 
 function solveNum(dat, puzzles){
 	if (!workingButton) return;
-	working();
 	if (dat.doneCount<puzzles.length){
-		var puzzleStartTime = getMicroseconds();
+		puzzleStartTime = getMicroseconds();
 		dat.qqwing.setRecordHistory(dat.printHistory || dat.printInstructions || dat.printStats || dat.difficulty!=qqwing.Difficulty.UNKNOWN);
 		dat.qqwing.setPrintStyle(dat.printStyle);
 		dat.qqwing.setPuzzle(puzzles[dat.doneCount]);
@@ -227,16 +230,14 @@ function solveNum(dat, puzzles){
 		}
 		addOutput(output);
 		dat.doneCount++;
-		setTimeout(function(){solveNum(dat,puzzles)}, 100);
+		setTimeout(function(){solveNum(dat,puzzles)}, 0);
 	} else {
 		var applicationDoneTime = getMicroseconds();
 		if (dat.timer){
 			var t = (applicationDoneTime - dat.applicationStartTime)/1000000.0;
 			addOutput(dat.doneCount+" puzzle"+((dat.doneCount==1)?"":"s")+" in "+t+" seconds.");
 		}
-		workingButton.value='Solve';
-		workingButton = null;
-		clearWorking();
+		clearWorking('Solve');
 	}
 }
 

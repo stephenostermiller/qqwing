@@ -5,7 +5,7 @@
 <%bte.tpl name=playLinkText %><b>Play</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
 	<link rel="stylesheet" href="play.css" type="text/css">
-	<script src=qqwing-play-VERSION.min.js></script>
+	<script src=qqwing-play.js></script>
 <%/bte.tpl%>
 <%bte.tpl name=bodyAttributes %>onload="init()" onunload="recordgaveup()"<%/bte.tpl%>
 <%bte.tpl name=pageContent %>

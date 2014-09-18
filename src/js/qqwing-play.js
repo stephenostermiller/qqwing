@@ -537,8 +537,7 @@ var generateNewGame = function(){
 	qq.solve();
 	var diff = qq.getDifficultyAsString().toLowerCase();
 	if ("random" != getDifficulty() && diff != getDifficulty()){
-		el('newgamemessage').innerHTML=el('newgamemessage').innerHTML+" .";
-		setTimeout(generateNewGame, 100);
+		setTimeout(generateNewGame, 0);
 	} else {
 		showScreen('game');
 		clearBoard();
@@ -551,8 +550,12 @@ var generateNewGame = function(){
 
 function newQQwingGame(){
 	showScreen('loading');
-	el('newgamemessage').innerHTML="Loading new game . . .";
-	setTimeout(generateNewGame, 100);
+	var workingImg = document.createElement("img");
+	workingImg.src = "loading.gif";
+	var msg = el('newgamemessage');
+	msg.innerHTML="Loading new game ";
+	msg.appendChild(workingImg);
+	setTimeout(generateNewGame, 0);
 }
 
 
