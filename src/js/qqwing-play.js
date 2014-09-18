@@ -73,16 +73,12 @@ function drawStats(){
 		var d = difficultyLevels[i];
 		var stat = getStat(d);
 		var n = getDiffName(d);
-		var bestTime = stat.besttime>0?toPrettyTime(stat.besttime):"-";
-		if (advMsg){
-			s+="<tr><th>"+n+"</th><td>"+advMsg+"</td></tr>";
-			break;
-		} else {
-			s+="<tr><th>"+n+"</th><td>"+(stat.besttime?"Best: "+toPrettyTime(stat.besttime)+"<br>":"")+"Solved: "+stat.wincount+"</td></tr>";
-			if (stat.wincount == 0 && d != "expert"){
-				advMsg = "You must solve "+d+" puzzles without asking for hints to advance and play more difficult games.";
-			}
+		s+="<tr><th>"+n+"</th><td>"+(stat.besttime?"Best: "+toPrettyTime(stat.besttime)+"<br>":"")+"Solved: "+stat.wincount;
+		if (stat.wincount == 0 && d != "expert"){
+			s += "<br>You must solve "+d+" puzzles without asking for hints to advance and play more difficult games."
+			i=9;
 		}
+		s+="</td></tr>";
 	}
 	s+="</table>"
 	statsDiv.innerHTML = s;
