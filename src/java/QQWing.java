@@ -20,9 +20,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The board containing all the memory structures and
@@ -31,6 +33,8 @@ import java.util.ArrayList;
 public class QQWing {
 
 	private static final String QQWING_VERSION = "1.2.0";
+
+	private static final String NL = System.getProperties().getProperty("line.separator");
 
 	private enum PrintStyle {
 		ONE_LINE,
@@ -453,6 +457,8 @@ public class QQWing {
 					case FLIP:
 						positionsym1 = rowColumnToCell(ROW_COL_SEC_SIZE-1-cellToRow(position),cellToColumn(position));
 					break;
+					default:
+					break;
 				}
 				// try backing out the value and
 				// counting solutions to the puzzle
@@ -528,40 +534,55 @@ public class QQWing {
 	}
 
 	void printHistory(ArrayList<LogItem> v){
+		System.out.print(historyToString(v));
+	}
+
+
+	String historyToString(ArrayList<LogItem> v){
+		StringBuilder sb = new StringBuilder();
 		if (!recordHistory){
-			System.out.println("History was not recorded.");
+			sb.append("History was not recorded.").append(NL);
 			if (printStyle == PrintStyle.CSV){
-				System.out.println(" -- ");
+				sb.append(" -- ").append(NL);
 			} else {
-				System.out.println();
+				sb.append(NL);
 			}
 		}
 		for (int i=0;i<v.size();i++){
-			System.out.println(i+1+". ");
+			sb.append(i+1+". ").append(NL);
 			(v.get(i)).print();
 			if (printStyle == PrintStyle.CSV){
-				System.out.println(" -- ");
+				sb.append(" -- ").append(NL);
 			} else {
-				System.out.println();
+				sb.append(NL);
 			}
 		}
 		if (printStyle == PrintStyle.CSV){
-			System.out.println(",");
+			sb.append(",").append(NL);
 		} else {
-			System.out.println();
+			sb.append(NL);
 		}
+		return sb.toString();
 	}
 
 	void printSolveInstructions(){
+		System.out.print(getSolveInstructionsString());
+	}
+
+	String getSolveInstructionsString(){
 		if (isSolved()){
-			printHistory(solveInstructions);
+			return historyToString(solveInstructions);
 		} else {
-			System.out.println("No solve instructions - Puzzle is not possible to solve.");
+			return "No solve instructions - Puzzle is not possible to solve.";
 		}
 	}
 
 	void printSolveHistory(){
 		printHistory(solveHistory);
+	}
+
+	String getSolveHistoryString(){
+		return historyToString(solveHistory);
 	}
 
 	boolean solve() throws Exception {
@@ -1395,39 +1416,45 @@ public class QQWing {
 	 * member variables.
 	 */
 	void print(int[] sudoku){
+		System.out.print(puzzleToString(sudoku));
+	}
+
+	String puzzleToString(int[] sudoku){
+		StringBuilder sb = new StringBuilder();
 		for(int i=0; i<BOARD_SIZE; i++){
 			if (printStyle == PrintStyle.READABLE){
-				System.out.print(" ");
+				sb.append(" ");
 			}
 			if (sudoku[i]==0){
-				System.out.print('.');
+				sb.append('.');
 			} else {
-				System.out.print(sudoku[i]);
+				sb.append(sudoku[i]);
 			}
 			if (i == BOARD_SIZE-1){
 				if (printStyle == PrintStyle.CSV){
-					System.out.print(",");
+					sb.append(",");
 				} else {
-					System.out.println();
+					sb.append(NL);
 				}
 				if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
-					System.out.println();
+					sb.append(NL);
 				}
 			} else if (i%ROW_COL_SEC_SIZE==ROW_COL_SEC_SIZE-1){
 				if (printStyle == PrintStyle.READABLE || printStyle == PrintStyle.COMPACT){
-					System.out.println();
+					sb.append(NL);
 				}
 				if (i%SEC_GROUP_SIZE==SEC_GROUP_SIZE-1){
 					if (printStyle == PrintStyle.READABLE){
-						System.out.println("-------|-------|-------");
+						sb.append("-------|-------|-------").append(NL);
 					}
 				}
 			} else if (i%GRID_SIZE==GRID_SIZE-1){
 				if (printStyle == PrintStyle.READABLE){
-					System.out.print(" |");
+					sb.append(" |");
 				}
 			}
 		}
+		return sb.toString();
 	}
 
 	/**
@@ -1437,6 +1464,10 @@ public class QQWing {
 		print(puzzle);
 	}
 
+	String getPuzzleString(){
+		return puzzleToString(puzzle);
+	}
+
 	/**
 	 * Print the sudoku solution.
 	 */
@@ -1444,375 +1475,436 @@ public class QQWing {
 		print(solution);
 	}
 
+	String getSolutionString(){
+		return puzzleToString(solution);
+	}
+
+	private static class QQWingOptions {
+		// defaults for options
+		boolean printPuzzle = false;
+		boolean printSolution = false;
+		boolean printHistory = false;
+		boolean printInstructions = false;
+		boolean timer = false;
+		boolean countSolutions = false;
+		Action action = Action.NONE;
+		boolean logHistory = false;
+		PrintStyle printStyle = PrintStyle.READABLE;
+		int numberToGenerate = 1;
+		boolean printStats = false;
+		Difficulty difficulty = Difficulty.UNKNOWN;
+		Symmetry symmetry = Symmetry.NONE;
+		int threads = Runtime.getRuntime().availableProcessors();
+	}
+
 	/**
 	 * Main method -- the entry point into the program.
 	 * Run with --help as an argument for usage and documentation
 	 */
 	public static void main(String[] argv){
-		try {
-			// Start time for the application for timing
-			long applicationStartTime = getMicroseconds();
+		// Start time for the application for timing
+		long applicationStartTime = getMicroseconds();
 
-			// The number of puzzles solved or generated.
-			int puzzleCount = 0;
 
-			// defaults for options
-			boolean printPuzzle = false;
-			boolean printSolution = false;
-			boolean printHistory = false;
-			boolean printInstructions = false;
-			boolean timer = false;
-			boolean countSolutions = false;
-			Action action = Action.NONE;
-			boolean logHistory = false;
-			PrintStyle printStyle = PrintStyle.READABLE;
-			int numberToGenerate = 1;
-			boolean printStats = false;
-			Difficulty difficulty = Difficulty.UNKNOWN;
-			Symmetry symmetry = Symmetry.NONE;
+		final QQWingOptions opts = new QQWingOptions();
 
-			// Read the arguments and set the options
-			for (int i=0; i<argv.length; i++){
-				if (argv[i].equals("--puzzle")){
-					printPuzzle = true;
-				} else if (argv[i].equals("--nopuzzle")){
-					printPuzzle = false;
-				} else if (argv[i].equals("--solution")){
-					printSolution = true;
-				} else if (argv[i].equals("--nosolution")){
-					printSolution = false;
-				} else if (argv[i].equals("--history")){
-					printHistory = true;
-				} else if (argv[i].equals("--nohistory")){
-					printHistory = false;
-				} else if (argv[i].equals("--instructions")){
-					printInstructions = true;
-				} else if (argv[i].equals("--noinstructions")){
-					printInstructions = false;
-				} else if (argv[i].equals("--stats")){
-					printStats = true;
-				} else if (argv[i].equals("--nostats")){
-					printStats = false;
-				} else if (argv[i].equals("--timer")){
-					timer = true;
-				} else if (argv[i].equals("--notimer")){
-					timer = false;
-				} else if (argv[i].equals("--count-solutions")){
-					countSolutions = true;
-				} else if (argv[i].equals("--nocount-solutions")){
-					countSolutions = false;
-				} else if (argv[i].equals("--generate")){
-					action = Action.GENERATE;
-					printPuzzle = true;
-					if (i+1 < argv.length && !argv[i+1].startsWith("-")){
-						try {
-							numberToGenerate = Integer.parseInt(argv[i+1]);
-						} catch (NumberFormatException nfx){
-							numberToGenerate = 0;
-						}
-						if (numberToGenerate <= 0){
-							System.out.println("Bad number of puzzles to generate: "+argv[i+1]);
-							System.exit(1);
-						}
-						i++;
-					}
-				} else if (argv[i].equals("--difficulty")){
-					if (argv.length <= i+1){
-						System.out.println("Please specify a difficulty.");
-						System.exit(1);
-					} else if (argv[i+1].equalsIgnoreCase("simple")){
-						difficulty = Difficulty.SIMPLE;
-					} else if (argv[i+1].equalsIgnoreCase("easy")){
-						difficulty = Difficulty.EASY;
-					} else if (argv[i+1].equalsIgnoreCase("intermediate")){
-						difficulty = Difficulty.INTERMEDIATE;
-					} else if (argv[i+1].equalsIgnoreCase("expert")){
-						difficulty = Difficulty.EXPERT;
-					} else if (argv[i+1].equalsIgnoreCase("any")){
-						difficulty = Difficulty.UNKNOWN;
-					} else {
-						System.out.println("Difficulty expected to be simple, easy, intermediate, expert, or any, not "+argv[i+1]);
-						System.exit(1);
-					}
-					i++;
-				} else if (argv[i].equals("--symmetry")){
-					if (argv.length <= i+1){
-						System.out.println("Please specify a symmetry.");
-						System.exit(1);
-					} else if (argv[i+1].equals("none")){
-						symmetry = Symmetry.NONE;
-					} else if (argv[i+1].equals("rotate90")){
-						symmetry = Symmetry.ROTATE90;
-					} else if (argv[i+1].equals("rotate180")){
-						symmetry = Symmetry.ROTATE180;
-					} else if (argv[i+1].equals("mirror")){
-						symmetry = Symmetry.MIRROR;
-					} else if (argv[i+1].equals("flip")){
-						symmetry = Symmetry.FLIP;
-					} else if (argv[i+1].equals("random")){
-						symmetry = Symmetry.RANDOM;
-					} else {
-						System.out.println("Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not " + argv[i+1]);
-						System.exit(1);
-					}
-					i++;
-				} else if (argv[i].equals("--solve")){
-					action = Action.SOLVE;
-					printSolution = true;
-				} else if (argv[i].equals("--log-history")){
-					logHistory = true;
-				} else if (argv[i].equals("--nolog-history")){
-					logHistory = false;
-				} else if (argv[i].equals("--one-line")){
-					printStyle=PrintStyle.ONE_LINE;
-				} else if (argv[i].equals("--compact")){
-					printStyle=PrintStyle.COMPACT;
-				} else if (argv[i].equals("--readable")){
-					printStyle=PrintStyle.READABLE;
-				} else if (argv[i].equals("--csv")){
-					printStyle=PrintStyle.CSV;
-				} else if (argv[i].equals("-n") || argv[i].equals("--number")){
-					if (i+1 < argv.length){
-						numberToGenerate = Integer.parseInt(argv[i+1]);
-						i++;
-					} else {
-						System.out.println("Please specify a number.");
-						System.exit(1);
-					}
-				} else if (argv[i].equals("-h") || argv[i].equals("--help") || argv[i].equals("help") || argv[i].equals("?")){
-					printHelp();
-					System.exit(0);
-				} else if (argv[i].equals("--version")){
-					printVersion();
-					System.exit(0);
-				} else if (argv[i].equals("--about")){
-					printAbout();
-					System.exit(0);
-				} else {
-					System.out.println("Unknown argument: '"+argv[i]+"'");
-					printHelp();
-					System.exit(0);
+
+		// Read the arguments and set the options
+		for (int i=0; i<argv.length; i++){
+			if (argv[i].equals("--puzzle")){
+				opts.printPuzzle = true;
+			} else if (argv[i].equals("--nopuzzle")){
+				opts.printPuzzle = false;
+			} else if (argv[i].equals("--solution")){
+				opts.printSolution = true;
+			} else if (argv[i].equals("--nosolution")){
+				opts.printSolution = false;
+			} else if (argv[i].equals("--history")){
+				opts.printHistory = true;
+			} else if (argv[i].equals("--nohistory")){
+				opts.printHistory = false;
+			} else if (argv[i].equals("--instructions")){
+				opts.printInstructions = true;
+			} else if (argv[i].equals("--noinstructions")){
+				opts.printInstructions = false;
+			} else if (argv[i].equals("--stats")){
+				opts.printStats = true;
+			} else if (argv[i].equals("--nostats")){
+				opts.printStats = false;
+			} else if (argv[i].equals("--timer")){
+				opts.timer = true;
+			} else if (argv[i].equals("--notimer")){
+				opts.timer = false;
+			} else if (argv[i].equals("--count-solutions")){
+				opts.countSolutions = true;
+			} else if (argv[i].equals("--nocount-solutions")){
+				opts.countSolutions = false;
+			} else if (argv[i].equals("--threads")){
+				i++;
+				if (i >= argv.length){
+					System.err.println("Please specify a number of threads.");
+					System.exit(1);
 				}
-			}
-
-			if (action == Action.NONE){
-				System.out.println("Either --solve or --generate must be specified.");
+				try {
+					opts.threads = Integer.parseInt(argv[i]);
+				} catch (NumberFormatException nfx){
+					System.err.println("Invalid number of threads: " + argv[i]);
+					System.exit(1);
+				}
+			} else if (argv[i].equals("--generate")){
+				opts.action = Action.GENERATE;
+				opts.printPuzzle = true;
+				if (i+1 < argv.length && !argv[i+1].startsWith("-")){
+					try {
+						opts.numberToGenerate = Integer.parseInt(argv[i+1]);
+					} catch (NumberFormatException nfx){
+						opts.numberToGenerate = 0;
+					}
+					if (opts.numberToGenerate <= 0){
+						System.err.println("Bad number of puzzles to generate: "+argv[i+1]);
+						System.exit(1);
+					}
+					i++;
+				}
+			} else if (argv[i].equals("--difficulty")){
+				if (argv.length <= i+1){
+					System.err.println("Please specify a difficulty.");
+					System.exit(1);
+				} else if (argv[i+1].equalsIgnoreCase("simple")){
+					opts.difficulty = Difficulty.SIMPLE;
+				} else if (argv[i+1].equalsIgnoreCase("easy")){
+					opts.difficulty = Difficulty.EASY;
+				} else if (argv[i+1].equalsIgnoreCase("intermediate")){
+					opts.difficulty = Difficulty.INTERMEDIATE;
+				} else if (argv[i+1].equalsIgnoreCase("expert")){
+					opts.difficulty = Difficulty.EXPERT;
+				} else if (argv[i+1].equalsIgnoreCase("any")){
+					opts.difficulty = Difficulty.UNKNOWN;
+				} else {
+					System.err.println("Difficulty expected to be simple, easy, intermediate, expert, or any, not "+argv[i+1]);
+					System.exit(1);
+				}
+				i++;
+			} else if (argv[i].equals("--symmetry")){
+				if (argv.length <= i+1){
+					System.err.println("Please specify a symmetry.");
+					System.exit(1);
+				} else if (argv[i+1].equals("none")){
+					opts.symmetry = Symmetry.NONE;
+				} else if (argv[i+1].equals("rotate90")){
+					opts.symmetry = Symmetry.ROTATE90;
+				} else if (argv[i+1].equals("rotate180")){
+					opts.symmetry = Symmetry.ROTATE180;
+				} else if (argv[i+1].equals("mirror")){
+					opts.symmetry = Symmetry.MIRROR;
+				} else if (argv[i+1].equals("flip")){
+					opts.symmetry = Symmetry.FLIP;
+				} else if (argv[i+1].equals("random")){
+					opts.symmetry = Symmetry.RANDOM;
+				} else {
+					System.err.println("Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not " + argv[i+1]);
+					System.exit(1);
+				}
+				i++;
+			} else if (argv[i].equals("--solve")){
+				opts.action = Action.SOLVE;
+				opts.printSolution = true;
+			} else if (argv[i].equals("--log-history")){
+				opts.logHistory = true;
+			} else if (argv[i].equals("--nolog-history")){
+				opts.logHistory = false;
+			} else if (argv[i].equals("--one-line")){
+				opts.printStyle=PrintStyle.ONE_LINE;
+			} else if (argv[i].equals("--compact")){
+				opts.printStyle=PrintStyle.COMPACT;
+			} else if (argv[i].equals("--readable")){
+				opts.printStyle=PrintStyle.READABLE;
+			} else if (argv[i].equals("--csv")){
+				opts.printStyle=PrintStyle.CSV;
+			} else if (argv[i].equals("-n") || argv[i].equals("--number")){
+				if (i+1 < argv.length){
+					opts.numberToGenerate = Integer.parseInt(argv[i+1]);
+					i++;
+				} else {
+					System.err.println("Please specify a number.");
+					System.exit(1);
+				}
+			} else if (argv[i].equals("-h") || argv[i].equals("--help") || argv[i].equals("help") || argv[i].equals("?")){
 				printHelp();
-				System.exit(1);
+				System.exit(0);
+			} else if (argv[i].equals("--version")){
+				printVersion();
+				System.exit(0);
+			} else if (argv[i].equals("--about")){
+				printAbout();
+				System.exit(0);
+			} else {
+				System.out.println("Unknown argument: '"+argv[i]+"'");
+				printHelp();
+				System.exit(0);
 			}
+		}
 
-			// Initialize the random number generator
-			QQWing.r = new Random(new Date().getTime());
-
-			// If printing out CSV, print a header
-			if (printStyle == PrintStyle.CSV){
-				if (printPuzzle) System.out.print("Puzzle,");
-				if (printSolution) System.out.print("Solution,");
-				if (printHistory) System.out.print("Solve History,");
-				if (printInstructions) System.out.print("Solve Instructions,");
-				if (countSolutions) System.out.print("Solution Count,");
-				if (timer) System.out.print("Time (milliseconds),");
-				if (printStats) System.out.print("Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty");
-				System.out.println("");
-			}
-
-			// Create a new puzzle board
-			// and set the options
-			QQWing ss = new QQWing();
-			ss.setRecordHistory(printHistory || printInstructions || printStats || difficulty!=Difficulty.UNKNOWN);
-			ss.setLogHistory(logHistory);
-			ss.setPrintStyle(printStyle);
-
-			// Solve puzzle or generate puzzles
-			// until end of input for solving, or
-			// until we have generated the specified number.
-			boolean done = false;
-			int numberGenerated = 0;
-			while (!done){
-				// record the start time for the timer.
-				long puzzleStartTime = getMicroseconds();
-
-				// iff something has been printed for this particular puzzle
-				boolean printedSomething = false;
-
-				// Record whether the puzzle was possible or not,
-				// so that we don't try to solve impossible givens.
-				boolean havePuzzle = false;
-				if (action == Action.GENERATE){
-					// Generate a puzzle
-					havePuzzle = ss.generatePuzzleSymmetry(symmetry);
-					if (!havePuzzle && printPuzzle){
-						System.out.print("Could not generate puzzle.");
-						if (printStyle==PrintStyle.CSV){
-							System.out.println(",");
-						} else {
-							System.out.println();
-						}
-						printedSomething = true;
-					}
-				} else {
-					// Read the next puzzle on STDIN
-					int[] puzzle = new int[BOARD_SIZE];
-					if (readPuzzleFromStdIn(puzzle)){
-						havePuzzle = ss.setPuzzle(puzzle);
-						if (!havePuzzle){
-							if (printPuzzle){
-								ss.printPuzzle();
-								printedSomething = true;
-							}
-							if (printSolution) {
-								System.out.print("Puzzle is not possible.");
-								if (printStyle==PrintStyle.CSV){
-									System.out.print(",");
-								} else {
-									System.out.println();
-								}
-								printedSomething = true;
-							}
-						}
-					} else {
-						// Set loop to terminate when nothing is left on STDIN
-						havePuzzle = false;
-						done = true;
-					}
-					puzzle = null;
-				}
-
-				int solutions = 0;
-
-				if (havePuzzle){
-
-					// Count the solutions if requested.
-					// (Must be done before solving, as it would
-					// mess up the stats.)
-					if (countSolutions){
-						solutions = ss.countSolutions();
-					}
-
-					// Solve the puzzle
-					if (printSolution || printHistory || printStats || printInstructions || difficulty!=Difficulty.UNKNOWN){
-						ss.solve();
-					}
-
-					// Bail out if it didn't meet the difficulty standards for generation
-					if (action == Action.GENERATE){
-						if (difficulty!=Difficulty.UNKNOWN && difficulty!=ss.getDifficulty()){
-							havePuzzle = false;
-						} else {
-							numberGenerated++;
-							// Set loop to terminate if enough have been generated.
-							if (numberGenerated >= numberToGenerate) done = true;
-						}
-					}
-				}
-
-				// Check havePuzzle again, it may have changed based on difficulty
-				if (havePuzzle){
-					// With a puzzle now in hand and possibly solved
-					// print out the solution, stats, etc.
-					printedSomething = true;
-
-					// Record the end time for the timer.
-					long puzzleDoneTime = getMicroseconds();
-
-					// Print the puzzle itself.
-					if (printPuzzle) ss.printPuzzle();
-
-					// Print the solution if there is one
-					if (printSolution){
-						if (ss.isSolved()){
-							ss.printSolution();
-						} else {
-							System.out.print("Puzzle has no solution.");
-							if (printStyle==PrintStyle.CSV){
-								System.out.print(",");
-							} else {
-								System.out.println();
-							}
-						}
-					}
-
-					// Print the steps taken to solve or attempt to solve the puzzle.
-					if (printHistory) ss.printSolveHistory();
-					// Print the instructions for solving the puzzle
-					if (printInstructions) ss.printSolveInstructions();
-
-					// Print the number of solutions to the puzzle.
-					if (countSolutions){
-						if (printStyle == PrintStyle.CSV){
-							System.out.print(solutions+",");
-						} else {
-							if (solutions == 0){
-								System.out.println("There are no solutions to the puzzle.");
-							} else if (solutions == 1){
-								System.out.println("The solution to the puzzle is unique.");
-							} else {
-								System.out.println("There are "+solutions+" solutions to the puzzle.");
-							}
-						}
-					}
-
-					// Print out the time it took to solve the puzzle.
-					if (timer){
-						double t = ((double)(puzzleDoneTime - puzzleStartTime))/1000.0;
-						if (printStyle == PrintStyle.CSV){
-							System.out.print(t+",");
-						} else {
-							System.out.println("Time: "+t +" milliseconds");
-						}
-					}
-
-					// Print any stats we were able to gather while solving the puzzle.
-					if (printStats){
-						int givenCount = ss.getGivenCount();
-						int singleCount = ss.getSingleCount();
-						int hiddenSingleCount = ss.getHiddenSingleCount();
-						int nakedPairCount = ss.getNakedPairCount();
-						int hiddenPairCount = ss.getHiddenPairCount();
-						int pointingPairTripleCount = ss.getPointingPairTripleCount();
-						int boxReductionCount = ss.getBoxLineReductionCount();
-						int guessCount = ss.getGuessCount();
-						int backtrackCount = ss.getBacktrackCount();
-						String difficultyString = ss.getDifficultyAsString();
-						if (printStyle == PrintStyle.CSV){
-							System.out.println(givenCount+"," +singleCount+","+hiddenSingleCount
-									+","+nakedPairCount+","+hiddenPairCount
-									+"," +pointingPairTripleCount +"," +boxReductionCount
-									+","+guessCount+","+backtrackCount
-									+","+difficultyString+",");
-						} else {
-							System.out.println("Number of Givens: "+givenCount );
-							System.out.println("Number of Singles: "+singleCount);
-							System.out.println("Number of Hidden Singles: "+hiddenSingleCount );
-							System.out.println("Number of Naked Pairs: "+nakedPairCount );
-							System.out.println("Number of Hidden Pairs: "+hiddenPairCount );
-							System.out.println("Number of Pointing Pairs/Triples: "+pointingPairTripleCount );
-							System.out.println("Number of Box/Line Intersections: "+boxReductionCount );
-							System.out.println("Number of Guesses: "+guessCount );
-							System.out.println("Number of Backtracks: "+backtrackCount );
-							System.out.println("Difficulty: "+difficultyString );
-						}
-					}
-					puzzleCount++;
-				}
-				if (printedSomething && printStyle == PrintStyle.CSV){
-					System.out.println();
-				}
-			}
-
-			ss = null;
-
-			long applicationDoneTime = getMicroseconds();
-			// Print out the time it took to do everything
-			if (timer){
-				double t = ((double)(applicationDoneTime - applicationStartTime))/1000000.0;
-				System.out.println(puzzleCount+" puzzle"+((puzzleCount==1)?"":"s")+" "+(action==Action.GENERATE?"generated":"solved")+" in "+t+" seconds.");
-			}
-		} catch (Exception e){
-			e.printStackTrace(System.out);
+		if (opts.action == Action.NONE){
+			System.out.println("Either --solve or --generate must be specified.");
+			printHelp();
 			System.exit(1);
 		}
+
+		// Initialize the random number generator
+		QQWing.r = new Random(new Date().getTime());
+
+		// If printing out CSV, print a header
+		if (opts.printStyle == PrintStyle.CSV){
+			if (opts.printPuzzle) System.out.print("Puzzle,");
+			if (opts.printSolution) System.out.print("Solution,");
+			if (opts.printHistory) System.out.print("Solve History,");
+			if (opts.printInstructions) System.out.print("Solve Instructions,");
+			if (opts.countSolutions) System.out.print("Solution Count,");
+			if (opts.timer) System.out.print("Time (milliseconds),");
+			if (opts.printStats) System.out.print("Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty");
+			System.out.println("");
+		}
+
+		// The number of puzzles solved or generated.
+		final AtomicInteger puzzleCount = new AtomicInteger(0);
+		final AtomicBoolean done = new AtomicBoolean(false);
+
+		Thread[] threads = new Thread[opts.threads];
+		for (int threadCount=0; threadCount<threads.length; threadCount++){
+			threads[threadCount] = new Thread(
+				new Runnable(){
+
+					// Create a new puzzle board
+					// and set the options
+					private QQWing ss = createQQWing();
+
+					private QQWing createQQWing(){
+						QQWing ss = new QQWing();
+						ss.setRecordHistory(opts.printHistory || opts.printInstructions || opts.printStats || opts.difficulty!=Difficulty.UNKNOWN);
+						ss.setLogHistory(opts.logHistory);
+						ss.setPrintStyle(opts.printStyle);
+						return ss;
+					}
+
+					@Override
+					public void run() {
+						try {
+
+
+							// Solve puzzle or generate puzzles
+							// until end of input for solving, or
+							// until we have generated the specified number.
+							while (!done.get()){
+
+								// record the start time for the timer.
+								long puzzleStartTime = getMicroseconds();
+
+								// iff something has been printed for this particular puzzle
+								StringBuilder output = new StringBuilder();
+
+								// Record whether the puzzle was possible or not,
+								// so that we don't try to solve impossible givens.
+								boolean havePuzzle = false;
+
+								if (opts.action == Action.GENERATE){
+									// Generate a puzzle
+									havePuzzle = ss.generatePuzzleSymmetry(opts.symmetry);
+
+									if (!havePuzzle && opts.printPuzzle){
+										output.append("Could not generate puzzle.");
+										if (opts.printStyle==PrintStyle.CSV){
+											output.append(",").append(NL);
+										} else {
+											output.append(NL);
+										}
+									}
+								} else {
+									// Read the next puzzle on STDIN
+									int[] puzzle = new int[BOARD_SIZE];
+									if (readPuzzleFromStdIn(puzzle)){
+										havePuzzle = ss.setPuzzle(puzzle);
+										if (havePuzzle){
+											puzzleCount.getAndDecrement();
+										} else {
+											if (opts.printPuzzle){
+												output.append(ss.getPuzzleString());
+											}
+											if (opts.printSolution) {
+												output.append("Puzzle is not possible.");
+												if (opts.printStyle==PrintStyle.CSV){
+													output.append(",");
+												} else {
+													output.append(NL);
+												}
+											}
+										}
+									} else {
+										// Set loop to terminate when nothing is left on STDIN
+										havePuzzle = false;
+										done.set(true);
+									}
+									puzzle = null;
+								}
+
+								int solutions = 0;
+
+								if (havePuzzle){
+
+									// Count the solutions if requested.
+									// (Must be done before solving, as it would
+									// mess up the stats.)
+									if (opts.countSolutions){
+										solutions = ss.countSolutions();
+									}
+
+									// Solve the puzzle
+									if (opts.printSolution || opts.printHistory || opts.printStats || opts.printInstructions || opts.difficulty!=Difficulty.UNKNOWN){
+										ss.solve();
+									}
+
+									// Bail out if it didn't meet the difficulty standards for generation
+									if (opts.action == Action.GENERATE){
+										if (opts.difficulty!=Difficulty.UNKNOWN && opts.difficulty!=ss.getDifficulty()){
+											havePuzzle = false;
+											// check if other threads have finished the job
+											if (puzzleCount.get() >= opts.numberToGenerate) done.set(true);
+										} else {
+											int numDone = puzzleCount.incrementAndGet();
+											if (numDone >= opts.numberToGenerate) done.set(true);
+											if (numDone > opts.numberToGenerate) havePuzzle = false;
+										}
+									}
+								}
+
+								// Check havePuzzle again, it may have changed based on difficulty
+								if (havePuzzle){
+									// With a puzzle now in hand and possibly solved
+									// print out the solution, stats, etc.
+									// Record the end time for the timer.
+									long puzzleDoneTime = getMicroseconds();
+
+									// Print the puzzle itself.
+									if (opts.printPuzzle) output.append(ss.getPuzzleString());
+
+									// Print the solution if there is one
+									if (opts.printSolution){
+										if (ss.isSolved()){
+											output.append(ss.getSolutionString());
+										} else {
+											output.append("Puzzle has no solution.");
+											if (opts.printStyle==PrintStyle.CSV){
+												output.append(",");
+											} else {
+												output.append(NL);
+											}
+										}
+									}
+
+									// Print the steps taken to solve or attempt to solve the puzzle.
+									if (opts.printHistory) output.append(ss.getSolveHistoryString());
+									// Print the instructions for solving the puzzle
+									if (opts.printInstructions) output.append(ss.getSolveInstructionsString());
+
+									// Print the number of solutions to the puzzle.
+									if (opts.countSolutions){
+										if (opts.printStyle == PrintStyle.CSV){
+											output.append(solutions+",");
+										} else {
+											if (solutions == 0){
+												output.append("There are no solutions to the puzzle.").append(NL);
+											} else if (solutions == 1){
+												output.append("The solution to the puzzle is unique.").append(NL);
+											} else {
+												output.append("There are "+solutions+" solutions to the puzzle.").append(NL);
+											}
+										}
+									}
+
+									// Print out the time it took to solve the puzzle.
+									if (opts.timer){
+										double t = ((double)(puzzleDoneTime - puzzleStartTime))/1000.0;
+										if (opts.printStyle == PrintStyle.CSV){
+											output.append(t+",");
+										} else {
+											output.append("Time: "+t +" milliseconds").append(NL);
+										}
+									}
+
+									// Print any stats we were able to gather while solving the puzzle.
+									if (opts.printStats){
+										int givenCount = ss.getGivenCount();
+										int singleCount = ss.getSingleCount();
+										int hiddenSingleCount = ss.getHiddenSingleCount();
+										int nakedPairCount = ss.getNakedPairCount();
+										int hiddenPairCount = ss.getHiddenPairCount();
+										int pointingPairTripleCount = ss.getPointingPairTripleCount();
+										int boxReductionCount = ss.getBoxLineReductionCount();
+										int guessCount = ss.getGuessCount();
+										int backtrackCount = ss.getBacktrackCount();
+										String difficultyString = ss.getDifficultyAsString();
+										if (opts.printStyle == PrintStyle.CSV){
+											output.append(givenCount).append(",").append(singleCount).append(",")
+												.append(hiddenSingleCount).append(",").append(nakedPairCount)
+												.append(",").append(hiddenPairCount).append(",")
+												.append(pointingPairTripleCount).append(",").append(boxReductionCount)
+												.append(",").append(guessCount).append(",").append(backtrackCount)
+												.append(",").append(difficultyString).append(",");
+										} else {
+											output.append("Number of Givens: ").append(givenCount).append(NL);
+											output.append("Number of Singles: ").append(singleCount).append(NL);
+											output.append("Number of Hidden Singles: ").append(hiddenSingleCount).append(NL);
+											output.append("Number of Naked Pairs: ").append(nakedPairCount).append(NL);
+											output.append("Number of Hidden Pairs: ").append(hiddenPairCount).append(NL);
+											output.append("Number of Pointing Pairs/Triples: ").append(pointingPairTripleCount).append(NL);
+											output.append("Number of Box/Line Intersections: ").append(boxReductionCount).append(NL);
+											output.append("Number of Guesses: ").append(guessCount).append(NL);
+											output.append("Number of Backtracks: ").append(backtrackCount).append(NL);
+											output.append("Difficulty: ").append(difficultyString).append(NL);
+										}
+									}
+								}
+								if (output.length() > 0){
+									if (opts.printStyle == PrintStyle.CSV) output.append(NL);
+									System.out.print(output);
+								}
+							}
+						} catch (Exception e){
+							e.printStackTrace(System.err);
+							System.exit(1);
+						}
+					}
+
+				}
+			);
+			threads[threadCount].start();
+		}
+
+		while (isAlive(threads)) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException ix){
+				ix.printStackTrace(System.err);
+				System.exit(1);
+			}
+		}
+
+		long applicationDoneTime = getMicroseconds();
+		// Print out the time it took to do everything
+		if (opts.timer){
+			double t = ((double)(applicationDoneTime - applicationStartTime))/1000000.0;
+			int count = opts.action == Action.GENERATE?opts.numberToGenerate: puzzleCount.get();
+			System.out.println(count+" puzzle"+((count==1)?"":"s")+" "+(opts.action==Action.GENERATE?"generated":"solved")+" in "+t+" seconds.");
+		}
 		System.exit(0);
+	}
+
+
+	private static boolean isAlive(Thread[] threads) {
+		for (int i = 0; i < threads.length; i++) {
+			if (threads[i].isAlive()) return true;
+		}
+		return false;
 	}
 
 	static void printVersion(){
@@ -1856,6 +1948,7 @@ public class QQWing {
 		System.out.println("  --nostats            Do not print statistics (default)");
 		System.out.println("  --timer              Print time to generate or solve each puzzle");
 		System.out.println("  --notimer            Do not print solve or generation times (default)");
+		System.out.println("  --threads            Number of processes (default available processors)");
 		System.out.println("  --count-solutions    Count the number of solutions to puzzles");
 		System.out.println("  --nocount-solutions  Do not count the number of solutions (default)");
 		System.out.println("  --history            Print trial and error used when solving");
@@ -1926,20 +2019,22 @@ public class QQWing {
 	 * other character is ignored.
 	 */
 	static boolean readPuzzleFromStdIn(int[] puzzle) throws IOException {
-		int read = 0;
-		while (read < BOARD_SIZE){
-			int c = System.in.read();
-			if (c < 0) return false;
-			if (c >= '1' && c <= '9'){
-				puzzle[read] = c-'0';
-				read++;
+		synchronized (System.in){
+			int read = 0;
+			while (read < BOARD_SIZE){
+				int c = System.in.read();
+				if (c < 0) return false;
+				if (c >= '1' && c <= '9'){
+					puzzle[read] = c-'0';
+					read++;
+				}
+				if (c == '.' || c == '0'){
+					puzzle[read] = 0;
+					read++;
+				}
 			}
-			if (c == '.' || c == '0'){
-				puzzle[read] = 0;
-				read++;
-			}
+			return true;
 		}
-		return true;
 	}
 
 	/**

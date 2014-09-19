@@ -20,7 +20,7 @@ set -e
 set -o pipefail
 
 expected="Symmetry expected to be none, rotate90, rotate180, mirror, flip, or random, not foo"
-actual=`$QQWING --symmetry foo || true`
+actual=`$QQWING --symmetry foo 2>&1 || true`
 
 if [ "$expected" != "$actual" ]
 then
