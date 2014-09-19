@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(qqwing, 1.2.0, http://ostermiller.org/qqwing/)
+AC_INIT(qqwing, 1.3.0, http://ostermiller.org/qqwing/)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADER([config.h])
@@ -13,7 +13,7 @@ AC_CONFIG_HEADER([config.h])
 # - If the interface is the same as the previous version, change to C:R+1:A
 QQWING_CURRENT=2
 QQWING_REVISION=0
-QQWING_AGE=0
+QQWING_AGE=1
 
 AC_SUBST([QQWING_CURRENT])
 AC_SUBST([QQWING_REVISION])
