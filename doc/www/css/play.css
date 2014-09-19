@@ -93,7 +93,7 @@
 #game table {
 	border-collapse: collapse;
 }
-#game td.sodukusection {
+#game td.sudokusection {
 	border:2px solid #598059;
 }
 #game td.cell {

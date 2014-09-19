@@ -375,7 +375,7 @@ function getFullHtml(){
 	var s="<table>";
 	for (var section=0; section<9; section++){
 		if (section%3==0) s+="<tr>";
-		s+="<td class=sodukusection>";
+		s+="<td class=sudokusection>";
 		s+=getSectionHtml(section);
 		s+=("</td>");
 		if (section%3==2) s+="</tr>";

@@ -1,5 +1,5 @@
 <%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>Play QQWing Sudouku<%/bte.tpl%>
+<%bte.tpl name=pageTitle %>Play QQWing Sudoku<%/bte.tpl%>
 <%bte.tpl name=description %>Play Stephen Ostermiller's QQWing sudoku online in your web browser.<%/bte.tpl%>
 <%bte.tpl name=keywords %>qqwing,play sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=playLinkText %><b>Play</b><%/bte.tpl%>
@@ -17,7 +17,7 @@
 		</div>
 
 		<div id=pausescreen>
-			<h1>Soduku paused</h1>
+			<h1>Sudoku paused</h1>
 			<div id=elapsedtime></div>
 			<input type=button class="button mainbutton" value="Resume Game" onclick="resumeGame();">
 			<div>

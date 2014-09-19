@@ -1,12 +1,12 @@
 <%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>About QQWing Soduku<%/bte.tpl%>
-<%bte.tpl name=description %>QQwing is a fast command line program written in C++ for generating and solving Soduku puzzles. It is licensed under the GNU GPL.<%/bte.tpl%>
+<%bte.tpl name=pageTitle %>About QQWing Sudoku<%/bte.tpl%>
+<%bte.tpl name=description %>QQwing is a fast command line program written in C++ for generating and solving Sudoku puzzles. It is licensed under the GNU GPL.<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
 <%bte.tpl name=aboutLinkText %><b>About</b><%/bte.tpl%>
 <%bte.tpl name=pageContent %>
 <h1>About QQwing</h1>
 
-<p>QQwing is software for generating and solving Soduku puzzles.
+<p>QQwing is software for generating and solving Sudoku puzzles.
 It has been ported to three programming languages: C++, Java, and JavaScript.
 It can be <a href="download.html">downloaded from qqwing.com</a></p>
 

@@ -1,9 +1,9 @@
 This is the JavaScript version of qqwing.  It is for generating and solving
-Soduku puzzles. See: http://ostermiller.org/qqwing/
+Sudoku puzzles. See: http://ostermiller.org/qqwing/
 
 This archive contains both the minimized and unminimized libraries.   Only one
 of the two needs to be used at one time.   qqwing.js is a library file that can
-be used by JavaScript applications that wish to generate and solve Soduku
+be used by JavaScript applications that wish to generate and solve Sudoku
 puzzles.   qqwing-main.js is a command line application that can be run with 
 NodeJS: 
 
