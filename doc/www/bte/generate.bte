@@ -1,6 +1,6 @@
 <%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>QQWing - Generate Soduku Puzzles<%/bte.tpl%>
-<%bte.tpl name=description %>Generate Soduku in your web browser using QQWing.<%/bte.tpl%>
+<%bte.tpl name=pageTitle %>QQWing - Generate Sudoku Puzzles<%/bte.tpl%>
+<%bte.tpl name=description %>Generate Sudoku in your web browser using QQWing.<%/bte.tpl%>
 <%bte.tpl name=keywords %>qqwing,generate sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=generateLinkText %><b>Generate</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
@@ -8,7 +8,7 @@
 	<script src="qqwing-html.js"></script>
 <%/bte.tpl%>
 <%bte.tpl name=pageContent %>
-	<noscript >You must have JavaScript enabled to generate soduku puzzles online.</noscript>
+	<noscript >You must have JavaScript enabled to generate Sudoku puzzles online.</noscript>
 
 	<form name=generateform onsubmit="return false;">
 		<div class=optionsection>How many? <input type=number name=generatenumber value=1 min=1></div>
@@ -53,6 +53,6 @@
 
 	<pre id=output></pre>
 
-	<div id=downloadavailable>A command line version of QQWing that can generate and solve Soduku puzzles much faster is <a href="download.html">available for download</a>.</div>
+	<div id=downloadavailable>A command line version of QQWing that can generate and solve Sudoku puzzles much faster is <a href="download.html">available for download</a>.</div>
 <%/bte.tpl%>
 <%/bte.doc%>

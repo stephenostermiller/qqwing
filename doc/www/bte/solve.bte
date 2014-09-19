@@ -1,6 +1,6 @@
 <%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>QQWing - Solve Soduku Puzzles<%/bte.tpl%>
-<%bte.tpl name=description %>Solve Soduku in your web browser using QQWing solving software.<%/bte.tpl%>
+<%bte.tpl name=pageTitle %>QQWing - Solve Sudoku Puzzles<%/bte.tpl%>
+<%bte.tpl name=description %>Solve Sudoku in your web browser using QQWing solving software.<%/bte.tpl%>
 <%bte.tpl name=keywords %>qqwing,solve sudoku,online sudoku<%/bte.tpl%>
 <%bte.tpl name=solveLinkText %><b>Solve</b><%/bte.tpl%>
 <%bte.tpl name=headContent %>
@@ -8,7 +8,7 @@
 	<script src="qqwing-html.js"></script>
 <%/bte.tpl%>
 <%bte.tpl name=pageContent %>
-	<noscript >You must have JavaScript enabled to solve soduku puzzles online.</noscript>
+	<noscript >You must have JavaScript enabled to solve Sudoku puzzles online.</noscript>
 
 	<div id=error></div>
 
@@ -38,6 +38,6 @@
 
 	<pre id=output></pre>
 
-	<div id=downloadavailable>A command line version of QQWing that can generate and solve Soduku puzzles much faster is <a href="download.html">available for download</a>.</div>
+	<div id=downloadavailable>A command line version of QQWing that can generate and solve Sudoku puzzles much faster is <a href="download.html">available for download</a>.</div>
 <%/bte.tpl%>
 <%/bte.doc%>

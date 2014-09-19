@@ -1,6 +1,6 @@
 <%bte.doc super="page.bte"%>
 <%bte.tpl name=pageTitle %>QQwing Instructions - Sudoku Generator and Solver<%/bte.tpl%>
-<%bte.tpl name=description %>Instructions for using a fast command line program written in C++ for generating and solving Soduku puzzles.<%/bte.tpl%>
+<%bte.tpl name=description %>Instructions for using a fast command line program written in C++ for generating and solving Sudoku puzzles.<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
 <%bte.tpl name=instructionsLinkText %><b>Instructions</b><%/bte.tpl%>
 <%bte.tpl name=pageContent %>
