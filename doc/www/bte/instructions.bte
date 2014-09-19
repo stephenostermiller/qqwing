@@ -10,74 +10,74 @@ QQWing is a command line program that accepts many options.
 
 <pre>qqwing &lt;options&gt;
 Sudoku solver and generator.
-  --generate &lt;num&gt;     Generate new puzzles
-  --solve              Solve all the puzzles from standard input
-  --difficulty &lt;diff&gt;  Generate only simple,easy, intermediate, or expert
-  --symmetry &lt;sym&gt;     Symmetry: none, rotate90, rotate180, mirror, flip, or random
-  --puzzle             Print the puzzle (default when generating)
-  --nopuzzle           Do not print the puzzle (default when solving)
-  --solution           Print the solution (default when solving)
-  --nosolution         Do not print the solution (default when generating)
-  --stats              Print statistics about moves used to solve the puzzle
-  --nostats            Do not print statistics (default)
-  --timer              Print time to generate or solve each puzzle
-  --notimer            Do not print solve or generation times (default)
-  --count-solutions    Count the number of solutions to puzzles
-  --nocount-solutions  Do not count the number of solutions (default)
-  --history            Print trial and error used when solving
-  --nohistory          Do not print trial and error to solve (default)
-  --instructions       Print the steps (at least 81) needed to solve the puzzle
-  --noinstructions     Do not print steps to solve (default)
-  --log-history        Print trial and error to solve as it happens
-  --nolog-history      Do not print trial and error  to solve as it happens
-  --one-line           Print puzzles on one line of 81 characters
-  --compact            Print puzzles on 9 lines of 9 characters
-  --readable           Print puzzles in human readable form (default)
-  --csv                Ouput CSV format with one line puzzles
-  --help               Print this message
-  --about              Author and license information
-  --version            Display current version number</pre>
+&nbsp; --generate &lt;num&gt;     Generate new puzzles
+&nbsp; --solve              Solve all the puzzles from standard input
+&nbsp; --difficulty &lt;diff&gt;  Generate only simple,easy, intermediate, or expert
+&nbsp; --symmetry &lt;sym&gt;     Symmetry: none, rotate90, rotate180, mirror, flip, or random
+&nbsp; --puzzle             Print the puzzle (default when generating)
+&nbsp; --nopuzzle           Do not print the puzzle (default when solving)
+&nbsp; --solution           Print the solution (default when solving)
+&nbsp; --nosolution         Do not print the solution (default when generating)
+&nbsp; --stats              Print statistics about moves used to solve the puzzle
+&nbsp; --nostats            Do not print statistics (default)
+&nbsp; --timer              Print time to generate or solve each puzzle
+&nbsp; --notimer            Do not print solve or generation times (default)
+&nbsp; --count-solutions    Count the number of solutions to puzzles
+&nbsp; --nocount-solutions  Do not count the number of solutions (default)
+&nbsp; --history            Print trial and error used when solving
+&nbsp; --nohistory          Do not print trial and error to solve (default)
+&nbsp; --instructions       Print the steps (at least 81) needed to solve the puzzle
+&nbsp; --noinstructions     Do not print steps to solve (default)
+&nbsp; --log-history        Print trial and error to solve as it happens
+&nbsp; --nolog-history      Do not print trial and error  to solve as it happens
+&nbsp; --one-line           Print puzzles on one line of 81 characters
+&nbsp; --compact            Print puzzles on 9 lines of 9 characters
+&nbsp; --readable           Print puzzles in human readable form (default)
+&nbsp; --csv                Ouput CSV format with one line puzzles
+&nbsp; --help               Print this message
+&nbsp; --about              Author and license information
+&nbsp; --version            Display current version number</pre>
 
 <h2>Examples</h2>
 <h3>Generate a single Sudoku</h3>
 <div class=commandline>$ qqwing --generate</div>
 <pre class=output> . 4 3 | 5 . . | . . 2
- . . 2 | . . 4 | . 8 3
- . 1 . | . . . | 6 . .
+&nbsp;. . 2 | . . 4 | . 8 3
+&nbsp;. 1 . | . . . | 6 . .
 -------|-------|-------
- . 8 . | 7 3 . | . . 5
- 2 6 . | . 4 5 | . . .
- 1 . . | . . 8 | . . .
+&nbsp;. 8 . | 7 3 . | . . 5
+&nbsp;2 6 . | . 4 5 | . . .
+&nbsp;1 . . | . . 8 | . . .
 -------|-------|-------
- . 7 . | 3 . . | . 6 .
- . . . | . . . | . . .
- . . . | 6 . 7 | . . .</pre>
+&nbsp;. 7 . | 3 . . | . 6 .
+&nbsp;. . . | . . . | . . .
+&nbsp;. . . | 6 . 7 | . . .</pre>
 
 <h3>Generate a single Sudoku and print the solution too</h3>
 <div class=commandline>$ qqwing --generate --solution</div>
 <pre class=output> 2 . . | . . 9 | . 8 .
- . 4 6 | . . . | . . .
- 7 . . | 4 . 2 | 1 . .
+&nbsp;. 4 6 | . . . | . . .
+&nbsp;7 . . | 4 . 2 | 1 . .
 -------|-------|-------
- 6 . . | . . 1 | 4 . 8
- . . . | 6 3 . | . 2 .
- 9 2 7 | . . . | . . 3
+&nbsp;6 . . | . . 1 | 4 . 8
+&nbsp;. . . | 6 3 . | . 2 .
+&nbsp;9 2 7 | . . . | . . 3
 -------|-------|-------
- 1 . . | 9 . . | 8 4 .
- . 9 . | . . . | . . .
- 4 . . | . . . | . 6 .
+&nbsp;1 . . | 9 . . | 8 4 .
+&nbsp;. 9 . | . . . | . . .
+&nbsp;4 . . | . . . | . 6 .
 
- 2 3 1 | 7 6 9 | 5 8 4
- 5 4 6 | 3 1 8 | 2 9 7
- 7 8 9 | 4 5 2 | 1 3 6
+&nbsp;2 3 1 | 7 6 9 | 5 8 4
+&nbsp;5 4 6 | 3 1 8 | 2 9 7
+&nbsp;7 8 9 | 4 5 2 | 1 3 6
 -------|-------|-------
- 6 5 3 | 2 9 1 | 4 7 8
- 8 1 4 | 6 3 7 | 9 2 5
- 9 2 7 | 5 8 4 | 6 1 3
+&nbsp;6 5 3 | 2 9 1 | 4 7 8
+&nbsp;8 1 4 | 6 3 7 | 9 2 5
+&nbsp;9 2 7 | 5 8 4 | 6 1 3
 -------|-------|-------
- 1 6 5 | 9 7 3 | 8 4 2
- 3 9 2 | 8 4 6 | 7 5 1
- 4 7 8 | 1 2 5 | 3 6 9</pre>
+&nbsp;1 6 5 | 9 7 3 | 8 4 2
+&nbsp;3 9 2 | 8 4 6 | 7 5 1
+&nbsp;4 7 8 | 1 2 5 | 3 6 9</pre>
 
 <h3>Generate ten puzzles and print out full stats in CSV format</h3>
 <div class=commandline>$ qqwing --generate 10 --solution --csv --stats --timer</div>
@@ -109,30 +109,30 @@ Sudoku solver and generator.
 <h3>Solve a puzzle</h3>
 <div class=commandline>$ echo ........49.1.6.5....8....9.8..4.37.6....1....54...718.....39..7....4..5....7..81. | qqwing --solve</div>
 <pre class=output> 7 5 6 | 9 8 1 | 2 3 4
- 9 2 1 | 3 6 4 | 5 7 8
- 4 3 8 | 5 7 2 | 6 9 1
+&nbsp;9 2 1 | 3 6 4 | 5 7 8
+&nbsp;4 3 8 | 5 7 2 | 6 9 1
 -------|-------|-------
- 8 1 9 | 4 5 3 | 7 2 6
- 6 7 3 | 2 1 8 | 9 4 5
- 5 4 2 | 6 9 7 | 1 8 3
+&nbsp;8 1 9 | 4 5 3 | 7 2 6
+&nbsp;6 7 3 | 2 1 8 | 9 4 5
+&nbsp;5 4 2 | 6 9 7 | 1 8 3
 -------|-------|-------
- 2 8 5 | 1 3 9 | 4 6 7
- 1 9 7 | 8 4 6 | 3 5 2
- 3 6 4 | 7 2 5 | 8 1 9</pre>
+&nbsp;2 8 5 | 1 3 9 | 4 6 7
+&nbsp;1 9 7 | 8 4 6 | 3 5 2
+&nbsp;3 6 4 | 7 2 5 | 8 1 9</pre>
 
- <h3>Solve a puzzle and print out complete stats and solve instructions</h3>
+&nbsp;<h3>Solve a puzzle and print out complete stats and solve instructions</h3>
 <div class=commandline>$ echo .....1.....2....9..1.97.83.7...2.6...81..6.4..9.....2....389.6....71........62... | qqwing --solve --stats --instructions --count-solutions</div>
 <pre class=output> 9 4 8 | 2 3 1 | 7 5 6
- 3 7 2 | 6 5 8 | 1 9 4
- 5 1 6 | 9 7 4 | 8 3 2
+&nbsp;3 7 2 | 6 5 8 | 1 9 4
+&nbsp;5 1 6 | 9 7 4 | 8 3 2
 -------|-------|-------
- 7 5 4 | 8 2 3 | 6 1 9
- 2 8 1 | 5 9 6 | 3 4 7
- 6 9 3 | 1 4 7 | 5 2 8
+&nbsp;7 5 4 | 8 2 3 | 6 1 9
+&nbsp;2 8 1 | 5 9 6 | 3 4 7
+&nbsp;6 9 3 | 1 4 7 | 5 2 8
 -------|-------|-------
- 1 2 7 | 3 8 9 | 4 6 5
- 4 6 9 | 7 1 5 | 2 8 3
- 8 3 5 | 4 6 2 | 9 7 1
+&nbsp;1 2 7 | 3 8 9 | 4 6 5
+&nbsp;4 6 9 | 7 1 5 | 2 8 3
+&nbsp;8 3 5 | 4 6 2 | 9 7 1
 
 1. Round: 1 - Mark given (Row: 1 - Column: 6 - Value: 1)
 2. Round: 1 - Mark given (Row: 2 - Column: 3 - Value: 2)
