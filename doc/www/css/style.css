@@ -16,13 +16,20 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-html, body, div, form, ul, ol, table, tr, td, input {
+html, body, div, form, table, tr, td, input, pre {
 	padding:0;
 	margin:0;
 	font-family: inherit;
+	font-size: inherit;
 }
-
+pre {
+	font-family: "Courier New", Courier, monospace;
+	overflow: auto;
+}
+textarea {
+	width: 99%;
+	height: 10em;
+}
 body {
 	padding:0px;
 	margin:0px;
@@ -30,6 +37,47 @@ body {
 	background-color:#598059;
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:14px;
+}
+a:link,a:visited {
+	color:#BF9060;
+	text-decoration:none;
+}
+a:link:hover {
+	text-decoration:underline;
+}
+#brand {
+	display: inline-block;
+	font-size: 200%;
+	margin: 0.25em;
+	padding: 0;
+	vertical-align: top;
+}
+#brand a:link, #brand a:visited {
+	color: white;
+}
+#mainmenu {
+	margin:0;
+	padding:0;
+	display: inline-block;
+	list-style-type: none;
+	vertical-align: top;
+}
+#mainmenu li, .gamecontrollinks li {
+	display: inline-block;
+	padding: 1.25em 1em;
+}
+#content {
+	color: black;
+	background: white;
+	padding: 1em 0;
+}
+.pagesection{
+	max-width: 70em;
+	margin: 0 auto;
+	padding: 0 0.4em;
+}
+a.mail {
+	font-style:italic;
 }
 .button {
 	padding: 0.5em 3em;
@@ -43,179 +91,21 @@ body {
 	margin: 0.5em;
 	display: inline-block;
 }
-
 .button:hover{
 	background: #CCAE8F;
 }
-
 .mainbutton {
 	padding: 1em 3em;
 	font-size: 150%;
 }
-
-a:link,a:visited {
-	color:#BF9060;
-	text-decoration:none;
+.downloadsection {
+	padding-left: 3em;
 }
-a:link:hover {
-	text-decoration:underline;
+.downloadsubsection {
+	margin-bottom: 1em;
+	border: 1px solid gray;
+	padding: 0.5em;
 }
-#head, #foot {
-}
-#brand {
-	display: inline-block;
-	font-size: 200%;
-	margin: 0.25em;
-	vertical-align: top;
-}
-#titlelinks {
-	list-style-type: none;
-}
-#mainmenu {
-	display: inline-block;
-	list-style-type: none;
-	vertical-align: top;
-}
-
-#mainmenu li, #titlelinks li {
-	display: inline-block;
-	padding: 1.25em 1em;
-}
-
-#content {
-	color: black;
-	background: white;
-	padding: 1em 0;
-}
-
-.pagesection{
-	max-width: 70em;
-	margin: 0 auto;
-	padding: 0 0.4em;
-}
-
-a.mail {
-	font-style:italic;
-}
-
-.tag{
-	font-weight:bold;
-	color:blue;
-}
-.endtag{
-	color:blue;
-}
-.reference{
-	color:black;
-}
-.name{
-	font-weight:bold;
-	color:maroon;
-}
-.value{
-	font-style: italic;
-	color:maroon;
-}
-.text{
-	font-weight:bold;
-	color:black;
-}
-.reservedWord{
-	color:blue;
-}
-.identifier{
-	color:black;
-}
-.literal{
-	color:maroon;
-}
-.separator{
-	color:navy;
-}
-.operator{
-	font-weight:bold;
-	color:navy;
-}
-.comment{
-	color:green;
-}
-.preprocessor{
-	color:purple;
-}
-.whitespace{
-}
-.error{
-	color:red;
-}
-.unknown{
-	color:orange;
-}
-.sourcedoc{
-	background-color:white;
-	overflow:scroll;
-	padding:1cm;
-}
-
-#newgamediv, #endgamescreen, #gamelinks, #newgamemessage, #pausescreen, #resumescreen{
-	text-align: center;
-}
-#endgamescreen, #resumescreen {
-	font-size: 200%;
-}
-*.unselectable {
-	-moz-user-select: -moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-#stats table {
-	border-collapse: collapse;
-	width: 100%;
-}
-#stats th, #stats td {
-	border: 2px solid #CFE6CF;
-	padding: 0.2em;
-}
-#game .given {
-	color: #BF9060;
-}
-#gamecolumns {
-	display: table;
-	margin: 0 auto;
-}
-#playingarea, #optionsarea {
-	display: table-cell;
-	vertical-align: top;
-}
-@media screen and (max-width: 610px){
-	#gamecolumns,#playingarea, #optionsarea {
-		display: inline-block;
-		margin: 0 auto;
-	}
-}
-#optionsarea {
-	width: 15em;
-	padding-left: 1em;
-}
-#optionsarea .button {
-	padding: 0.25em 1em;
-	font-size: 100%;
-}
-#markingcolors input {
-	margin: 0 0.5em;
-}
-#game table {
-	border-collapse: collapse;
-}
-#game td.sodukusection {
-	border:2px solid #598059;
-}
-#game td.cell {
-	border:1px solid #598059;
-}
-#entiregame {
-	min-height: 100vh;
-	text-align: center;
+code {
+	background: #DDDDDD;
 }

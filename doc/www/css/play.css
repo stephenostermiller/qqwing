@@ -1,0 +1,114 @@
+/*
+ * qqwing - Sudoku solver and generator
+ * Copyright (C) 2014 Stephen Ostermiller
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+.gamecontrollinks {
+	list-style-type: none;
+}
+#newgamediv, #endgamescreen, #gamelinks, #newgamemessage, #pausescreen, #resumescreen, #options {
+	text-align: center;
+}
+#gamelinks {
+	margin: 1em 0;
+}
+#newgamemessage {
+	max-width: 30em;
+	margin: 3em auto;
+	font-size: 200%;
+}
+#resumescreen{
+	margin: 3em 0;
+}
+#endgamescreen, #resumescreen {
+	font-size: 200%;
+}
+#endgamescreen {
+	margin: 1em 0;
+}
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#stats table {
+	border-collapse: collapse;
+	margin: 1em auto;
+	max-width: 25em;
+}
+#stats th, #stats td {
+	border: 2px solid #CFE6CF;
+	padding: 0.4em;
+}
+#game .given {
+	color: #BF9060;
+}
+#game .hintcell,#hint {
+	background-color: #FCFAA4;
+}
+#gamecolumns {
+	display: table;
+	margin: 0 auto;
+}
+#playingarea, #optionsarea {
+	display: table-cell;
+	vertical-align: top;
+}
+@media screen and (max-width: 610px){
+	#gamecolumns,#playingarea, #optionsarea {
+		display: inline-block;
+		margin: 0 auto;
+	}
+}
+#optionsarea {
+	width: 15em;
+	padding-left: 1em;
+	text-align: left;
+}
+#optionsarea .button {
+	padding: 0.25em 0.5em;
+	font-size: 100%;
+}
+#markingcolors {
+	margin: 1em 0;
+}
+#markingcolors input {
+	margin: 0 0.5em;
+}
+#game table {
+	border-collapse: collapse;
+}
+#game td.sodukusection {
+	border:2px solid #598059;
+}
+#game td.cell {
+	border:1px solid #598059;
+}
+#entiregame {
+	text-align: center;
+}
+#hint {
+	font-size: 120%;
+	padding: 1em;
+	margin: 1em 0;
+	border-radius: 0.5em;
+}
+#instructions {
+	max-width: 40em;
+	margin: 1em auto;
+}

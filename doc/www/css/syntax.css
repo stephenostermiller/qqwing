@@ -1,0 +1,75 @@
+/*
+ * qqwing - Sudoku solver and generator
+ * Copyright (C) 2014 Stephen Ostermiller
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+.tag{
+	font-weight:bold;
+	color:blue;
+}
+.endtag{
+	color:blue;
+}
+.reference{
+	color:black;
+}
+.name{
+	font-weight:bold;
+	color:maroon;
+}
+.value{
+	font-style: italic;
+	color:maroon;
+}
+.text{
+	font-weight:bold;
+	color:black;
+}
+.reservedWord{
+	color:blue;
+}
+.identifier{
+	color:black;
+}
+.literal{
+	color:maroon;
+}
+.separator{
+	color:navy;
+}
+.operator{
+	font-weight:bold;
+	color:navy;
+}
+.comment{
+	color:green;
+}
+.preprocessor{
+	color:purple;
+}
+.whitespace{
+}
+.error{
+	color:red;
+}
+.unknown{
+	color:orange;
+}
+.sourcedoc{
+	background-color:white;
+	overflow:scroll;
+	padding:2em 0;
+}

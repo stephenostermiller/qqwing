@@ -20,7 +20,7 @@ set -e
 set -o pipefail
 
 expected="Please specify a difficulty."
-actual=`$QQWING --difficulty || true`
+actual=`$QQWING --difficulty 2>&1 || true`
 
 if [ "$expected" != "$actual" ]
 then

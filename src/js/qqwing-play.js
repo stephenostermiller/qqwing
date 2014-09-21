@@ -32,8 +32,8 @@ function stringToStats(statString){
 	var statList = statString.split("|");
 	for (var i=0; i<statList.length; i++){
 		var sp = statList[i].split(",");
-		if (sp.length == 5){
-			stats[sp[0]] = new Stat(sp[0],parseInt(sp[1]),parseInt(sp[2]),parseInt(sp[3]),parseInt(sp[4]));
+		if (sp.length > 4){
+			stats[sp[0]] = new Stat(sp[0],sp[1],sp[2],sp[3],sp[4],sp.length>5?sp[5]:0);
 		}
 	}
 }
@@ -63,28 +63,24 @@ function initStats(){
 	}
 }
 
-var difficultyLevels = new Array("simple","easy","intermediate","expert");
+var difficultyLevels = new Array("simple","easy","intermediate","expert","random");
 
 function drawStats(){
 	var statsDiv = el("stats");
 	var advMsg = "";
-	var s = "<table><tr><th>Difficulty</th><th># Solved</th><th>Average Solve Time</th><th># Solved w/ Hint</th><th># Abandoned</th></tr>"
-	for (var i=0; i<difficultyLevels.length; i++){
+	var s = "<table>"
+	for (var i=0; i<difficultyLevels.length-1; i++){
 		var d = difficultyLevels[i];
 		var stat = getStat(d);
 		var n = getDiffName(d);
-		var avgTime = "-";
-		if (stat.wincount > 0){
-			avgTime = toPrettyTime(stat.time/stat.wincount);
-		}
-		s+="<tr><td align=center>"+n+"</td><td align=right>"+stat.wincount+"</td><td align=center>"+avgTime+"</td><td align=right>"+stat.winwithhintcount+"</td><td align=right>"+stat.gaveupcount+"</td></tr>";
+		s+="<tr><th>"+n+"</th><td>"+(stat.besttime?"Best: "+toPrettyTime(stat.besttime)+"<br>":"")+"Solved: "+stat.wincount;
 		if (stat.wincount == 0 && d != "expert"){
-			advMsg = "You must solve a "+d+" puzzle without asking for hints to advance and play more difficult games.";
-			break;
+			s += "<br>You must solve "+d+" puzzles without asking for hints to advance and play more difficult games."
+			i=9;
 		}
+		s+="</td></tr>";
 	}
 	s+="</table>"
-	s+=advMsg;
 	statsDiv.innerHTML = s;
 }
 
@@ -97,11 +93,15 @@ function haveStats(){
 }
 
 function fillDifficultySelect(){
-	for (var i=0; i<difficultyLevels.length; i++){
+	var count = 0;
+	var done = false;
+	for (var i=0; i<difficultyLevels.length && !done; i++){
 		var d = difficultyLevels[i];
 		addDifficultyToSelect(d);
-		if (stats[d] == null || stats[d].wincount == 0) return;
+		count++;
+		if (stats[d] == null || stats[d].wincount == 0) done=true;
 	}
+	el('difficultyoption').style.display=count>1?'block':'none';
 }
 
 function getDiffName(d){
@@ -144,21 +144,23 @@ function statsToString(){
 	var s = "";
 	for (var i in stats) {
 		if(s!="") s+="|";
-		s+=stats[i].type+","+stats[i].wincount+","+stats[i].time+","+stats[i].winwithhintcount+","+stats[i].gaveupcount;
+		s+=stats[i].type+","+stats[i].wincount+","+stats[i].time+","+stats[i].winwithhintcount+","+stats[i].gaveupcount+","+stats[i].besttime;
 	}
 	return s;
 }
 
-function Stat(type,wincount,time,winwithhintcount,gaveupcount){
+function Stat(type,wincount,time,winwithhintcount,gaveupcount,besttime){
 	this.type=type;
 	this.wincount=ensureNum(wincount);
 	this.time=ensureNum(time);
 	this.winwithhintcount=ensureNum(winwithhintcount);
 	this.gaveupcount=ensureNum(gaveupcount);
+	this.besttime=ensureNum(besttime);
 }
 
 function ensureNum(n){
 	if (""+n == "NaN") return 0;
+	if (typeof n == 'string') n = parseInt(n);
 	return n;
 }
 
@@ -295,26 +297,28 @@ function detectComplete(){
 		if (board[cell] == 0) complete = false;
 	}
 	if (complete && gameType!="complete"){
-		var hintS="";
-		if (usedHint){
-			hintS=" although you needed a hint.";
-		}
 		var gamet = getGameTime();
-		el('endgamemessage').innerHTML = "Sudoku solved in " + toPrettyTime(gamet) + hintS;
-		showScreen('over');
+		var msg = getDiffName(gameType) + " Sudoku solved in " + toPrettyTime(gamet);
 		var s = getStat(gameType);
 		if (!usedHint){
 			s.wincount++;
 			s.time+=gamet;
+			if (!s.besttime || gamet < s.besttime){
+				s.besttime=gamet;
+				msg += "; your best time!";
+			}
 		} else {
+			msg += " although you needed a hint."
 			s.winwithhintcount++;
 		}
+		el('endgamemessage').innerHTML = msg;
 		saveStats();
 		gameType = "complete";
 		usedHint = false;
 		pauseTime = 0;
 		startTime = new Date().getTime();
 		fillDifficultySelect();
+		showScreen('over');
 		draw();
 	}
 }
@@ -426,8 +430,8 @@ function getSectionHtml(section){
 	for (var offset=0; offset<9; offset++){
 		if (offset%3==0) s+="<tr>";
 		var cell = sectionToCell(section, offset);
-		var hintstyle = (cell==hintPosition)?"background-color:#C0F5BC;":"";
-		s+="<td style='"+hintstyle+"width:"+squareSize+"px;height:"+squareSize+"px;' align=center class='cell unselectable' unselectable=on>";
+		var hintclass = (cell==hintPosition)?" hintcell":"";
+		s+="<td style='width:"+squareSize+"px;height:"+squareSize+"px;' align=center class='cell unselectable"+hintclass+"' unselectable=on>";
 		s+=getCellHtml(cell);
 		s+="</td>";
 		if (offset%3==2) s+="</tr>";
@@ -531,13 +535,13 @@ var generateNewGame = function(){
 	qq.generatePuzzleSymmetry(getSymmetry());
 	qq.setRecordHistory(true);
 	qq.solve();
-	if (qq.getDifficultyAsString().toLowerCase() != getDifficulty()){
-		el('newgamemessage').innerHTML=el('newgamemessage').innerHTML+" .";
-		setTimeout(generateNewGame, 100);
+	var diff = qq.getDifficultyAsString().toLowerCase();
+	if ("random" != getDifficulty() && diff != getDifficulty()){
+		setTimeout(generateNewGame, 0);
 	} else {
 		showScreen('game');
 		clearBoard();
-		gameType = getDifficulty();
+		gameType = diff;
 		newGame(qq.getPuzzleString());
 		draw();
 		el('newgamemessage').innerHTML="";
@@ -546,8 +550,12 @@ var generateNewGame = function(){
 
 function newQQwingGame(){
 	showScreen('loading');
-	el('newgamemessage').innerHTML="Loading new game . . .";
-	setTimeout(generateNewGame, 100);
+	var workingImg = document.createElement("img");
+	workingImg.src = "loading.gif";
+	var msg = el('newgamemessage');
+	msg.innerHTML="Loading new game ";
+	msg.appendChild(workingImg);
+	setTimeout(generateNewGame, 0);
 }
 
 
@@ -555,8 +563,8 @@ function clearHint(){
 	hintArray = null;
 	hintPosition = -1;
 	document.gameform.hintButton.disabled=false;
-	document.gameform.hintButton.value="Hint";
-	el("hint").innerHTML="";
+	document.gameform.hintButton.value='Hint';
+	setHint("");
 }
 
 function hint(){
@@ -587,11 +595,17 @@ function hint(){
 		if (!hintArray.length) {
 			document.gameform.hintButton.disabled=true;
 		} else {
-			document.gameform.hintButton.value="Another hint";
+			document.gameform.hintButton.value="More hints";
 		}
 	}
-	el("hint").innerHTML=hint;
+	setHint(hint);
 	draw();
+}
+
+function setHint(s){
+	var hintdiv = el('hint');
+	hintdiv.innerHTML = s;
+	hintdiv.style.display=s?'block':'none';
 }
 
 function clearBoard(){
@@ -685,14 +699,11 @@ function newUrlGame(){
 var pauseStart = 0;
 var pauseTime = 0;
 var pauseState = "";
-var pauseDifficultyIndex = 0;
-var pauseColor = "";
 var resumecountdown=5;
 
 function pauseGame(){
 	pauseStart = (new Date()).getTime();
-	pauseDifficultyIndex = document.gameform.difficultyselect.selectedIndex;
-	pauseColor = getColor();
+	el('elapsedtime').innerHTML = "Game play time: " + toPrettyTime(getGameTime());
 	showScreen('pause');
 }
 
@@ -717,12 +728,14 @@ function showScreen(screen){
 	el('head').style.display = screen=='game'?'none':'block';
 	el('foot').style.display = screen=='game'?'none':'block';
 	el('entiregame').style.display = screen=='game'?'block':'none';
+	el('content').style.padding = (getWindowHeight()<=400&&screen=='game')?"0":"1em 0";
+	document.body.style.backgroundColor = screen=='game'?'white':'#598059';
 	el('titlescreen').style.display = /title|over/.test(screen)?'block':'none';
 	el('pausescreen').style.display = screen=='pause'?'block':'none';
 	el('resumescreen').style.display = screen=='resume'?'block':'none';
 	el('newgamemessage').style.display = screen=='loading'?'block':'none';
 	el('endgamescreen').style.display = screen=='over'?'block':'none';
-	el('statsarea').style.display = (screen!='game'&&haveStats())?'block':'none';
+	el('statsarea').style.display = (!/game|loading|resume/.test(screen)&&haveStats())?'block':'none';
 	el('gamelinks').style.display = (/pause|over/.test(screen))?'block':'none';
 	el('instructions').style.display='none';
 	el('options').style.display='none';

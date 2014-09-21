@@ -18,11 +18,11 @@
 
 set -e
 
-mkdir -p target/www target/www-debug
+mkdir -p target/www/html target/www/min target/www/debug
 
-if [ -e target/website ]
+if [ -e target/www/.tstamp ]
 then
-	newer=`find src/ build/configure.ac doc/www -type f -newer target/website`
+	newer=`find src/ build/configure.ac doc/www -type f -newer target/www/.tstamp`
 	if [ "z$newer" = "z" ]
 	then
 		exit 0
@@ -33,36 +33,34 @@ version=`build/version.sh`
 
 for file in doc/www/bte/*.bte
 do
-	sed "s/VERSION/$version/g" $file > target/www/${file##*/}
-done
-for file in doc/www/*.html
-do
-	name=${file##*/}
-	sed "s/VERSION/$version/g" $file > target/www/$name
+	sed "s/VERSION/$version/g" $file > target/www/html/${file##*/}
 done
 
-cp doc/www/css/*.css target/www/
-cp target/jsmin/qqwing-html-$version.min.js target/www
-cp target/jsmin/qqwing-play-$version.min.js target/www
-
-cd target/www
+cd target/www/html
 bte *.bte
-tohtml ../../src/cpp/qqwing.cpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.cpp.html
-tohtml ../../src/cpp/qqwing.hpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.hpp.html
-tohtml ../../src/cpp/main.cpp -s "" -f -i whitespace -t cppsource.bte -o ./main.cpp.html
-tohtml ../../src/java/QQWing.java -s "" -f -i whitespace -t javasource.bte -o ./QQWing.java.html
-tohtml ../../target/js/qqwing-main-$version.js -s "" -f -i whitespace -t jssource.bte -o ./qqwing-main.js.html
+tohtml ../../../src/cpp/qqwing.cpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.cpp.html
+tohtml ../../../src/cpp/qqwing.hpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.hpp.html
+tohtml ../../../src/cpp/main.cpp -s "" -f -i whitespace -t cppsource.bte -o ./main.cpp.html
+tohtml ../../../src/java/QQWing.java -s "" -f -i whitespace -t javasource.bte -o ./QQWing.java.html
+tohtml ../../../target/js/qqwing-main-$version.js -s "" -f -i whitespace -t jssource.bte -o ./qqwing-main.js.html
 rm *.bte
-cp ../qqwing*.* .
-cd ../..
+cd ../../..
 
-cp target/www/*.html target/www/*.css target/www-debug
-cp -v target/js/qqwing-html-$version.js target/www-debug
-cp -v target/js/qqwing-play-$version.js target/www-debug
-sed -i 's/.min././g' target/www-debug/*.html
+cp target/www/html/*.html target/www/debug/
+cp doc/www/css/*.css target/www/debug/
+cp doc/www/img/*.* target/www/debug/
+cp target/js/qqwing-html-$version.js target/www/debug/qqwing-html.js
+cp target/js/qqwing-play-$version.js target/www/debug/qqwing-play.js
+cp target/qqwing*.* target/www/debug/
 
-sed -ri 's/^[ \t]*//' target/www/*.html target/www/*.css
-sed -ri '/^\s*$/d' target/www/*.html target/www/*.css
+cp target/www/html/*.html target/www/min/
+sed -ri 's/^[ \t]*//' target/www/min/*.html
+sed -ri '/^\s*$/d' target/www/min/*.html
+yui-compressor --type css --charset UTF-8 -o 'doc\/www\/css\/(.*)\.css$:target\/www\/min\/$1.css' doc/www/css/*.css
+cp doc/www/img/*.* target/www/min/
+cp target/jsmin/qqwing-html-$version.min.js target/www/min/qqwing-html.js
+cp target/jsmin/qqwing-play-$version.min.js target/www/min/qqwing-play.js
+cp target/qqwing*.* target/www/min/
 
 echo "Website built in target/www"
-touch target/website
+touch target/www/.tstamp
