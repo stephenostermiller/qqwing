@@ -20,7 +20,7 @@ set -e
 set -o pipefail
 
 expected="Bad number of puzzles to generate: foo"
-actual=`$QQWING --generate foo | head -n 1 || true`
+actual=`$QQWING --generate foo 2>&1 | head -n 1 || true`
 
 if [ "$expected" != "$actual" ]
 then

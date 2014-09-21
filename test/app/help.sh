@@ -19,7 +19,7 @@
 set -e
 set -o pipefail
 
-actual=`$QQWING --help`
+actual=`$QQWING --help | grep -v threads`
 expected="qqwing <options>
 Sudoku solver and generator.
   --generate <num>     Generate new puzzles

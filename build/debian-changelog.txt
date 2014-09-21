@@ -1,3 +1,10 @@
+qqwing (1.3.0-1) RELEASED; urgency=medium
+
+  * Multi-threaded Java version
+  * Revamp of website and documentation 
+
+ -- Stephen Ostermiller <debian@ostermiller.org>  Fri, 19 Sep 2014 06:38:28 -0400
+
 qqwing (1.2.0-1) RELEASED; urgency=medium
 
   * Fix bug that caused generated puzzles with symmetry not to be unique

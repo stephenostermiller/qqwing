@@ -1,10 +1,16 @@
 <%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>QQwing License - Sudoku Generator and Solver<%/bte.tpl%>
+<%bte.tpl name=pageTitle %>About QQWing Soduku<%/bte.tpl%>
 <%bte.tpl name=description %>QQwing is a fast command line program written in C++ for generating and solving Soduku puzzles. It is licensed under the GNU GPL.<%/bte.tpl%>
 <%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
-<%bte.tpl name=licenseLinkText %><b>License</b><%/bte.tpl%>
+<%bte.tpl name=aboutLinkText %><b>About</b><%/bte.tpl%>
 <%bte.tpl name=pageContent %>
-<h1>QQwing License</h1>
+<h1>About QQwing</h1>
+
+<p>QQwing is software for generating and solving Soduku puzzles.
+It has been ported to three programming languages: C++, Java, and JavaScript.
+It can be <a href="download.html">downloaded from qqwing.com</a></p>
+
+<h2>License</h2>
 
 <p>This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
@@ -14,8 +20,15 @@ any later version.</p>
 <p>This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 or FITNESS FOR A PARTICULAR PURPOSE. See the
-<a href="http://www.gnu.org/copyleft/gpl.html">GNU
+<a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU
 General Public License</a> for more details.</p>
+
+<h2>Bugs and Feature Requests</h2>
+Bugs, features, issues, and problems with QQWing are tracked using Bugzilla.
+<ul>
+	<li><a href="http://bugzilla.ostermiller.com/buglist.cgi?bug_status=__open__&product=QQWing">Check open bugs</a></li>
+	<li><a href="http://bugzilla.ostermiller.com/enter_bug.cgi?product=QQWing">File a new bug</a></li>
+</ul>
 
 <%/bte.tpl%>
 <%/bte.doc%>
