@@ -76,9 +76,9 @@ nextlib="0"
 while [ $nextlib == "0" ]
 do
 	echo "Current C++ library version: $libcurrent.$librevision.$libage"
-	echo "1) Methods removed or binary compat broken ($nextlibcurrent.0.0)"
+	echo "1) Methods removed or binary compatibility broken ($nextlibcurrent.0.0)"
 	echo "2) Methods added ($nextlibcurrent.0.$nextlibage)"
-	echo "3) No changes ($libcurrent.$nextlibrevision.$libage)"
+	echo "3) No interface changes ($libcurrent.$nextlibrevision.$libage)"
 	read lib_release_type
 	case $lib_release_type in
 		"1" )
