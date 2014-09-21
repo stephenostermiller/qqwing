@@ -77,29 +77,27 @@ while [ $nextlib == "0" ]
 do
 	echo "Current C++ library version: $libcurrent.$librevision.$libage"
 	echo "1) Methods removed or binary compat broken ($nextlibcurrent.0.0)"
-	echo "2) Methods added ($libcurrent.$nextlibrevision.0)"
-	echo "3) No changes ($libcurrent.$librevision.$nextlibage)"
+	echo "2) Methods added ($nextlibcurrent.0.$nextlibage)"
+	echo "3) No changes ($libcurrent.$nextlibrevision.$libage)"
 	read lib_release_type
 	case $lib_release_type in
 		"1" )
 			libcurrent=$nextlibcurrent
 			librevision=0
 			libage=0
-			nextlib="$libcurrent.$librevision.$libage"
 			;;
 		"2" )
-			libcurrent=$libcurrent
-			librevision=$nextlibrevision
-			libage=0
-			nextlib="$libcurrent.$librevision.$libage"
+			libcurrent=$nextlibcurrent
+			librevision=0
+			libage=$nextlibage
 			;;
 		"3" )
 			libcurrent=$libcurrent
-			librevision=$librevision
-			libage=$nextlibage
-			nextlib="$libcurrent.$librevision.$libage"
+			librevision=$nextlibrevision
+			libage=$libage
 			;;
 	esac
+	nextlib="$libcurrent.$librevision.$libage"
 done
 
 sed -ri "s/QQWING_CURRENT=.*/QQWING_CURRENT=$libcurrent/g;s/QQWING_REVISION=.*/QQWING_REVISION=$librevision/g;s/QQWING_AGE=.*/QQWING_AGE=$libage/g" build/configure.ac
