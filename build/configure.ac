@@ -12,8 +12,8 @@ AC_CONFIG_HEADER([config.h])
 #   change to C+1:0:0
 # - If the interface is the same as the previous version, change to C:R+1:A
 QQWING_CURRENT=2
-QQWING_REVISION=0
-QQWING_AGE=1
+QQWING_REVISION=1
+QQWING_AGE=0
 
 AC_SUBST([QQWING_CURRENT])
 AC_SUBST([QQWING_REVISION])
