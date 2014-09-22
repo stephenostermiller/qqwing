@@ -172,7 +172,7 @@ function draw(){
 
 function clickValue(event, cell, value){
 	clearHint();
-	if (event.ctrlKey || event.altKey || event.shiftKey){
+	if ((event.ctrlKey || event.altKey || event.shiftKey) && !isOnlyPossibilityInCell(cell)){
 		removePossibility(cell,value);
 	} else {
 		mark(cell,value,getColor());
@@ -289,6 +289,14 @@ function mark(cell, value, color){
 			possibilities[possibilityIndex] = 1;
 		}
 	}
+}
+
+function isOnlyPossibilityInCell(cell){
+	var count = 0;
+	for (var valueIndex = 0; valueIndex<9; valueIndex++){
+		if (possibilities[getPossibilityIndex(cell,valueIndex)]==0) count++;
+	}
+	return count==1;
 }
 
 function detectComplete(){
