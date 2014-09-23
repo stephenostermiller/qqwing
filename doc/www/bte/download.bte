@@ -30,7 +30,7 @@ platforms and different environments.</p>
 
 <h2>Java QQWing</h2>
 <p>The Java version of QQWing the only multi-threaded version of QQWing and is therefore the fastest.   It can generate
-1000 Sudoku puzzles/second.  If you are planning to generate thousands of Sudoku puzzles, you will want this version.
+1000 Sudoku puzzles per second.  If you are planning to generate thousands of Sudoku puzzles, you will want this version.
 It can be run from the command line, or used as a library from other Java programs to generate or solve
 Sudoku puzzles.</p>
 <div class=downloadsection>
