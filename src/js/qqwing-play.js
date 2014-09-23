@@ -26,6 +26,7 @@ var stats = new Array();
 var qq = new qqwing();
 var hintPosition = -1;
 var hintArray;
+var links = {};
 
 function stringToStats(statString){
 	stats = new Array();
@@ -177,7 +178,7 @@ function clickValue(event, cell, value){
 	} else {
 		mark(cell,value,getColor());
 	}
-
+	setLink('Everything filled in');
 	draw();
 	detectComplete();
 }
@@ -185,6 +186,7 @@ function clickValue(event, cell, value){
 function clickset(cell){
 	clearHint();
 	unmark(cell);
+	setLink('Everything filled in');
 	draw();
 }
 
@@ -547,11 +549,8 @@ var generateNewGame = function(){
 	if ("random" != getDifficulty() && diff != getDifficulty()){
 		setTimeout(generateNewGame, 0);
 	} else {
-		showScreen('game');
-		clearBoard();
 		gameType = diff;
 		newGame(qq.getPuzzleString());
-		draw();
 		el('newgamemessage').innerHTML="";
 	}
 }
@@ -622,7 +621,7 @@ function clearBoard(){
 	for (var boardindex=0; boardindex<qqwing.BOARD_SIZE; boardindex++) board[boardindex]=0;
 	for (var boardcolorsindex=0; boardcolorsindex<qqwing.BOARD_SIZE; boardcolorsindex++) boardcolors[boardcolorsindex]=0;
 	for (var possibilitiesindex=0; possibilitiesindex<qqwing.POSSIBILITY_SIZE; possibilitiesindex++) possibilities[possibilitiesindex]=0;
-	el("begingamelink").innerHTML="";
+	setLink();
 	usedHint = false;
 	pauseTime = 0;
 	gameType='blank';
@@ -640,6 +639,7 @@ function clearColor(color){
 }
 
 function newGame(s){
+	clearBoard();
 	showScreen('game');
 	var count = 0;
 	for (var ca=0; ca<s.length; ca++){
@@ -649,8 +649,41 @@ function newGame(s){
 			count++;
 		}
 	}
-	el("begingamelink").innerHTML="<a href='"+getGameUrl()+"'>Bookmarkable link for the this game</a>";
+	setLink("Link to this game");
+	draw();
 }
+
+function setLink(type){
+	if (type){
+		links[type] = getGameUrl();
+	} else {
+		links={};
+	}
+	var s = getLinkHtml('Link to this game') + getLinkHtml('Everything filled in');
+	el('gamelinks').innerHTML = s;
+	el('ingamelinks').innerHTML = s;
+
+}
+function getLinkHtml(type){
+	if (!links[type]) return "";
+	var id = type.replace(/ /g,"");
+	return '<div><a href="'+ links[type] +'">' + type + '</a>:</div><div onclick="select(this);" class=textlink>' + links[type] + '</div>';
+}
+
+function select(node) {
+	var range;
+	if (document.selection) {
+		range = document.body.createTextRange();
+		range.moveToElementText(node);
+		range.select();
+	} else if (window.getSelection) {
+		range = document.createRange();
+		range.selectNodeContents(node);
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(range);
+	}
+}
+
 
 function getGameUrl(){
 	var url = document.location.href;
@@ -684,8 +717,13 @@ function recordgaveup(){
 	}
 }
 
+function startBlank(){
+	gameType='blank';
+	newGame("");
+	return false;
+}
+
 function newUrlGame(){
-	clearBoard();
 	var cgiData = location.search.substring(1,location.search.length);
 	var nameValPairs = new Array();
 	var newgame = false;
@@ -700,7 +738,6 @@ function newUrlGame(){
 			newgame=true;
 		}
 	}
-	draw();
 	return newgame;
 }
 
@@ -744,14 +781,15 @@ function showScreen(screen){
 	el('newgamemessage').style.display = screen=='loading'?'block':'none';
 	el('endgamescreen').style.display = screen=='over'?'block':'none';
 	el('statsarea').style.display = (!/game|loading|resume/.test(screen)&&haveStats())?'block':'none';
-	el('gamelinks').style.display = (/pause|over/.test(screen))?'block':'none';
+	el('gamelinks').style.display = 'none';
 	el('instructions').style.display='none';
 	el('options').style.display='none';
 }
 
-function showInstructions(){
-	var sty = el('instructions').style;
+function toggleDisp(id){
+	var sty = el(id).style;
 	sty.display=sty.display=='block'?'none':'block';
+	return false;
 }
 
 function showOptions(){

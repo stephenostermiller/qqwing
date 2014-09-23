@@ -12,12 +12,14 @@
 	<noscript >You must have JavaScript enabled to be able play online.</noscript>
 	<form onsubmit="return false" name=gameform>
 
+		<div id=gamelinks></div>
+
 		<div id=endgamescreen>
-			<div id=endgamemessage></div>
+			<span id=endgamemessage></span> <img src="linkicon.png" onclick="return toggleDisp('gamelinks');">
 		</div>
 
 		<div id=pausescreen>
-			<h1>Sudoku paused</h1>
+			<h1>Sudoku paused <img src="linkicon.png" onclick="return toggleDisp('gamelinks');"></h1>
 			<div id=elapsedtime></div>
 			<input type=button class="button mainbutton" value="Resume Game" onclick="resumeGame();">
 			<div>
@@ -25,7 +27,7 @@
 			</div>
 
 			<ul id=pauselinks class=gamecontrollinks>
-				<li><a href="#" onclick="showInstructions(); return false;">Instructions</a></li>
+				<li><a href="#" onclick="return toggleDisp('instructions');">Instructions</a></li>
 			</ul>
 		</div>
 
@@ -49,17 +51,14 @@
 							<option value=5 selected>Random</option>
 						</select>
 					</div>
+					<a href="#" onclick="return startBlank();">Start with a blank board</a>
 				</div>
 
 				<ul id=titlelinks class=gamecontrollinks>
-					<li><a href="#" onclick="showOptions(); return false;">Options</a></li>
-					<li><a href="#" onclick="showInstructions(); return false;">Instructions</a></li>
+					<li><a href="#" onclick="return toggleDisp('options');">Options</a></li>
+					<li><a href="#" onclick="return toggleDisp('instructions');">Instructions</a></li>
 				</ul>
 			</div>
-		</div>
-
-		<div id=gamelinks>
-			<div id=begingamelink></div>
 		</div>
 
 		<div id=newgamemessage></div>
@@ -72,6 +71,8 @@
 				<div id=optionsarea>
 					<input id=pausebutton type=button class=button value=Pause onclick="pauseGame();">
 					<input id=hintbutton name=hintButton type=button class=button value=Hint onclick="hint();">
+					<img src="linkicon.png" onclick="return toggleDisp('ingamelinks');">
+					<div id=ingamelinks></div>
 					<div id="hint"></div>
 					<div id=markingcolors><table>
 						<tr><td><label style="color:#3D613D;"><input type=radio name=color value="#3D613D" checked>Green</label></td><td><input type=button value="Clear" style="color:#3D613D;" onclick="clearColor('#3D613D')"></td></tr>
