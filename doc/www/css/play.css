@@ -18,6 +18,8 @@
  */
 .gamecontrollinks {
 	list-style-type: none;
+	padding-left: 0;
+	margin-left: 0;
 }
 #newgamediv, #endgamescreen, #gamelinks, #newgamemessage, #pausescreen, #resumescreen, #options {
 	text-align: center;
@@ -61,6 +63,9 @@
 #game .hintcell,#hint {
 	background-color: #FCFAA4;
 }
+#ingamelinks, #gamelinks {
+	display: none;
+}
 #gamecolumns {
 	display: table;
 	margin: 0 auto;
@@ -80,10 +85,23 @@
 	padding-left: 1em;
 	text-align: left;
 }
-#optionsarea .button {
-	padding: 0.25em 0.5em;
+#optionsarea .button, #optionsarea img {
+	padding: 0.25em;
+	margin: 0.1em;
 	font-size: 100%;
+	vertical-align: middle;
+	cursor: pointer;
 }
+.textlink {
+	white-space: nowrap;
+	font-family: "Courier New", Courier, monospace;
+	overflow: auto;
+}
+
+#optionsarea .textlink {
+	width: 15em;
+}
+
 #markingcolors {
 	margin: 1em 0;
 }
@@ -101,6 +119,9 @@
 }
 #entiregame {
 	text-align: center;
+}
+#gamelinks {
+	text-align: left;
 }
 #hint {
 	font-size: 120%;
