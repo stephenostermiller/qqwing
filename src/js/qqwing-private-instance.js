@@ -477,28 +477,28 @@ var pointingColumnReduction = function(round){
 	for (var valIndex=0; valIndex<qqwing.ROW_COL_SEC_SIZE; valIndex++){
 		for (var section=0; section<qqwing.ROW_COL_SEC_SIZE; section++){
 			var secStart = sectionToFirstCell(section);
-			var inOneRow = true;
-			var boxRow = -1;
-			for (var j=0; j<qqwing.GRID_SIZE; j++){
-				for (var i=0; i<qqwing.GRID_SIZE; i++){
+			var inOneCol = true;
+			var boxCol = -1;
+			for (var i=0; i<qqwing.GRID_SIZE; i++){
+				for (var j=0; j<qqwing.GRID_SIZE; j++){
 					var secVal=secStart+i+(qqwing.ROW_COL_SEC_SIZE*j);
 					var valPos = getPossibilityIndex(valIndex,secVal);
 					if(possibilities[valPos] == 0){
-						if (boxRow == -1 || boxRow == j){
-							boxRow = j;
+						if (boxCol == -1 || boxCol == i){
+							boxCol = i;
 						} else {
-							inOneRow = false;
+							inOneCol = false;
 						}
 					}
 				}
 			}
-			if (inOneRow && boxRow != -1){
+			if (inOneCol && boxCol != -1){
 				var doneSomething = false;
-				var row = cellToRow(secStart) + boxRow;
-				var rowStart = rowToFirstCell(row);
+				var col = cellToColumn(secStart) + boxCol;
+				var colStart = columnToFirstCell(col);
 
 				for (var i=0; i<qqwing.ROW_COL_SEC_SIZE; i++){
-					var position = rowStart+i;
+					var position = colStart+(qqwing.ROW_COL_SEC_SIZE*i);
 					var section2 = cellToSection(position);
 					var valPos = getPossibilityIndex(valIndex,position);
 					if (section != section2 && possibilities[valPos] == 0){
@@ -507,14 +507,14 @@ var pointingColumnReduction = function(round){
 					}
 				}
 				if (doneSomething){
-					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.POINTING_PAIR_TRIPLE_ROW, valIndex+1, rowStart));
+					if (logHistory || recordHistory) addHistoryItem.call(this, new this.LogItem(round, qqwing.LogType.POINTING_PAIR_TRIPLE_COLUMN, valIndex+1, colStart));
 					return true;
 				}
 			}
 		}
 	}
 	return false;
-};
+}
 
 var hiddenPairInRow = function(round){
 	for (var row=0; row<qqwing.ROW_COL_SEC_SIZE; row++){
