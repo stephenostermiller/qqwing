@@ -586,27 +586,87 @@ function hint(){
 		if (typeof instructions == 'string'){
 			hint = instructions;
 		} else {
-			hintArray = Array();
-			for (var i=0; hint=="" && i<instructions.length; i++){
-				if (instructions[i].getType() != qqwing.LogType.GIVEN) hintArray.push(instructions[i]);
-			}
+			hintArray = instructions;
 		}
 	}
-	if (!hint && hintArray){
-		if (hintArray.length){
-			var next = hintArray.shift();
+	while (!hint && hintArray && hintArray.length){
+		var next = hintArray.shift();
+		if (!haveUsedHint(next)){
 			hint = next.getDescription();
 			if (next.getValue() > 0) hint += " - " + next.getValue();
 			hintPosition = next.getPosition();
 		}
-		if (!hintArray.length) {
-			document.gameform.hintButton.disabled=true;
-		} else {
-			document.gameform.hintButton.value="More hints";
-		}
+	}
+	if (!hintArray || !hintArray.length) {
+		document.gameform.hintButton.disabled=true;
+	} else if (hint) {
+		document.gameform.hintButton.value="More hints";
 	}
 	setHint(hint);
 	draw();
+}
+
+function haveUsedHint(hint){
+	switch(hint.getType()){
+		case qqwing.LogType.GIVEN:
+			return true;
+		case qqwing.LogType.NAKED_PAIR_ROW:
+			var row = cellToRow(hint.getPosition());
+			var cellposs = [];
+			for (var valueIndex = 0; valueIndex<9; valueIndex++){
+				cellposs[valueIndex] = possibilities[getPossibilityIndex(hint.getPosition(),valueIndex)];
+			}
+			for (var columnIndex=0; columnIndex<9; columnIndex++){
+				workingCell = rowColumnToCell(row, columnIndex);
+				var isPartOfPair = true;
+				var hasPairPoss = false;
+				for (var valueIndex = 0; !board[workingCell] && valueIndex<9; valueIndex++){
+					var poss=possibilities[getPossibilityIndex(workingCell,valueIndex)];
+					if (cellposs[valueIndex] != poss) isPartOfPair = false;
+					if (!cellposs[valueIndex] && !poss) hasPairPoss = true;
+				}
+				if (!isPartOfPair && hasPairPoss) return false;
+			}
+			return true;
+		case qqwing.LogType.NAKED_PAIR_COLUMN:
+			var col = cellToColumn(hint.getPosition());
+			var cellposs = [];
+			for (var valueIndex = 0; valueIndex<9; valueIndex++){
+				cellposs[valueIndex] = possibilities[getPossibilityIndex(hint.getPosition(),valueIndex)];
+			}
+			for (var rowIndex=0; rowIndex<9; rowIndex++){
+				workingCell = rowColumnToCell(rowIndex, col);
+				var isPartOfPair = true;
+				var hasPairPoss = false;
+				for (var valueIndex = 0; !board[workingCell] && valueIndex<9; valueIndex++){
+					var poss=possibilities[getPossibilityIndex(workingCell,valueIndex)];
+					if (cellposs[valueIndex] != poss) isPartOfPair = false;
+					if (!cellposs[valueIndex] && !poss) hasPairPoss = true;
+				}
+				if (!isPartOfPair && hasPairPoss) return false;
+			}
+			return true;
+		case qqwing.LogType.NAKED_PAIR_SECTION:
+			var section = cellToSection(hint.getPosition());
+			var cellposs = [];
+			for (var valueIndex = 0; valueIndex<9; valueIndex++){
+				cellposs[valueIndex] = possibilities[getPossibilityIndex(hint.getPosition(),valueIndex)];
+			}
+			for (var sectionOffset=0; sectionOffset<9; sectionOffset++){
+				workingCell = sectionToCell(section, sectionOffset);
+				var isPartOfPair = true;
+				var hasPairPoss = false;
+				for (var valueIndex = 0; !board[workingCell] && valueIndex<9; valueIndex++){
+					var poss=possibilities[getPossibilityIndex(workingCell,valueIndex)];
+					if (cellposs[valueIndex] != poss) isPartOfPair = false;
+					if (!cellposs[valueIndex] && !poss) hasPairPoss = true;
+				}
+				if (!isPartOfPair && hasPairPoss) return false;
+			}
+			return true;
+		default:
+			return false;
+	}
 }
 
 function setHint(s){
