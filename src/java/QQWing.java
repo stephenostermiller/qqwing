@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class QQWing {
 
-	private static final String QQWING_VERSION = "1.3.1";
+	private static final String QQWING_VERSION = "1.3.2";
 
 	private static final String NL = System.getProperties().getProperty("line.separator");
 
