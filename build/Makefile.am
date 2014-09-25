@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
+EXTRA_DIST = debian
 
 include_HEADERS = qqwing.hpp
 

@@ -27,9 +27,17 @@ then
 fi
 
 echo "Running automake and configure"
-mkdir -p target/automake
+mkdir -p target/automake/debian/source
 cp build/configure.ac build/Makefile.am build/qqwing.pc.in doc/README doc/AUTHORS doc/COPYING target/automake
 cp doc/qqwing.man target/automake/qqwing.1
+cp build/debian-changelog.txt target/automake/debian/changelog
+cp build/debian-control.txt target/automake/debian/control
+cp build/debian-copyright.txt target/automake/debian/copyright
+cp build/debian-rules.txt target/automake/debian/rules
+chmod +x target/automake/debian/rules
+echo "3.0 (quilt)" > target/automake/debian/source/format
+echo 9 > target/automake/debian/compat
+
 cd target/automake
 touch config.h.in
 autoreconf --force --install

@@ -37,16 +37,8 @@ cp target/qqwing-$version.tar.gz target/deb/qqwing_$version.orig.tar.gz
 cd target/deb
 tar xfz qqwing_$version.orig.tar.gz
 cd qqwing-$version
-mkdir debian
 export DEBEMAIL='debian@ostermiller.org'
 export DEBFULLNAME='Stephen Ostermiller'
-cp ../../../build/debian-changelog.txt debian/changelog
-cp ../../../build/debian-control.txt debian/control
-cp ../../../build/debian-copyright.txt debian/copyright
-cp ../../../build/debian-rules.txt debian/rules
-mkdir -p debian/source
-echo "3.0 (quilt)" > debian/source/format
-echo 9 > debian/compat
 
 debuild -us -uc
 
