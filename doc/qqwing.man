@@ -107,4 +107,4 @@ Display version number
 
 .SH "SEE ALSO"
 .PP
-http://ostermiller.org/qqwing/
+http://qqwing.com/

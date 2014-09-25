@@ -1,7 +1,6 @@
 /*
  * qqwing - Sudoku solver and generator
- * Copyright (C) 2006-2014 Stephen Ostermiller
- * http://ostermiller.org/qqwing/
+ * Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  * Copyright (C) 2011 Jean Guillerez (j.guillerez - orange.fr)
  * Copyright (C) 2014 Michael Catanzaro (mcatanzaro@gnome.org)

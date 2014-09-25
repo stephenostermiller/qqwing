@@ -1,5 +1,5 @@
 This is the JavaScript version of qqwing.  It is for generating and solving
-Sudoku puzzles. See: http://ostermiller.org/qqwing/
+Sudoku puzzles. See: http://qqwing.com/
 
 This archive contains both the minimized and unminimized libraries.   Only one
 of the two needs to be used at one time.   qqwing.js is a library file that can

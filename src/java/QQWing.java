@@ -1,7 +1,6 @@
 /*
  * qqwing - Sudoku solver and generator
- * Copyright (C) 2006-2014 Stephen Ostermiller
- * http://ostermiller.org/qqwing/
+ * Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/
  * Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)
  * Copyright (C) 2007 Joel Yarde (joel.yarde - gmail.com)
  *
@@ -1913,8 +1912,7 @@ public class QQWing {
 
 	static void printAbout(){
 		System.out.println("qqwing - Sudoku solver and generator");
-		System.out.println("Copyright (C) 2006-2014 Stephen Ostermiller");
-		System.out.println("http://ostermiller.org/qqwing/");
+		System.out.println("Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/");
 		System.out.println("Copyright (C) 2007 Jacques Bensimon (jacques@ipm.com)");
 		System.out.println("Copyright (C) 2007 Joel Yarde (joel.yarde - gmail.com)");
 		System.out.println("");

@@ -1,9 +1,9 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: qqwing
-Source: http://ostermiller.org/qqwing/
+Source: http://qqwing.com/
 
 Files: *
-Copyright: Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/qqwing/
+Copyright: Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/
 License: GPL-2+
  This program is free software; you can redistribute it
  and/or modify it under the terms of the GNU General Public
@@ -27,6 +27,6 @@ License: GPL-2+
  `/usr/share/common-licenses/GPL-2'.
 
 Files: debian/*
-Copyright: Copyright 2006-2014 Stephen Ostermiller http://ostermiller.org/qqwing/
+Copyright: Copyright 2006-2014 Stephen Ostermiller http://ostermiller.org/
 License: GPL-2+
  [LICENSE TEXT]
