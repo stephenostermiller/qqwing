@@ -6,13 +6,13 @@ Prefix: /usr
 Release: 1
 Version: VERSION
 Source: %{name}-%{version}.tar.gz
-URL: http://ostermiller.org/qqwing/
+URL: http://qqwing.com/
 Buildroot: /tmp/qqwingrpm
 Packager: Stephen Ostermiller, http://ostermiller.org/contact.pl?regarding=QQwing
 
 %description
 QQwing can solve or generate Sudoku puzzles.
-http://ostermiller.org/qqwing/
+http://qqwing.com/
 
 %prep
 %setup -q
