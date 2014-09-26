@@ -33,7 +33,7 @@ Sudoku solver and generator.
 &nbsp; --one-line           Print puzzles on one line of 81 characters
 &nbsp; --compact            Print puzzles on 9 lines of 9 characters
 &nbsp; --readable           Print puzzles in human readable form (default)
-&nbsp; --csv                Ouput CSV format with one line puzzles
+&nbsp; --csv                Output CSV format with one line puzzles
 &nbsp; --help               Print this message
 &nbsp; --about              Author and license information
 &nbsp; --version            Display current version number</pre>

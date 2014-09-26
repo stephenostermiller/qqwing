@@ -473,7 +473,7 @@ void printHelp(){
 	cout << "  --one-line           Print puzzles on one line of 81 characters" << endl;
 	cout << "  --compact            Print puzzles on 9 lines of 9 characters" << endl;
 	cout << "  --readable           Print puzzles in human readable form (default)" << endl;
-	cout << "  --csv                Ouput CSV format with one line puzzles" << endl;
+	cout << "  --csv                Output CSV format with one line puzzles" << endl;
 	cout << "  --help               Print this message" << endl;
 	cout << "  --about              Author and license information" << endl;
 	cout << "  --version            Display current version number" << endl;

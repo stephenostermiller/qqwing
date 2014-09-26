@@ -401,7 +401,7 @@ function printHelp(){
 	console.log("  --one-line           Print puzzles on one line of 81 characters");
 	console.log("  --compact            Print puzzles on 9 lines of 9 characters");
 	console.log("  --readable           Print puzzles in human readable form (default)");
-	console.log("  --csv                Ouput CSV format with one line puzzles");
+	console.log("  --csv                Output CSV format with one line puzzles");
 	console.log("  --help               Print this message");
 	console.log("  --about              Author and license information");
 	console.log("  --version            Display current version number");
