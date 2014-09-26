@@ -1958,7 +1958,7 @@ public class QQWing {
 		System.out.println("  --one-line           Print puzzles on one line of 81 characters");
 		System.out.println("  --compact            Print puzzles on 9 lines of 9 characters");
 		System.out.println("  --readable           Print puzzles in human readable form (default)");
-		System.out.println("  --csv                Ouput CSV format with one line puzzles");
+		System.out.println("  --csv                Output CSV format with one line puzzles");
 		System.out.println("  --help               Print this message");
 		System.out.println("  --about              Author and license information");
 		System.out.println("  --version            Display current version number");

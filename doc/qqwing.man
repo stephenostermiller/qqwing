@@ -4,9 +4,9 @@ qqwing \- A tool for generating and solving Sudoku puzzles
 
 .SH "SYNOPSIS"
 .PP
-\fBqqwing\fR --generate [\fIOPTIONS...\fP]
+\fBqqwing\fR \-\-generate [\fIOPTIONS...\fP]
 .br
-\fBqqwing\fR --solve [\fIOPTIONS...\fP]
+\fBqqwing\fR \-\-solve [\fIOPTIONS...\fP]
 
 .SH "DESCRIPTION"
 .PP
@@ -94,7 +94,7 @@ Print puzzles on 9 lines of 9 characters
 Print puzzles in human readable form (default)
 .TP
 .BR \-\-csv
-Ouput CSV format with one line puzzles
+Output CSV format with one line puzzles
 .TP
 .BR \-h ,\  \-\-help
 Display help message
