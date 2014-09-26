@@ -48,21 +48,17 @@ do
 	esac
 done
 
-rm -rf debian/
-mkdir -p debian
-cp build/debian-changelog.txt  debian/changelog
-cp build/debian-control.txt  debian/control
+
+cd build
 dch -v $nextversion-1 -M
 
 if ! grep -q $nextversion debian/changelog
 then
 	echo "Aborting release"
-	rm -rf debian/
 	exit 1
 fi
 sed -i 's/UNRELEASED/RELEASED/g' debian/changelog
-cp debian/changelog build/debian-changelog.txt
-rm -rf debian
+cd ..
 
 sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac src/js/qqwing-main.js
 
