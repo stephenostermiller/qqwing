@@ -549,8 +549,7 @@ var generateNewGame = function(){
 	if ("random" != getDifficulty() && diff != getDifficulty()){
 		setTimeout(generateNewGame, 0);
 	} else {
-		gameType = diff;
-		newGame(qq.getPuzzleString());
+		newGame(diff,qq.getPuzzleString());
 		el('newgamemessage').innerHTML="";
 	}
 }
@@ -684,7 +683,6 @@ function clearBoard(){
 	setLink();
 	usedHint = false;
 	pauseTime = 0;
-	gameType='blank';
 	startTime = new Date().getTime();
 }
 
@@ -698,8 +696,9 @@ function clearColor(color){
 	draw();
 }
 
-function newGame(s){
+function newGame(type, s){
 	clearBoard();
+	gameType=type;
 	showScreen('game');
 	var count = 0;
 	for (var ca=0; ca<s.length; ca++){
@@ -778,8 +777,7 @@ function recordgaveup(){
 }
 
 function startBlank(){
-	gameType='blank';
-	newGame("");
+	newGame('blank','');
 	return false;
 }
 
@@ -793,8 +791,7 @@ function newUrlGame(){
 		var value;
 		if (nameValPairs[i].indexOf('game=') == 0) {
 			var game = nameValPairs[i].substring(5);
-			gameType="url";
-			newGame(game);
+			newGame('url',game);
 			newgame=true;
 		}
 	}
