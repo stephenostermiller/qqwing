@@ -62,6 +62,7 @@ function initStats(){
 			}
 		}
 	}
+	drawStats();
 }
 
 var difficultyLevels = new Array("simple","easy","intermediate","expert","random");
@@ -837,7 +838,9 @@ function showScreen(screen){
 	el('resumescreen').style.display = screen=='resume'?'block':'none';
 	el('newgamemessage').style.display = screen=='loading'?'block':'none';
 	el('endgamescreen').style.display = screen=='over'?'block':'none';
+	console.log(screen + " " + haveStats());
 	el('statsarea').style.display = (!/game|loading|resume/.test(screen)&&haveStats())?'block':'none';
+	console.log(el('statsarea').style.display);
 	el('gamelinks').style.display = 'none';
 	el('instructions').style.display='none';
 	el('options').style.display='none';
