@@ -17,21 +17,32 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 set -e
 
-if [ -e target/qqwing ]
+target="$1"
+if [ "z$target" == "z" ]
 then
-	newer=`find src/cpp/ target/automake/Makefile -type f -newer target/qqwing`
+	target="native"
+fi
+
+mkdir -p target/automake
+tstamp=target/automake/.compile-$target.tstamp
+builddir=target/automake/$target
+
+if [ -e $tstamp ]
+then
+	newer=`find src/cpp/ target/automake/Makefile -type f -newer $tstamp`
 	if [ "z$newer" = "z" ]
 	then
 		exit 0
 	fi
 fi
 
-echo "Building target/qqwing"
-rm -rf target/automake/qqwing target/qqwing target/.libs target/automake/*.o target/automake/*.lo target/automake/*.la target/automake/.libs/ target/automake/autom4te.cache/*
-cp src/cpp/*.cpp target/automake
-cp src/cpp/*.hpp target/automake
-cd target/automake
+echo "Building qqwing in $builddir"
+rm -rf $builddir/qqwing target/qqwing $builddir/.libs $builddir/*.o $builddir/*.lo $builddir/*.la $builddir/.libs/ $builddir/autom4te.cache/*
+cp src/cpp/*.cpp $builddir
+cp src/cpp/*.hpp $builddir
+pushd $builddir
 make
-cd ../..
-cp target/automake/qqwing target/qqwing
-ls target/qqwing
+popd
+ls $builddir
+#cp target/automake/qqwing target/qqwing
+#ls target/qqwing

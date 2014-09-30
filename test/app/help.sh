@@ -19,7 +19,21 @@
 set -e
 set -o pipefail
 
-actual=`$QQWING --help | grep -v threads`
+testexpected(){
+	if [ "$actual" != "$expected" ]
+	then
+		actualfile=`mktemp /tmp/actual.XXXXXXXXX`
+		expectedfile=`mktemp /tmp/expected.XXXXXXXX`
+		echo "$actual" > "$actualfile"
+		echo "$expected" > "$expectedfile"
+		echo
+		echo "Test: $test"
+		echo "qqwing: $QQWING"
+		diff -s "$actualfile" "$expectedfile"
+		exit 1
+	fi
+}
+
 expected="qqwing <options>
 Sudoku solver and generator.
   --generate <num>     Generate new puzzles
@@ -50,16 +64,16 @@ Sudoku solver and generator.
   --about              Author and license information
   --version            Display current version number"
 
-if [ "$actual" != "$expected" ]
-then
-	actualfile=`mktemp /tmp/actual.XXXXXXXXX`
-	expectedfile=`mktemp /tmp/expected.XXXXXXXX`
-	echo "$actual" > "$actualfile"
-	echo "$expected" > "$expectedfile"
-	echo
-	echo "Test: $0"
-	echo "qqwing: $QQWING"
-	diff -s "$actualfile" "$expectedfile"
-	exit 1
-fi
+actual=`$QQWING --help | grep -v threads`
+test="$0"
+testexpected
 
+actual=`grep -E -A 100 '^qqwing' doc/README`
+test="help message in doc/README"
+testexpected
+
+actual=`grep -E -A 100 '^node qqwing' doc/JSREADME | sed 's/node qqwing-main.js/qqwing/g'`
+test="help message in doc/README"
+testexpected
+
+#echo "hello $expected"

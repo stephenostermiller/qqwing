@@ -17,9 +17,19 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 set -e
 
-if [ -e target/cppconfigure ]
+target="$1"
+if [ "z$target" == "z" ]
 then
-	newer=`find build/debian build/configure.ac build/Makefile.am doc/README doc/AUTHORS doc/COPYING -type f -newer target/cppconfigure`
+	target="native"
+fi
+
+mkdir -p target/automake
+tstamp=target/automake/.configure-$target.tstamp
+builddir=target/automake/$target
+
+if [ -e $tstamp ]
+then
+	newer=`find build/debian build/configure.ac build/Makefile.am doc/README doc/AUTHORS doc/COPYING -type f -newer $tstamp`
 	if [ "z$newer" = "z" ]
 	then
 		exit 0
@@ -27,14 +37,21 @@ then
 fi
 
 echo "Running automake and configure"
-mkdir -p target/automake
-cp build/configure.ac build/Makefile.am build/qqwing.pc.in doc/README doc/AUTHORS doc/COPYING target/automake
-cp doc/qqwing.man target/automake/qqwing.1
-cp -r build/debian target/automake/debian
+mkdir -p $builddir
+cp build/configure.ac build/Makefile.am build/qqwing.pc.in doc/README doc/AUTHORS doc/COPYING $builddir
+cp doc/qqwing.man $builddir/qqwing.1
+cp -r build/debian $builddir/debian
 
-cd target/automake
+pushd $builddir
 touch config.h.in
 autoreconf --force --install
 rm -f config.h.in~
-./configure
-touch ../cppconfigure
+if [ "$target" == "native" ]
+then
+	./configure
+else
+	./configure --host "$target"
+fi
+popd
+
+touch $tstamp
