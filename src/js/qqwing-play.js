@@ -43,6 +43,7 @@ function init(){
 	initStats();
 	if (!newUrlGame()) showScreen('title');
 }
+window.onload = init;
 
 function initStats(){
 	var c = getCookie("sudokuStats");
@@ -776,6 +777,7 @@ function recordgaveup(){
 		saveStats();
 	}
 }
+window.onunload=recordgaveup;
 
 function startBlank(){
 	newGame('blank','');

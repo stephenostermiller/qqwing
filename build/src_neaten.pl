@@ -69,6 +69,8 @@ for my $file (@ARGV){
 				$line .= " ";
 			} elsif ($spacecount == 2 and $code =~ /^-/ and $file =~ /\.(html)$/){
 				$line .= "  ";
+			} elsif ($spacecount == 1 and $code =~ /^[\-0-9]/ and $file =~ /\.(md|(?:md\.tmpl))$/){
+				$line .= " ";
 			} elsif ($spacecount != 0){
 				die "Line in $file has other than four space tabs: $code";
 			}

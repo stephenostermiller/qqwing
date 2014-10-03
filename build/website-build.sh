@@ -31,20 +31,43 @@ fi
 
 version=`build/version.sh`
 
-for file in doc/www/bte/*.bte
-do
-	sed "s/VERSION/$version/g" $file > target/www/html/${file##*/}
-done
+cp doc/www/bte/*.bte target/www/html
 
 cd target/www/html
 bte *.bte
-tohtml ../../../src/cpp/qqwing.cpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.cpp.html
-tohtml ../../../src/cpp/qqwing.hpp -s "" -f -i whitespace -t cppsource.bte -o ./qqwing.hpp.html
-tohtml ../../../src/cpp/main.cpp -s "" -f -i whitespace -t cppsource.bte -o ./main.cpp.html
-tohtml ../../../src/java/QQWing.java -s "" -f -i whitespace -t javasource.bte -o ./QQWing.java.html
-tohtml ../../../target/js/qqwing-main-$version.js -s "" -f -i whitespace -t jssource.bte -o ./qqwing-main.js.html
 rm *.bte
 cd ../../..
+
+
+mkdir -p target/www/md
+for file in src/cpp/*.* src/java/*.java target/js/qqwing-main-$version.js
+do
+	extension=${file##*.}
+	basename=${file##*/}
+	basename=${basename//-$version/}
+	case $extension in
+		"cpp" | "hpp"  ) language="cpp";;
+		"java" ) language="java";;
+		"js" ) language="javascript";;
+		* ) echo "Bad extension $extension"; exit 1;;
+	esac
+	output=target/www/md/$basename.md
+	sed "s/\$lang/$language/g" doc/www/tmpl/source.md.tmpl > $output
+	cat $file >> $output
+	echo "~~~~~~~~~~~~~" >> $output
+done
+
+for file in doc/www/md/*.md target/www/md/*.md
+do
+	basename=${file##*/}
+	basename=${basename%.md}
+	pandoc --to html5 --template doc/www/tmpl/qqwing.html.tmpl --standalone -o target/www/html/$basename.html $file
+done
+
+for file in target/www/html/*.html
+do
+	sed -i "s/VERSION/$version/g" $file
+done
 
 cp target/www/html/*.html target/www/debug/
 cp doc/www/css/*.css target/www/debug/

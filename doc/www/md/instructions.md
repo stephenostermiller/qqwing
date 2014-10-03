@@ -1,10 +1,9 @@
-<%bte.doc super="page.bte"%>
-<%bte.tpl name=pageTitle %>QQwing Instructions - Sudoku Generator and Solver<%/bte.tpl%>
-<%bte.tpl name=description %>Instructions for using a fast command line program written in C++ for generating and solving Sudoku puzzles.<%/bte.tpl%>
-<%bte.tpl name=keywords %>sudoku generator, sudoku generater, sudoku solver<%/bte.tpl%>
-<%bte.tpl name=instructionsLinkText %><b>Instructions</b><%/bte.tpl%>
-<%bte.tpl name=pageContent %>
-<h1>Instructions for QQwing</h1>
+---
+title: QQwing Sudoku Instructions
+description: Instructions for using a fast command line program written in C++ for generating and solving Sudoku puzzles.
+...
+
+# Instructions for QQwing
 
 QQWing is a command line program that accepts many options.
 
@@ -38,9 +37,12 @@ Sudoku solver and generator.
 &nbsp; --about              Author and license information
 &nbsp; --version            Display current version number</pre>
 
-<h2>Examples</h2>
-<h3>Generate a single Sudoku</h3>
-<div class=commandline>$ qqwing --generate</div>
+## Examples
+
+### Generate a single Sudoku
+
+	$ qqwing --generate
+
 <pre class=output> . 4 3 | 5 . . | . . 2
 &nbsp;. . 2 | . . 4 | . 8 3
 &nbsp;. 1 . | . . . | 6 . .
@@ -53,8 +55,10 @@ Sudoku solver and generator.
 &nbsp;. . . | . . . | . . .
 &nbsp;. . . | 6 . 7 | . . .</pre>
 
-<h3>Generate a single Sudoku and print the solution too</h3>
-<div class=commandline>$ qqwing --generate --solution</div>
+### Generate a single Sudoku and print the solution too
+
+	$ qqwing --generate --solution
+
 <pre class=output> 2 . . | . . 9 | . 8 .
 &nbsp;. 4 6 | . . . | . . .
 &nbsp;7 . . | 4 . 2 | 1 . .
@@ -79,8 +83,10 @@ Sudoku solver and generator.
 &nbsp;3 9 2 | 8 4 6 | 7 5 1
 &nbsp;4 7 8 | 1 2 5 | 3 6 9</pre>
 
-<h3>Generate ten puzzles and print out full stats in CSV format</h3>
-<div class=commandline>$ qqwing --generate 10 --solution --csv --stats --timer</div>
+### Generate ten puzzles and print out full stats in CSV format
+
+	$ qqwing --generate 10 --solution --csv --stats --timer
+
 <pre class=output>Puzzle,Solution,Time (milliseconds),Givens,Singles,Hidden Singles,Naked Pairs,Hidden Pairs,Pointing Pairs/Triples,Box/Line Intersections,Guesses,Backtracks,Difficulty
 .13.....22.....48....7...19...9..8..7......2....3.......263.9..4.9.7.6....149...8,913584762257169483648723519136942857795816324824357196572638941489271635361495278,46.717,26,34,21,0,0,0,0,0,0,Easy,
 5...7.6..41..53..7.6712...884.....1.....1.3.6...7...2........65......87..3.......,529478631418653297367129458846532719275914386193786524982347165654291873731865942,30.1,26,55,0,0,0,0,0,0,0,Simple,
@@ -94,8 +100,10 @@ Sudoku solver and generator.
 ........49.1.6.5....8....9.8..4.37.6....1....54...718.....39..7....4..5....7..81.,756981234921364578438572691819453726673218945542697183285139467197846352364725819,75.17,26,43,11,0,0,1,0,1,0,Expert,
 10 puzzles generated in 0.757244 seconds.</pre>
 
-<h3>Generate a puzzle of expert difficulty and print it in compact format</h3>
-<div class=commandline>$ qqwing --generate --difficulty expert --compact</div>
+### Generate a puzzle of expert difficulty and print it in compact format
+
+	$ qqwing --generate --difficulty expert --compact
+
 <pre class=output>8........
 ......5.7
 .......61
@@ -106,8 +114,10 @@ Sudoku solver and generator.
 75.3....9
 ..9..13..</pre>
 
-<h3>Solve a puzzle</h3>
-<div class=commandline>$ echo ........49.1.6.5....8....9.8..4.37.6....1....54...718.....39..7....4..5....7..81. | qqwing --solve</div>
+### Solve a puzzle
+
+	$ echo ........49.1.6.5....8....9.8..4.37.6....1....54...718.....39..7....4..5....7..81. | qqwing --solve
+
 <pre class=output> 7 5 6 | 9 8 1 | 2 3 4
 &nbsp;9 2 1 | 3 6 4 | 5 7 8
 &nbsp;4 3 8 | 5 7 2 | 6 9 1
@@ -120,8 +130,10 @@ Sudoku solver and generator.
 &nbsp;1 9 7 | 8 4 6 | 3 5 2
 &nbsp;3 6 4 | 7 2 5 | 8 1 9</pre>
 
-&nbsp;<h3>Solve a puzzle and print out complete stats and solve instructions</h3>
-<div class=commandline>$ echo .....1.....2....9..1.97.83.7...2.6...81..6.4..9.....2....389.6....71........62... | qqwing --solve --stats --instructions --count-solutions</div>
+### Solve a puzzle and print out complete stats and solve instructions
+
+	$ echo .....1.....2....9..1.97.83.7...2.6...81..6.4..9.....2....389.6....71........62... | qqwing --solve --stats --instructions --count-solutions
+
 <pre class=output> 9 4 8 | 2 3 1 | 7 5 6
 &nbsp;3 7 2 | 6 5 8 | 1 9 4
 &nbsp;5 1 6 | 9 7 4 | 8 3 2
@@ -230,6 +242,3 @@ Number of Box/Line Intersections: 0
 Number of Guesses: 1
 Number of Backtracks: 2
 Difficulty: Expert</pre>
-
-<%/bte.tpl%>
-<%/bte.doc%>

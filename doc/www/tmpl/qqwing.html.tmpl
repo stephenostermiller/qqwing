@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv=content-type content="text/html; charset=UTF-8">
+	$if(pagetitle)$
+		<title>$pagetitle$</title>
+	$endif$
+	$if(description)$
+		<meta name=description content="$description$">
+	$endif$
+	<meta name=viewport content="width=device-width, user-scalable=no">
+	<link rel=stylesheet href="style.css" type="text/css">
+	$for(css)$
+		<link rel=stylesheet href="$css$" type="text/css">
+	$endfor$
+	$for(js)$
+		<script src="$js$"></script>
+	$endfor$
+	$if(highlighting-css)$
+		<style type="text/css">
+			$highlighting-css$
+		</style>
+	$endif$
+</head>
+<body>
+	<div id=head><div class=pagesection>
+		<h1 id=brand><a href="./">QQWing Sudoku</a></h1>
+		<ul id=mainmenu>
+			<li><a href="./">Play</a></li>
+			<li><a href="generate.html">Generate</a></li>
+			<li><a href="solve.html">Solve</a></li>
+			<li><a href="download.html">Download</a></li>
+			<li><a href="about.html">About</a></li>
+		</ul>
+	</div></div>
+	<div id=content><div class=pagesection>$body$</div></div>
+
+	<div id=foot><div class=pagesection>
+		<p>Copyright &copy; <a href="http://ostermiller.org/contact.pl?regarding=QQwing" class=mail>Stephen Ostermiller</a> 2005-2014</p>
+	</div></div>
+</body>
+</html>
+
+
+
