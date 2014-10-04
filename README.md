@@ -2,7 +2,7 @@
 
 QQwing is software for generating and solving Sudoku puzzles.
 
- - Website: [http://qqwing.com/](http://qqwing.com/)
+ - Website: [qqwing.com](http://qqwing.com/)
  - [About QQWing](http://qqwing.com/about.html)
  - [Build instructions](http://qqwing.com/build.html)
  - [Downloads](http://qqwing.com/download.html)
