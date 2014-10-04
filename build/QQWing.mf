@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: com.qqwing.QQWing
+Main-Class: com.qqwing.QQWingMain
