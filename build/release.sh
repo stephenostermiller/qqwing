@@ -59,7 +59,7 @@ fi
 sed -i 's/UNRELEASED/RELEASED/g' debian/changelog
 cd ..
 
-sed -i s/$version/$nextversion/g src/java/QQWing.java build/configure.ac src/js/qqwing-main.js
+sed -i s/$version/$nextversion/g src/java/com/qqwing/QQWing.java build/configure.ac src/js/qqwing-main.js
 
 libcurrent=`grep QQWING_CURRENT= build/configure.ac | grep -oE '[0-9]+'`
 let "nextlibcurrent=libcurrent+1"

@@ -28,5 +28,5 @@ fi
 
 mkdir -p target/testclasses
 echo "Compiling java test sources"
-javac -sourcepath test/java/ -classpath target/classes -d target/testclasses/ test/java/*.java
+find test/java/ -name *.java -print0 | xargs -0 javac -sourcepath test/java/ -classpath target/classes -d target/testclasses/
 touch target/javatestcompile

@@ -19,10 +19,10 @@
 set -e
 
 version=`build/version.sh`
-fileversion=`grep 'QQWING_VERSION =' src/java/QQWing.java | grep -oE '[0-9]+\.[0-9]+\.[0-9\.]+'`
+fileversion=`grep 'QQWING_VERSION =' src/java/com/qqwing/QQWing.java | grep -oE '[0-9]+\.[0-9]+\.[0-9\.]+'`
 
 if [ "$version" != "$fileversion" ]
 then
 	echo "Setting version in QQWing.java to $version (was $fileversion)"
-	sed -i "s/$fileversion/$version/g" src/java/QQWing.java
+	sed -i "s/$fileversion/$version/g" src/java/com/qqwing/QQWing.java
 fi

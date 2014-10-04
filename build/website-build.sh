@@ -40,7 +40,7 @@ cd ../../..
 
 
 mkdir -p target/www/md
-for file in src/cpp/*.* src/java/*.java target/js/qqwing-main-$version.js
+for file in src/cpp/*.* src/java/com/qqwing/QQWing.java target/js/qqwing-main-$version.js
 do
 	extension=${file##*.}
 	basename=${file##*/}

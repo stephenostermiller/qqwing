@@ -31,6 +31,6 @@ fi
 
 mkdir -p target/jar
 echo "Creating jar file: target/$jar"
-cp target/classes/* doc/COPYING src/java/*.java target/jar
+cp -r target/classes/* doc/COPYING src/java/* target/jar
 cd target/jar
 jar cmf ../../build/QQWing.mf ../$jar *

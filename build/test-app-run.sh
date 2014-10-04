@@ -24,7 +24,7 @@ case $1 in
 	"java")
 		export QQWINGTESTTYPE=java
 		export QQWING="java -jar target/qqwing-$version.jar"
-		export QQWINGSRCWITHCOPYRIGHT=src/java/QQWing.java
+		export QQWINGSRCWITHCOPYRIGHT=src/java/com/qqwing/QQWing.java
 		;;
 	"cpp")
 		export QQWINGTESTTYPE=cpp
