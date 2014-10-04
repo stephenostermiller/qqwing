@@ -123,10 +123,10 @@
 
 				/**
 				 * The 729 integers that make up a the possible
-				 * values for a suduko puzzle. (9 possibilities
+				 * values for a Sudoku puzzle. (9 possibilities
 				 * for each of 81 squares).  If possibilities[i]
 				 * is zero, then the possibility could still be
-				 * filled in according to the sudoku rules.  When
+				 * filled in according to the Sudoku rules.  When
 				 * a possibility is eliminated, possibilities[i]
 				 * is assigned the round (recursion level) at
 				 * which it was determined that it could not be
