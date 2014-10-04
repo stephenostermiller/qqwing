@@ -41,10 +41,18 @@ do
 					sed 1d "$file" >> "$tmp"
 				fi
 				;;
-			css|hpp|cpp|java|js)
+			css|hpp|cpp|js)
 				echo '/*' >> "$tmp"
 				sed "s/YEAR/$year/g;s/^/ * /g;s/ $//g;" doc/license-header-template.txt >> "$tmp"
 				echo ' */' >> "$tmp"
+				cat "$file" >> "$tmp"
+				;;
+			java)
+				echo '// @formatter:off' >> "$tmp"
+				echo '/*' >> "$tmp"
+				sed "s/YEAR/$year/g;s/^/ * /g;s/ $//g;" doc/license-header-template.txt >> "$tmp"
+				echo ' */' >> "$tmp"
+				echo '// @formatter:on' >> "$tmp"
 				cat "$file" >> "$tmp"
 				;;
 			html)

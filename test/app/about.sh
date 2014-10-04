@@ -19,7 +19,7 @@
 set -e
 set -o pipefail
 
-expected=`build/comments-get-first.pl $QQWINGSRCWITHCOPYRIGHT`
+expected=`build/src-first-comment.pl $QQWINGSRCWITHCOPYRIGHT`
 actual=`$QQWING --about`
 
 if [ "$actual" != "$expected" ]
