@@ -95,6 +95,13 @@ public class LogItem {
 	}
 
 	/**
+	 * Get the position (0-80) on the board or -1 if no position
+	 */
+	public int getPosition() {
+		return position;
+	}
+
+	/**
 	 * Get the value, or -1 if no value
 	 */
 	public int getValue() {
@@ -106,7 +113,7 @@ public class LogItem {
 	 * Print the current log item. The message used is determined by the type of
 	 * log item.
 	 */
-	public String toString() {
+	public String getDescription() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Round: ").append(getRound());
 		sb.append(" - ");
@@ -123,5 +130,9 @@ public class LogItem {
 			sb.append(")");
 		}
 		return sb.toString();
+	}
+
+	public String toString() {
+		return getDescription();
 	}
 }
