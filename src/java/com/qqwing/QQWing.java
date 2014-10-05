@@ -23,6 +23,9 @@
 package com.qqwing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -57,19 +60,19 @@ public class QQWing {
 	 * are 0. Once initialized, this puzzle remains as is. The answer is worked
 	 * out in "solution".
 	 */
-	private int[] puzzle;
+	private int[] puzzle = new int[BOARD_SIZE];
 
 	/**
 	 * The 81 integers that make up a sudoku puzzle. The solution is built here,
 	 * after completion all will be 1-9.
 	 */
-	private int[] solution;
+	private int[] solution = new int[BOARD_SIZE];
 
 	/**
 	 * Recursion depth at which each of the numbers in the solution were placed.
 	 * Useful for backing out solve branches that don't lead to a solution.
 	 */
-	private int[] solutionRound;
+	private int[] solutionRound = new int[BOARD_SIZE];
 
 	/**
 	 * The 729 integers that make up a the possible values for a Sudoku puzzle.
@@ -79,71 +82,60 @@ public class QQWing {
 	 * round (recursion level) at which it was determined that it could not be a
 	 * possibility.
 	 */
-	private int[] possibilities;
+	private int[] possibilities = new int[POSSIBILITY_SIZE];
 
 	/**
 	 * An array the size of the board (81) containing each of the numbers 0-n
 	 * exactly once. This array may be shuffled so that operations that need to
 	 * look at each cell can do so in a random order.
 	 */
-	private int[] randomBoardArray;
+	private int[] randomBoardArray = fillIncrementing(new int[BOARD_SIZE]);
 
 	/**
 	 * An array with one element for each position (9), in some random order to
 	 * be used when trying each position in turn during guesses.
 	 */
-	private int[] randomPossibilityArray;
+	private int[] randomPossibilityArray = fillIncrementing(new int[ROW_COL_SEC_SIZE]);
 
 	/**
 	 * Whether or not to record history
 	 */
-	private boolean recordHistory;
+	private boolean recordHistory = false;
 
 	/**
 	 * Whether or not to print history as it happens
 	 */
-	private boolean logHistory;
+	private boolean logHistory = false;
 
 	/**
 	 * A list of moves used to solve the puzzle. This list contains all moves,
 	 * even on solve branches that did not lead to a solution.
 	 */
-	private ArrayList<LogItem> solveHistory;
+	private ArrayList<LogItem> solveHistory = new ArrayList<LogItem>();
 
 	/**
 	 * A list of moves used to solve the puzzle. This list contains only the
 	 * moves needed to solve the puzzle, but doesn't contain information about
 	 * bad guesses.
 	 */
-	private ArrayList<LogItem> solveInstructions;
+	private ArrayList<LogItem> solveInstructions = new ArrayList<LogItem>();
 
 	/**
 	 * The style with which to print puzzles and solutions
 	 */
-	private PrintStyle printStyle;
+	private PrintStyle printStyle = PrintStyle.READABLE;
 
 	/**
 	 * Create a new Sudoku board
 	 */
 	public QQWing() {
-		puzzle = new int[BOARD_SIZE];
-		solution = new int[BOARD_SIZE];
-		solutionRound = new int[BOARD_SIZE];
-		possibilities = new int[POSSIBILITY_SIZE];
-		recordHistory = false;
-		printStyle = PrintStyle.READABLE;
-		randomBoardArray = new int[BOARD_SIZE];
-		randomPossibilityArray = new int[ROW_COL_SEC_SIZE];
-		solveHistory = new ArrayList<LogItem>();
-		solveInstructions = new ArrayList<LogItem>();
+	}
 
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			randomBoardArray[i] = i;
+	private static int[] fillIncrementing(int[] arr){
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = i;
 		}
-
-		for (int i = 0; i < ROW_COL_SEC_SIZE; i++) {
-			randomPossibilityArray[i] = i;
-		}
+		return arr;
 	}
 
 	/**
@@ -162,7 +154,7 @@ public class QQWing {
 	 * Set the board to the given puzzle. The given puzzle must be an array of
 	 * 81 integers.
 	 */
-	public boolean setPuzzle(int[] initPuzzle) throws Exception {
+	public boolean setPuzzle(int[] initPuzzle) {
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			puzzle[i] = (initPuzzle == null) ? 0 : initPuzzle[i];
 		}
@@ -174,19 +166,9 @@ public class QQWing {
 	 * clears any solution, resets statistics, and clears any history messages.
 	 */
 	private boolean reset() {
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			solution[i] = 0;
-		}
-		for (int i = 0; i < BOARD_SIZE; i++) {
-			solutionRound[i] = 0;
-		}
-		for (int i = 0; i < POSSIBILITY_SIZE; i++) {
-			possibilities[i] = 0;
-		}
-
-		for (int i = 0; i < solveHistory.size(); i++) {
-			solveHistory.remove(i);
-		}
+		Arrays.fill(solution, 0);
+		Arrays.fill(solutionRound, 0);
+		Arrays.fill(possibilities, 0);
 		solveHistory.clear();
 		solveInstructions.clear();
 
@@ -298,7 +280,7 @@ public class QQWing {
 		shuffleArray(randomPossibilityArray, ROW_COL_SEC_SIZE);
 	}
 
-	private void clearPuzzle() throws Exception {
+	private void clearPuzzle() {
 		// Clear any existing puzzle
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			puzzle[i] = 0;
@@ -306,11 +288,11 @@ public class QQWing {
 		reset();
 	}
 
-	public boolean generatePuzzle() throws Exception {
+	public boolean generatePuzzle() {
 		return generatePuzzleSymmetry(Symmetry.NONE);
 	}
 
-	public boolean generatePuzzleSymmetry(Symmetry symmetry) throws Exception {
+	public boolean generatePuzzleSymmetry(Symmetry symmetry) {
 
 		if (symmetry == Symmetry.RANDOM) symmetry = getRandomSymmetry();
 
@@ -493,12 +475,24 @@ public class QQWing {
 		}
 	}
 
+	public List<LogItem> getSolveInstructions() {
+		if (isSolved()) {
+			return Collections.unmodifiableList(solveInstructions);
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
 	public void printSolveHistory() {
 		printHistory(solveHistory);
 	}
 
 	public String getSolveHistoryString() {
 		return historyToString(solveHistory);
+	}
+
+	public List<LogItem> getSolveHistory() {
+		return Collections.unmodifiableList(solveHistory);
 	}
 
 	public boolean solve() {
@@ -528,7 +522,7 @@ public class QQWing {
 		return false;
 	}
 
-	public int countSolutions() throws Exception {
+	public int countSolutions() {
 		// Don't record history while generating.
 		boolean recHistory = recordHistory;
 		setRecordHistory(false);
@@ -545,7 +539,7 @@ public class QQWing {
 		return solutionCount;
 	}
 
-	private int countSolutions(int round, boolean limitToTwo) throws Exception {
+	private int countSolutions(int round, boolean limitToTwo) {
 		while (singleSolveMove(round)) {
 			if (isSolved()) {
 				rollbackRound(round);
@@ -1379,6 +1373,10 @@ public class QQWing {
 		return puzzleToString(puzzle);
 	}
 
+	public int[] getPuzzle() {
+		return puzzle.clone();
+	}
+
 	/**
 	 * Print the sudoku solution.
 	 */
@@ -1388,6 +1386,10 @@ public class QQWing {
 
 	public String getSolutionString() {
 		return puzzleToString(solution);
+	}
+
+	public int[] getSolution() {
+		return solution.clone();
 	}
 
 	/**
