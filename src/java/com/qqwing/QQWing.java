@@ -34,7 +34,7 @@ import java.util.Random;
  */
 public class QQWing {
 
-	public static final String QQWING_VERSION = "1.3.2";
+	public static final String QQWING_VERSION = "1.3.3";
 
 	private static final String NL = System.getProperties().getProperty("line.separator");
 
