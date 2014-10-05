@@ -180,7 +180,7 @@ public class QQWing {
 				int value = puzzle[position];
 				if (possibilities[valPos] != 0) return false;
 				mark(position, round, value);
-				if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.GIVEN, value, position));
+				if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.GIVEN, value, position));
 			}
 		}
 
@@ -213,7 +213,7 @@ public class QQWing {
 	 * there was only one possible value for that cell.
 	 */
 	public int getSingleCount() {
-		return getLogCount(solveInstructions, LogItemType.SINGLE);
+		return getLogCount(solveInstructions, LogType.SINGLE);
 	}
 
 	/**
@@ -222,8 +222,8 @@ public class QQWing {
 	 * section.
 	 */
 	public int getHiddenSingleCount() {
-		return (getLogCount(solveInstructions, LogItemType.HIDDEN_SINGLE_ROW) +
-			getLogCount(solveInstructions, LogItemType.HIDDEN_SINGLE_COLUMN) + getLogCount(solveInstructions, LogItemType.HIDDEN_SINGLE_SECTION));
+		return (getLogCount(solveInstructions, LogType.HIDDEN_SINGLE_ROW) +
+			getLogCount(solveInstructions, LogType.HIDDEN_SINGLE_COLUMN) + getLogCount(solveInstructions, LogType.HIDDEN_SINGLE_SECTION));
 	}
 
 	/**
@@ -231,8 +231,8 @@ public class QQWing {
 	 * this puzzle.
 	 */
 	public int getNakedPairCount() {
-		return (getLogCount(solveInstructions, LogItemType.NAKED_PAIR_ROW) +
-			getLogCount(solveInstructions, LogItemType.NAKED_PAIR_COLUMN) + getLogCount(solveInstructions, LogItemType.NAKED_PAIR_SECTION));
+		return (getLogCount(solveInstructions, LogType.NAKED_PAIR_ROW) +
+			getLogCount(solveInstructions, LogType.NAKED_PAIR_COLUMN) + getLogCount(solveInstructions, LogType.NAKED_PAIR_SECTION));
 	}
 
 	/**
@@ -240,8 +240,8 @@ public class QQWing {
 	 * this puzzle.
 	 */
 	public int getHiddenPairCount() {
-		return (getLogCount(solveInstructions, LogItemType.HIDDEN_PAIR_ROW) +
-			getLogCount(solveInstructions, LogItemType.HIDDEN_PAIR_COLUMN) + getLogCount(solveInstructions, LogItemType.HIDDEN_PAIR_SECTION));
+		return (getLogCount(solveInstructions, LogType.HIDDEN_PAIR_ROW) +
+			getLogCount(solveInstructions, LogType.HIDDEN_PAIR_COLUMN) + getLogCount(solveInstructions, LogType.HIDDEN_PAIR_SECTION));
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class QQWing {
 	 * solving this puzzle.
 	 */
 	public int getPointingPairTripleCount() {
-		return (getLogCount(solveInstructions, LogItemType.POINTING_PAIR_TRIPLE_ROW) + getLogCount(solveInstructions, LogItemType.POINTING_PAIR_TRIPLE_COLUMN));
+		return (getLogCount(solveInstructions, LogType.POINTING_PAIR_TRIPLE_ROW) + getLogCount(solveInstructions, LogType.POINTING_PAIR_TRIPLE_COLUMN));
 	}
 
 	/**
@@ -257,14 +257,14 @@ public class QQWing {
 	 * puzzle.
 	 */
 	public int getBoxLineReductionCount() {
-		return (getLogCount(solveInstructions, LogItemType.ROW_BOX) + getLogCount(solveInstructions, LogItemType.COLUMN_BOX));
+		return (getLogCount(solveInstructions, LogType.ROW_BOX) + getLogCount(solveInstructions, LogType.COLUMN_BOX));
 	}
 
 	/**
 	 * Get the number lucky guesses in solving this puzzle.
 	 */
 	public int getGuessCount() {
-		return getLogCount(solveInstructions, LogItemType.GUESS);
+		return getLogCount(solveInstructions, LogType.GUESS);
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class QQWing {
 	 * puzzle.
 	 */
 	public int getBacktrackCount() {
-		return getLogCount(solveHistory, LogItemType.ROLLBACK);
+		return getLogCount(solveHistory, LogType.ROLLBACK);
 	}
 
 	private void shuffleRandomArrays() {
@@ -565,7 +565,7 @@ public class QQWing {
 	}
 
 	private void rollbackRound(int round) {
-		if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.ROLLBACK));
+		if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.ROLLBACK));
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			if (solutionRound[i] == round) {
 				solutionRound[i] = 0;
@@ -637,7 +637,7 @@ public class QQWing {
 			if (possibilities[valPos] == 0) {
 				if (localGuessCount == guessNumber) {
 					int value = valIndex + 1;
-					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.GUESS, value, position));
+					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.GUESS, value, position));
 					mark(position, round, value);
 					return true;
 				}
@@ -702,7 +702,7 @@ public class QQWing {
 						}
 					}
 					if (doneSomething) {
-						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.COLUMN_BOX, valIndex + 1, colStart));
+						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.COLUMN_BOX, valIndex + 1, colStart));
 						return true;
 					}
 				}
@@ -750,7 +750,7 @@ public class QQWing {
 						}
 					}
 					if (doneSomething) {
-						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.ROW_BOX, valIndex + 1, rowStart));
+						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.ROW_BOX, valIndex + 1, rowStart));
 						return true;
 					}
 				}
@@ -793,7 +793,7 @@ public class QQWing {
 						}
 					}
 					if (doneSomething) {
-						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.POINTING_PAIR_TRIPLE_ROW, valIndex + 1, rowStart));
+						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.POINTING_PAIR_TRIPLE_ROW, valIndex + 1, rowStart));
 						return true;
 					}
 				}
@@ -836,7 +836,7 @@ public class QQWing {
 						}
 					}
 					if (doneSomething) {
-						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.POINTING_PAIR_TRIPLE_COLUMN, valIndex + 1, colStart));
+						if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.POINTING_PAIR_TRIPLE_COLUMN, valIndex + 1, colStart));
 						return true;
 					}
 				}
@@ -932,7 +932,7 @@ public class QQWing {
 								}
 							}
 							if (doneSomething) {
-								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_PAIR_COLUMN, valIndex + 1, rowColumnToCell(r1, column)));
+								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_PAIR_COLUMN, valIndex + 1, rowColumnToCell(r1, column)));
 								return true;
 							}
 						}
@@ -997,7 +997,7 @@ public class QQWing {
 								}
 							}
 							if (doneSomething) {
-								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_PAIR_SECTION, valIndex + 1, sectionToCell(section, si1)));
+								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_PAIR_SECTION, valIndex + 1, sectionToCell(section, si1)));
 								return true;
 							}
 						}
@@ -1062,7 +1062,7 @@ public class QQWing {
 								}
 							}
 							if (doneSomething) {
-								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_PAIR_ROW, valIndex + 1, rowColumnToCell(row, c1)));
+								if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_PAIR_ROW, valIndex + 1, rowColumnToCell(row, c1)));
 								return true;
 							}
 						}
@@ -1093,7 +1093,7 @@ public class QQWing {
 									}
 								}
 								if (doneSomething) {
-									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.NAKED_PAIR_ROW, 0, position));
+									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.NAKED_PAIR_ROW, 0, position));
 									return true;
 								}
 							}
@@ -1106,7 +1106,7 @@ public class QQWing {
 									}
 								}
 								if (doneSomething) {
-									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.NAKED_PAIR_COLUMN, 0, position));
+									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.NAKED_PAIR_COLUMN, 0, position));
 									return true;
 								}
 							}
@@ -1122,7 +1122,7 @@ public class QQWing {
 									}
 								}
 								if (doneSomething) {
-									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.NAKED_PAIR_SECTION, 0, position));
+									if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.NAKED_PAIR_SECTION, 0, position));
 									return true;
 								}
 							}
@@ -1155,7 +1155,7 @@ public class QQWing {
 				}
 				if (count == 1) {
 					int value = valIndex + 1;
-					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_SINGLE_ROW, value, lastPosition));
+					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_SINGLE_ROW, value, lastPosition));
 					mark(lastPosition, round, value);
 					return true;
 				}
@@ -1185,7 +1185,7 @@ public class QQWing {
 				}
 				if (count == 1) {
 					int value = valIndex + 1;
-					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_SINGLE_COLUMN, value, lastPosition));
+					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_SINGLE_COLUMN, value, lastPosition));
 					mark(lastPosition, round, value);
 					return true;
 				}
@@ -1218,7 +1218,7 @@ public class QQWing {
 				}
 				if (count == 1) {
 					int value = valIndex + 1;
-					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.HIDDEN_SINGLE_SECTION, value, lastPosition));
+					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.HIDDEN_SINGLE_SECTION, value, lastPosition));
 					mark(lastPosition, round, value);
 					return true;
 				}
@@ -1246,7 +1246,7 @@ public class QQWing {
 				}
 				if (count == 1) {
 					mark(position, round, lastValue);
-					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogItemType.SINGLE, lastValue, position));
+					if (logHistory || recordHistory) addHistoryItem(new LogItem(round, LogType.SINGLE, lastValue, position));
 					return true;
 				}
 			}
@@ -1396,7 +1396,7 @@ public class QQWing {
 	 * Given a vector of LogItems, determine how many log items in the vector
 	 * are of the specified type.
 	 */
-	private int getLogCount(ArrayList<LogItem> v, LogItemType type) {
+	private int getLogCount(ArrayList<LogItem> v, LogType type) {
 		int count = 0;
 		for (int i = 0; i < v.size(); i++) {
 			if ((v.get(i)).getType() == type) count++;

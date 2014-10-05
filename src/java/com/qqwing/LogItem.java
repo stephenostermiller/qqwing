@@ -36,7 +36,7 @@ public class LogItem {
 	/**
 	 * The type of log message that will determine the message printed.
 	 */
-	private LogItemType type;
+	private LogType type;
 
 	/**
 	 * Value that was set by the operation (or zero for no value)
@@ -48,15 +48,15 @@ public class LogItem {
 	 */
 	private int position;
 
-	public LogItem(int r, LogItemType t) {
+	public LogItem(int r, LogType t) {
 		init(r, t, 0, -1);
 	}
 
-	public LogItem(int r, LogItemType t, int v, int p) {
+	public LogItem(int r, LogType t, int v, int p) {
 		init(r, t, v, p);
 	}
 
-	private void init(int r, LogItemType t, int v, int p) {
+	private void init(int r, LogType t, int v, int p) {
 		round = r;
 		type = t;
 		value = v;
@@ -70,7 +70,7 @@ public class LogItem {
 	/**
 	 * Get the type of this log item.
 	 */
-	public LogItemType getType() {
+	public LogType getType() {
 		return type;
 	}
 

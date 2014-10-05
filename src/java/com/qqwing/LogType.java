@@ -20,7 +20,7 @@
 // @formatter:on
 package com.qqwing;
 
-public enum LogItemType {
+public enum LogType {
 	GIVEN("Mark given"),
 	SINGLE("Mark only possibility for cell"),
 	HIDDEN_SINGLE_ROW("Mark single possibility for value in row"),
@@ -41,7 +41,7 @@ public enum LogItemType {
 
 	private String description;
 
-	private LogItemType(String description) {
+	private LogType(String description) {
 		this.description = description;
 	}
 
