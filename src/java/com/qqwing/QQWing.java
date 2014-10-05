@@ -173,7 +173,7 @@ public class QQWing {
 	 * Reset the board to its initial state with only the givens. This method
 	 * clears any solution, resets statistics, and clears any history messages.
 	 */
-	private boolean reset() throws Exception {
+	private boolean reset() {
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			solution[i] = 0;
 		}
@@ -501,13 +501,13 @@ public class QQWing {
 		return historyToString(solveHistory);
 	}
 
-	public boolean solve() throws Exception {
+	public boolean solve() {
 		reset();
 		shuffleRandomArrays();
 		return solve(2);
 	}
 
-	private boolean solve(int round) throws Exception {
+	private boolean solve(int round) {
 		lastSolveRound = round;
 
 		while (singleSolveMove(round)) {
@@ -634,7 +634,7 @@ public class QQWing {
 		return bestPosition;
 	}
 
-	private boolean guess(int round, int guessNumber) throws Exception {
+	private boolean guess(int round, int guessNumber) {
 		int localGuessCount = 0;
 		int position = findPositionWithFewestPossibilities();
 		for (int i = 0; i < ROW_COL_SEC_SIZE; i++) {
@@ -653,7 +653,7 @@ public class QQWing {
 		return false;
 	}
 
-	private boolean singleSolveMove(int round) throws Exception {
+	private boolean singleSolveMove(int round) {
 		if (onlyPossibilityForCell(round)) return true;
 		if (onlyValueInSection(round)) return true;
 		if (onlyValueInRow(round)) return true;
@@ -1146,7 +1146,7 @@ public class QQWing {
 	 * is only listed for one cell. This type of cell is often called a
 	 * "hidden single"
 	 */
-	private boolean onlyValueInRow(int round) throws Exception {
+	private boolean onlyValueInRow(int round) {
 		for (int row = 0; row < ROW_COL_SEC_SIZE; row++) {
 			for (int valIndex = 0; valIndex < ROW_COL_SEC_SIZE; valIndex++) {
 				int count = 0;
@@ -1176,7 +1176,7 @@ public class QQWing {
 	 * possibility that is only listed for one cell. This type of cell is often
 	 * called a "hidden single"
 	 */
-	private boolean onlyValueInColumn(int round) throws Exception {
+	private boolean onlyValueInColumn(int round) {
 		for (int col = 0; col < ROW_COL_SEC_SIZE; col++) {
 			for (int valIndex = 0; valIndex < ROW_COL_SEC_SIZE; valIndex++) {
 				int count = 0;
@@ -1206,7 +1206,7 @@ public class QQWing {
 	 * possibility that is only listed for one cell. This type of cell is often
 	 * called a "hidden single"
 	 */
-	private boolean onlyValueInSection(int round) throws Exception {
+	private boolean onlyValueInSection(int round) {
 		for (int sec = 0; sec < ROW_COL_SEC_SIZE; sec++) {
 			int secPos = sectionToFirstCell(sec);
 			for (int valIndex = 0; valIndex < ROW_COL_SEC_SIZE; valIndex++) {
@@ -1238,7 +1238,7 @@ public class QQWing {
 	 * exists. This method will look for a cell that has only one possibility.
 	 * This type of cell is often called a "single"
 	 */
-	private boolean onlyPossibilityForCell(int round) throws Exception {
+	private boolean onlyPossibilityForCell(int round) {
 		for (int position = 0; position < BOARD_SIZE; position++) {
 			if (solution[position] == 0) {
 				int count = 0;
@@ -1268,14 +1268,14 @@ public class QQWing {
 	 * @param round Round to mark for rollback purposes
 	 * @param value The value to go in the square at the given position
 	 */
-	private void mark(int position, int round, int value) throws Exception {
-		if (solution[position] != 0) throw new Exception("Marking position that already has been marked.");
-		if (solutionRound[position] != 0) throw new Exception("Marking position that was marked another round.");
+	private void mark(int position, int round, int value) {
+		if (solution[position] != 0) throw new IllegalArgumentException("Marking position that already has been marked.");
+		if (solutionRound[position] != 0) throw new IllegalArgumentException("Marking position that was marked another round.");
 		int valIndex = value - 1;
 		solution[position] = value;
 
 		int possInd = getPossibilityIndex(valIndex, position);
-		if (possibilities[possInd] != 0) throw new Exception("Marking impossible position.");
+		if (possibilities[possInd] != 0) throw new IllegalArgumentException("Marking impossible position.");
 
 		// Take this value out of the possibilities for everything in the row
 		solutionRound[position] = round;
