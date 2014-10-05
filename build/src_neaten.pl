@@ -61,9 +61,7 @@ for my $file (@ARGV){
 					}
 				}
 			}
-			if ($spacecount eq 1 || $spacecount eq 2 and $file eq "doc/www/bte/instructions.bte"){
-				$line .= $ws;
-			} elsif ($spacecount == 2 and $code =~ /^--/ and $file =~ /\.(sh)$/){
+			if ($spacecount == 2 and $code =~ /^--/ and $file =~ /\.(sh)$/){
 				$line .= "  ";
 			} elsif ($spacecount == 1 and $code =~ /^\*/ and $file =~ /\.(java|cpp|hpp|js|css)$/){
 				$line .= " ";

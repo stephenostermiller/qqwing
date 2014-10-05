@@ -31,14 +31,6 @@ fi
 
 version=`build/version.sh`
 
-cp doc/www/bte/*.bte target/www/html
-
-cd target/www/html
-bte *.bte
-rm *.bte
-cd ../../..
-
-
 mkdir -p target/www/md
 for file in src/cpp/*.* src/java/com/qqwing/QQWing.java target/js/qqwing-main-$version.js
 do
