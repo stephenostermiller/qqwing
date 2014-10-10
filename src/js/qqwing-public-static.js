@@ -28,7 +28,8 @@ qqwing.Difficulty = {
 	SIMPLE: 1,
 	EASY: 2,
 	INTERMEDIATE: 3,
-	EXPERT: 4
+	EXPERT: 4,
+	BEGINNER: 5
 };
 
 qqwing.Symmetry = {

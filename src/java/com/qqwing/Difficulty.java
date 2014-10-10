@@ -25,6 +25,7 @@ import java.util.Locale;
 public enum Difficulty {
 	UNKNOWN,
 	SIMPLE,
+	BEGINNER,
 	EASY,
 	INTERMEDIATE,
 	EXPERT;

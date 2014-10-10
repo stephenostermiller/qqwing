@@ -210,8 +210,8 @@ namespace qqwing {
 		if (getBoxLineReductionCount() > 0) return SudokuBoard::INTERMEDIATE;
 		if (getPointingPairTripleCount() > 0) return SudokuBoard::INTERMEDIATE;
 		if (getHiddenPairCount() > 0) return SudokuBoard::INTERMEDIATE;
-		if (getNakedPairCount() > 0) return SudokuBoard::INTERMEDIATE;
 		if (getHiddenSingleCount() > 0) return SudokuBoard::EASY;
+		if (getNakedPairCount() > 0) return SudokuBoard::BEGINNER;
 		if (getSingleCount() > 0) return SudokuBoard::SIMPLE;
 		return SudokuBoard::UNKNOWN;
 	}
@@ -225,6 +225,7 @@ namespace qqwing {
 			case SudokuBoard::EXPERT: return "Expert"; break;
 			case SudokuBoard::INTERMEDIATE: return "Intermediate"; break;
 			case SudokuBoard::EASY: return "Easy"; break;
+			case SudokuBoard::BEGINNER: return "Beginner"; break;
 			case SudokuBoard::SIMPLE: return "Simple"; break;
 			default: return "Unknown"; break;
 		}
@@ -649,10 +650,10 @@ namespace qqwing {
 
 	bool SudokuBoard::singleSolveMove(int round){
 		if (onlyPossibilityForCell(round)) return true;
+		if (handleNakedPairs(round)) return true;
 		if (onlyValueInSection(round)) return true;
 		if (onlyValueInRow(round)) return true;
 		if (onlyValueInColumn(round)) return true;
-		if (handleNakedPairs(round)) return true;
 		if (pointingRowReduction(round)) return true;
 		if (pointingColumnReduction(round)) return true;
 		if (rowBoxReduction(round)) return true;

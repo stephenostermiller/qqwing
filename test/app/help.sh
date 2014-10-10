@@ -24,7 +24,7 @@ expected="qqwing <options>
 Sudoku solver and generator.
   --generate <num>     Generate new puzzles
   --solve              Solve all the puzzles from standard input
-  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any
+  --difficulty <diff>  Generate only simple, beginner, easy, intermediate, expert, or any
   --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random
   --puzzle             Print the puzzle (default when generating)
   --nopuzzle           Do not print the puzzle (default when solving)

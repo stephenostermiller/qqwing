@@ -66,7 +66,7 @@ function initStats(){
 	drawStats();
 }
 
-var difficultyLevels = new Array("simple","easy","intermediate","expert","random");
+var difficultyLevels = new Array("simple","beginner","easy","intermediate","expert","random");
 
 function drawStats(){
 	var statsDiv = el("stats");

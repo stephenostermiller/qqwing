@@ -86,6 +86,8 @@ try {
 				process.exit(1);
 			} else if (argv[i+1].toLowerCase() == "simple"){
 				difficulty = qqwing.Difficulty.SIMPLE;
+			} else if (argv[i+1].toLowerCase() == "beginner"){
+				difficulty = qqwing.Difficulty.BEGINNER;
 			} else if (argv[i+1].toLowerCase() == "easy"){
 				difficulty = qqwing.Difficulty.EASY;
 			} else if (argv[i+1].toLowerCase() == "intermediate"){
@@ -95,7 +97,7 @@ try {
 			} else if (argv[i+1].toLowerCase() == "any"){
 				difficulty = qqwing.Difficulty.UNKNOWN;
 			} else {
-				console.log("Difficulty expected to be simple, easy, intermediate, expert, or any, not "+argv[i+1]);
+				console.log("Difficulty expected to be simple, beginner, easy, intermediate, expert, or any, not "+argv[i+1]);
 				process.exit(1);
 			}
 			i++;
@@ -380,7 +382,7 @@ function printHelp(){
 	console.log("Sudoku solver and generator.");
 	console.log("  --generate <num>     Generate new puzzles");
 	console.log("  --solve              Solve all the puzzles from standard input");
-	console.log("  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any");
+	console.log("  --difficulty <diff>  Generate only simple, beginner, easy, intermediate, expert, or any");
 	console.log("  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random");
 	console.log("  --puzzle             Print the puzzle (default when generating)");
 	console.log("  --nopuzzle           Do not print the puzzle (default when solving)");

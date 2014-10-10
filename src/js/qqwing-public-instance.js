@@ -503,8 +503,8 @@ this.getDifficulty = function(){
 	if (this.getBoxLineReductionCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
 	if (this.getPointingPairTripleCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
 	if (this.getHiddenPairCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
-	if (this.getNakedPairCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
 	if (this.getHiddenSingleCount() > 0) return qqwing.Difficulty.EASY;
+	if (this.getNakedPairCount() > 0) return qqwing.Difficulty.BEGINNER;
 	if (this.getSingleCount() > 0) return qqwing.Difficulty.SIMPLE;
 	return qqwing.Difficulty.UNKNOWN;
 };
@@ -515,6 +515,7 @@ this.getDifficultyAsString = function(){
 		case qqwing.Difficulty.EXPERT: return "Expert";
 		case qqwing.Difficulty.INTERMEDIATE: return "Intermediate";
 		case qqwing.Difficulty.EASY: return "Easy";
+		case qqwing.Difficulty.BEGINNER: return "Beginner";
 		case qqwing.Difficulty.SIMPLE: return "Simple";
 		default: return "Unknown";
 	}

@@ -19,15 +19,5 @@
 set -e
 set -o pipefail
 
-expected="Difficulty expected to be simple, beginner, easy, intermediate, expert, or any, not foo"
-actual=`$QQWING --difficulty foo 2>&1 || true`
+./test/app/helper/generate.sh $0 "--difficulty beginner"
 
-if [ "$expected" != "$actual" ]
-then
-	echo
-	echo "Test: $0"
-	echo "qqwing: $QQWING"
-	echo "Expected: $expected"
-	echo "Actual:   $actual"
-	exit 1
-fi

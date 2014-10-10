@@ -1,3 +1,4 @@
+
 /*
  * qqwing - Sudoku solver and generator
  * Copyright (C) 2006-2014 Stephen Ostermiller http://ostermiller.org/
@@ -123,6 +124,8 @@ int main(int argc, char *argv[]){
 					difficulty = SudokuBoard::SIMPLE;
 				} else if (!strcmp(argv[i+1],"easy")){
 					difficulty = SudokuBoard::EASY;
+				} else if (!strcmp(argv[i+1],"beginner")){
+					difficulty = SudokuBoard::BEGINNER;
 				} else if (!strcmp(argv[i+1],"intermediate")){
 					difficulty = SudokuBoard::INTERMEDIATE;
 				} else if (!strcmp(argv[i+1],"expert")){
@@ -130,7 +133,7 @@ int main(int argc, char *argv[]){
 				} else if (!strcmp(argv[i+1],"any")){
 					difficulty = SudokuBoard::UNKNOWN;
 				} else {
-					cout << "Difficulty expected to be simple, easy, intermediate, expert, or any, not " << argv[i+1] << endl;
+					cout << "Difficulty expected to be simple, beginner, easy, intermediate, expert, or any, not " << argv[i+1] << endl;
 					return 1;
 				}
 				i++;
@@ -450,7 +453,7 @@ void printHelp(){
 	cout << "Sudoku solver and generator." << endl;
 	cout << "  --generate <num>     Generate new puzzles" << endl;
 	cout << "  --solve              Solve all the puzzles from standard input" << endl;
-	cout << "  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any" << endl;
+	cout << "  --difficulty <diff>  Generate only simple, beginner, easy, intermediate, expert, or any" << endl;
 	cout << "  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random" << endl;
 	cout << "  --puzzle             Print the puzzle (default when generating)" << endl;
 	cout << "  --nopuzzle           Do not print the puzzle (default when solving)" << endl;

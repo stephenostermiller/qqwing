@@ -195,8 +195,8 @@ public class QQWing {
 		if (getBoxLineReductionCount() > 0) return Difficulty.INTERMEDIATE;
 		if (getPointingPairTripleCount() > 0) return Difficulty.INTERMEDIATE;
 		if (getHiddenPairCount() > 0) return Difficulty.INTERMEDIATE;
-		if (getNakedPairCount() > 0) return Difficulty.INTERMEDIATE;
 		if (getHiddenSingleCount() > 0) return Difficulty.EASY;
+		if (getNakedPairCount() > 0) return Difficulty.BEGINNER;
 		if (getSingleCount() > 0) return Difficulty.SIMPLE;
 		return Difficulty.UNKNOWN;
 	}
@@ -649,10 +649,10 @@ public class QQWing {
 
 	private boolean singleSolveMove(int round) {
 		if (onlyPossibilityForCell(round)) return true;
+		if (handleNakedPairs(round)) return true;
 		if (onlyValueInSection(round)) return true;
 		if (onlyValueInRow(round)) return true;
 		if (onlyValueInColumn(round)) return true;
-		if (handleNakedPairs(round)) return true;
 		if (pointingRowReduction(round)) return true;
 		if (pointingColumnReduction(round)) return true;
 		if (rowBoxReduction(round)) return true;

@@ -145,10 +145,10 @@ var reset = function(){
 
 var singleSolveMove = function(round){
 	if (onlyPossibilityForCell.call(this, round)) return true;
+	if (handleNakedPairs.call(this, round)) return true;
 	if (onlyValueInSection.call(this, round)) return true;
 	if (onlyValueInRow.call(this, round)) return true;
 	if (onlyValueInColumn.call(this, round)) return true;
-	if (handleNakedPairs.call(this, round)) return true;
 	if (pointingRowReduction.call(this, round)) return true;
 	if (pointingColumnReduction.call(this, round)) return true;
 	if (rowBoxReduction.call(this, round)) return true;

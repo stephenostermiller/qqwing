@@ -106,7 +106,7 @@ class QQWingMain {
 				}
 				opts.difficulty = Difficulty.get(argv[i + 1]);
 				if (opts.difficulty == null){
-					System.err.println("Difficulty expected to be simple, easy, intermediate, expert, or any, not " + argv[i + 1]);
+					System.err.println("Difficulty expected to be simple, beginner, easy, intermediate, expert, or any, not " + argv[i + 1]);
 					System.exit(1);
 				}
 				i++;
@@ -491,7 +491,7 @@ class QQWingMain {
 		System.out.println("Sudoku solver and generator.");
 		System.out.println("  --generate <num>     Generate new puzzles");
 		System.out.println("  --solve              Solve all the puzzles from standard input");
-		System.out.println("  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any");
+		System.out.println("  --difficulty <diff>  Generate only simple, beginner, easy, intermediate, expert, or any");
 		System.out.println("  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random");
 		System.out.println("  --puzzle             Print the puzzle (default when generating)");
 		System.out.println("  --nopuzzle           Do not print the puzzle (default when solving)");
