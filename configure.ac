@@ -19,7 +19,7 @@ AC_SUBST([QQWING_CURRENT])
 AC_SUBST([QQWING_REVISION])
 AC_SUBST([QQWING_AGE])
 
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 
 # Checks for programs.
 AC_PROG_CXX
