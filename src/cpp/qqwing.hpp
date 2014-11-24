@@ -52,14 +52,14 @@
 					ONE_LINE,
 					COMPACT,
 					READABLE,
-					CSV,
+                    CSV
 				};
 				enum Difficulty {
 					UNKNOWN,
 					SIMPLE,
 					EASY,
 					INTERMEDIATE,
-					EXPERT,
+                    EXPERT
 				};
 				enum Symmetry {
 					NONE,
@@ -67,7 +67,7 @@
 					ROTATE180,
 					MIRROR,
 					FLIP,
-					RANDOM,
+                    RANDOM
 				};
 				SudokuBoard();
 				bool setPuzzle(int* initPuzzle);
