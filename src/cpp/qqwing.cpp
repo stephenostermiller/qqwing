@@ -185,7 +185,7 @@ namespace qqwing {
 			possibilities[i] = 0;
 		}}
 
-        {for (unsigned int i=0; i<solveHistory->size(); i++){
+		{for (unsigned int i=0; i<solveHistory->size(); i++){
 			delete solveHistory->at(i);
 		}}
 		solveHistory->clear();
