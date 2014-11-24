@@ -201,7 +201,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Initialize the random number generator
-        srand ( unsigned ( time(0) ) );
+		srand ( unsigned ( time(0) ) );
 
 		// If printing out CSV, print a header
 		if (printStyle == SudokuBoard::CSV){
@@ -419,7 +419,7 @@ int main(int argc, char *argv[]){
 }
 
 void printVersion(){
-    cout << PACKAGE_STRING << endl;
+	cout << PACKAGE_STRING << endl;
 }
 
 void printAbout(){
