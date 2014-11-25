@@ -201,8 +201,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Initialize the random number generator
-		int timeSeed = time(NULL);
-		srand(timeSeed);
+		srand ( unsigned ( time(0) ) );
 
 		// If printing out CSV, print a header
 		if (printStyle == SudokuBoard::CSV){

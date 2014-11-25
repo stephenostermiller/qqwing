@@ -57,7 +57,7 @@ namespace qqwing {
 				COLUMN_BOX,
 				HIDDEN_PAIR_ROW,
 				HIDDEN_PAIR_COLUMN,
-				HIDDEN_PAIR_SECTION,
+				HIDDEN_PAIR_SECTION
 			};
 			LogItem(int round, LogType type);
 			LogItem(int round, LogType type, int value, int position);
@@ -108,17 +108,20 @@ namespace qqwing {
 	/**
 	 * Create a new Sudoku board
 	 */
-	SudokuBoard::SudokuBoard(){
-		puzzle = new int[BOARD_SIZE];
-		solution = new int[BOARD_SIZE];
-		solutionRound = new int[BOARD_SIZE];
-		possibilities = new int[POSSIBILITY_SIZE];
-		recordHistory = false;
-		printStyle = READABLE;
-		randomBoardArray = new int[BOARD_SIZE];
-		randomPossibilityArray = new int[ROW_COL_SEC_SIZE];
-		solveHistory = new vector<LogItem*>();
-		solveInstructions = new vector<LogItem*>();
+    SudokuBoard::SudokuBoard() : 
+		puzzle ( new int[BOARD_SIZE] ),
+		solution ( new int[BOARD_SIZE] ),
+		solutionRound ( new int[BOARD_SIZE] ),
+		possibilities ( new int[POSSIBILITY_SIZE] ),
+		randomBoardArray ( new int[BOARD_SIZE] ),
+		randomPossibilityArray ( new int[ROW_COL_SEC_SIZE] ),
+		recordHistory ( false ),
+		logHistory( false ),
+		solveHistory ( new vector<LogItem*>() ),
+		solveInstructions ( new vector<LogItem*>() ),
+		printStyle ( READABLE ),
+		lastSolveRound (0)
+    {
 		{for (int i=0; i<BOARD_SIZE; i++){
 			randomBoardArray[i] = i;
 		}}
@@ -182,7 +185,7 @@ namespace qqwing {
 			possibilities[i] = 0;
 		}}
 
-		{for (int i=0;i<solveHistory->size();i++){
+		{for (unsigned int i=0; i<solveHistory->size(); i++){
 			delete solveHistory->at(i);
 		}}
 		solveHistory->clear();
@@ -383,6 +386,10 @@ namespace qqwing {
 					case FLIP:
 						positionsym1 = rowColumnToCell(ROW_COL_SEC_SIZE-1-cellToRow(position),cellToColumn(position));
 					break;
+					case RANDOM: // NOTE: Should never happen
+					break;
+					case NONE: // NOTE: No need to do anything
+					break;
 				}
 				// try backing out the value and
 				// counting solutions to the puzzle
@@ -467,7 +474,7 @@ namespace qqwing {
 				cout << endl;
 			}
 		}
-		{for (int i=0;i<v->size();i++){
+		{for (unsigned int i=0;i<v->size();i++){
 			cout << i+1 << ". ";
 			v->at(i)->print();
 			if (printStyle == CSV){
@@ -1499,8 +1506,8 @@ namespace qqwing {
 	 * log items in the vector are of the specified type.
 	 */
 	int getLogCount(vector<LogItem*>* v, LogItem::LogType type){
-		int count = 0;
-		{for (int i=0; i<v->size(); i++){
+		unsigned int count = 0;
+		{for (unsigned int i=0; i<v->size(); i++){
 			if(v->at(i)->getType() == type) count++;
 		}}
 		return count;
@@ -1526,6 +1533,7 @@ namespace qqwing {
 			case 2: return SudokuBoard::MIRROR;
 			case 3: return SudokuBoard::FLIP;
 		}
+		return SudokuBoard::ROTATE90; // NOTE: default action
 	}
 
 	/**
