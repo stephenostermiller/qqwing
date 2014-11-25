@@ -108,7 +108,7 @@ namespace qqwing {
 	/**
 	 * Create a new Sudoku board
 	 */
-    SudokuBoard::SudokuBoard() : 
+	SudokuBoard::SudokuBoard() :
 		puzzle ( new int[BOARD_SIZE] ),
 		solution ( new int[BOARD_SIZE] ),
 		solutionRound ( new int[BOARD_SIZE] ),
@@ -121,7 +121,7 @@ namespace qqwing {
 		solveInstructions ( new vector<LogItem*>() ),
 		printStyle ( READABLE ),
 		lastSolveRound (0)
-    {
+	{
 		{for (int i=0; i<BOARD_SIZE; i++){
 			randomBoardArray[i] = i;
 		}}
