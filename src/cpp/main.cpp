@@ -274,7 +274,7 @@ int main(int argc, char *argv[]){
 					havePuzzle = false;
 					done = true;
 				}
-				delete puzzle;
+				delete[] puzzle;
 			}
 
 			int solutions = 0;
