@@ -225,11 +225,11 @@ namespace qqwing {
 	string SudokuBoard::getDifficultyAsString(){
 		SudokuBoard::Difficulty difficulty = getDifficulty();
 		switch (difficulty){
-			case SudokuBoard::EXPERT: return "Expert"; break;
-			case SudokuBoard::INTERMEDIATE: return "Intermediate"; break;
-			case SudokuBoard::EASY: return "Easy"; break;
-			case SudokuBoard::SIMPLE: return "Simple"; break;
-			default: return "Unknown"; break;
+			case SudokuBoard::EXPERT: return "Expert"; 
+			case SudokuBoard::INTERMEDIATE: return "Intermediate"; 
+			case SudokuBoard::EASY: return "Easy";
+			case SudokuBoard::SIMPLE: return "Simple";
+			default: return "Unknown"; 
 		}
 	}
 
@@ -655,18 +655,18 @@ namespace qqwing {
 	}
 
 	bool SudokuBoard::singleSolveMove(int round){
-		if (onlyPossibilityForCell(round)) return true;
-		if (onlyValueInSection(round)) return true;
-		if (onlyValueInRow(round)) return true;
-		if (onlyValueInColumn(round)) return true;
-		if (handleNakedPairs(round)) return true;
-		if (pointingRowReduction(round)) return true;
-		if (pointingColumnReduction(round)) return true;
-		if (rowBoxReduction(round)) return true;
-		if (colBoxReduction(round)) return true;
-		if (hiddenPairInRow(round)) return true;
-		if (hiddenPairInColumn(round)) return true;
-		if (hiddenPairInSection(round)) return true;
+		if ( onlyPossibilityForCell(round) 
+			|| onlyValueInSection(round) 
+			|| onlyValueInRow(round)
+			|| onlyValueInColumn(round) 
+			|| handleNakedPairs(round)
+			|| pointingRowReduction(round)
+			|| pointingColumnReduction(round)
+			|| rowBoxReduction(round)
+			|| colBoxReduction(round)
+			|| hiddenPairInRow(round)
+			|| hiddenPairInColumn(round)
+			|| hiddenPairInSection(round) ) return true;
 		return false;
 	}
 
