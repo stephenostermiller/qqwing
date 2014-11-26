@@ -225,11 +225,11 @@ namespace qqwing {
 	string SudokuBoard::getDifficultyAsString(){
 		SudokuBoard::Difficulty difficulty = getDifficulty();
 		switch (difficulty){
-			case SudokuBoard::EXPERT: return "Expert"; break;
-			case SudokuBoard::INTERMEDIATE: return "Intermediate"; break;
-			case SudokuBoard::EASY: return "Easy"; break;
-			case SudokuBoard::SIMPLE: return "Simple"; break;
-			default: return "Unknown"; break;
+			case SudokuBoard::EXPERT: return "Expert";
+			case SudokuBoard::INTERMEDIATE: return "Intermediate";
+			case SudokuBoard::EASY: return "Easy";
+			case SudokuBoard::SIMPLE: return "Simple";
+			default: return "Unknown";
 		}
 	}
 
@@ -1383,12 +1383,12 @@ namespace qqwing {
 
 	SudokuBoard::~SudokuBoard(){
 		clearPuzzle();
-		delete puzzle;
-		delete solution;
-		delete possibilities;
-		delete solutionRound;
-		delete randomBoardArray;
-		delete randomPossibilityArray;
+		delete[] puzzle;
+		delete[] solution;
+		delete[] possibilities;
+		delete[] solutionRound;
+		delete[] randomBoardArray;
+		delete[] randomPossibilityArray;
 		delete solveHistory;
 		delete solveInstructions;
 	}
