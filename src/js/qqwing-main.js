@@ -408,7 +408,7 @@ function printHelp(){
 }
 
 function printVersion(){
-	console.log("qqwing 1.3.3");
+	console.log("qqwing 1.3.4");
 }
 
 function printAbout(){

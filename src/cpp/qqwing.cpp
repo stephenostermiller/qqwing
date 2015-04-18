@@ -529,7 +529,19 @@ namespace qqwing {
 		return false;
 	}
 
+	bool SudokuBoard::hasUniqueSolution(){
+		return countSolutionsLimited() == 1;
+	}
+
 	int SudokuBoard::countSolutions(){
+		return countSolutions(false);
+	}
+
+	int SudokuBoard::countSolutionsLimited(){
+		return countSolutions(true);
+	}
+
+	int SudokuBoard::countSolutions(bool limitToTwo){
 		// Don't record history while generating.
 		bool recHistory = recordHistory;
 		setRecordHistory(false);
@@ -537,7 +549,7 @@ namespace qqwing {
 		setLogHistory(false);
 
 		reset();
-		int solutionCount = countSolutions(2, false);
+		int solutionCount = countSolutions(2, limitToTwo);
 
 		// Restore recording history.
 		setRecordHistory(recHistory);

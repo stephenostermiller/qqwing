@@ -76,7 +76,28 @@
 				void printPuzzle();
 				void printSolution();
 				bool solve();
+
+				/**
+				 * Count the number of solutions to the puzzle
+				 */
 				int countSolutions();
+
+				/**
+				 * Count the number of solutions to the puzzle
+				 * but return two any time there are two or
+				 * more solutions.  This method will run much
+				 * falter than countSolutions() when there
+				 * are many possible solutions and can be used
+				 * when you are interested in knowing if the
+				 * puzzle has zero, one, or multiple solutions.
+				 */
+				int countSolutionsLimited();
+
+				/**
+				 * return true if the puzzle has a solution
+				 * and only a single solution
+				 */
+				bool hasUniqueSolution();
 				bool isSolved();
 				void printSolveHistory();
 				void setRecordHistory(bool recHistory);
@@ -190,6 +211,7 @@
 				bool onlyValueInColumn(int round);
 				bool onlyValueInSection(int round);
 				bool solve(int round);
+				int countSolutions(bool limitToTwo);
 				int countSolutions(int round, bool limitToTwo);
 				bool guess(int round, int guessNumber);
 				bool isImpossible();

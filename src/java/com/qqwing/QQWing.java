@@ -34,7 +34,7 @@ import java.util.Random;
  */
 public class QQWing {
 
-	public static final String QQWING_VERSION = "1.3.3";
+	public static final String QQWING_VERSION = "1.3.4";
 
 	private static final String NL = System.getProperties().getProperty("line.separator");
 
@@ -522,7 +522,35 @@ public class QQWing {
 		return false;
 	}
 
+	/**
+	 * return true if the puzzle has a solution
+	 * and only a single solution
+	 */
+	public boolean hasUniqueSolution(){
+		return countSolutionsLimited() == 1;
+	}
+
+	/**
+	 * Count the number of solutions to the puzzle
+	 */
 	public int countSolutions() {
+		return countSolutions(false);
+	}
+
+	/**
+	 * Count the number of solutions to the puzzle
+	 * but return two any time there are two or
+	 * more solutions.  This method will run much
+	 * falter than countSolutions() when there
+	 * are many possible solutions and can be used
+	 * when you are interested in knowing if the
+	 * puzzle has zero, one, or multiple solutions.
+	 */
+	public int countSolutionsLimited(){
+		return countSolutions(true);
+	}
+
+	private int countSolutions(boolean limitToTwo) {
 		// Don't record history while generating.
 		boolean recHistory = recordHistory;
 		setRecordHistory(false);
@@ -530,7 +558,7 @@ public class QQWing {
 		setLogHistory(false);
 
 		reset();
-		int solutionCount = countSolutions(2, false);
+		int solutionCount = countSolutions(2, limitToTwo);
 
 		// Restore recording history.
 		setRecordHistory(recHistory);
