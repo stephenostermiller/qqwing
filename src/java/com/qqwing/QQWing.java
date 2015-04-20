@@ -523,11 +523,25 @@ public class QQWing {
 	}
 
 	/**
+	 * return true if the puzzle has no solutions at all
+	 */
+	public boolean hasNoSolution(){
+		return countSolutionsLimited() == 0;
+	}
+
+	/**
 	 * return true if the puzzle has a solution
 	 * and only a single solution
 	 */
 	public boolean hasUniqueSolution(){
 		return countSolutionsLimited() == 1;
+	}
+
+	/**
+	 * return true if the puzzle has more than one solution
+	 */
+	public boolean hasMultipleSolutions(){
+		return countSolutionsLimited() > 1;
 	}
 
 	/**

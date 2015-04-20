@@ -529,8 +529,16 @@ namespace qqwing {
 		return false;
 	}
 
+	bool SudokuBoard::hasNoSolution(){
+		return countSolutionsLimited() == 0;
+	}
+
 	bool SudokuBoard::hasUniqueSolution(){
 		return countSolutionsLimited() == 1;
+	}
+
+	bool SudokuBoard::hasMultipleSolutions(){
+		return countSolutionsLimited() > 1;
 	}
 
 	int SudokuBoard::countSolutions(){

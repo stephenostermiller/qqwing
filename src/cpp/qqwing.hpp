@@ -94,10 +94,20 @@
 				int countSolutionsLimited();
 
 				/**
+				 * return true if the puzzle has no solutions at all
+				 */
+				bool hasNoSolution();
+
+				/**
 				 * return true if the puzzle has a solution
 				 * and only a single solution
 				 */
 				bool hasUniqueSolution();
+
+				/**
+				 * return true if the puzzle has more than one solution
+				 */
+				bool hasMultipleSolutions();
 				bool isSolved();
 				void printSolveHistory();
 				void setRecordHistory(bool recHistory);
