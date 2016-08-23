@@ -57,7 +57,7 @@ and "solve" on this website are powered it.  QQWing in JavaScript is very slow c
 
 This is the most efficient version of QQWing.  It has the lowest startup overhead and uses the least CPU per puzzle
 generated. It also can be used as a library to power other Sudoku applications. (See:
-[Gnome Sudoku](https://wiki.gnome.org/Apps/Sudoku), which uses the QQWing C++ library.)
+[other software](software.html))
 
 <div class=downloadsection><div class=downloadsubsection>
 
