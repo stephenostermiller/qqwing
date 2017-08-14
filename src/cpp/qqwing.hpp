@@ -86,7 +86,7 @@
 				 * Count the number of solutions to the puzzle
 				 * but return two any time there are two or
 				 * more solutions.  This method will run much
-				 * falter than countSolutions() when there
+				 * faster than countSolutions() when there
 				 * are many possible solutions and can be used
 				 * when you are interested in knowing if the
 				 * puzzle has zero, one, or multiple solutions.
