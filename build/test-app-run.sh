@@ -47,12 +47,13 @@ echo "Running app tests for $QQWINGTESTTYPE ($QQWING):"
 for test in test/app/*.sh
 do
 	echo -n '.'
-	$test
+	out=`$test 2>&1`
 	if [ $? -ne 0 ]
 	then
 		exitstatus=1
 		echo
 		echo "Failed $test"
+		echo "$out"
 	fi
 done
 
