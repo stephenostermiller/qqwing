@@ -832,7 +832,8 @@ function finishResume(){
 function showScreen(screen){
 	el('head').style.display = screen=='game'?'none':'block';
 	el('foot').style.display = screen=='game'?'none':'block';
-	el('entiregame').style.display = screen=='game'?'block':'none';
+	el('entiregame').style.display = /game|over/.test(screen)?'block':'none';
+	el('optionsarea').style.display = screen=='game'?'block':'none';
 	el('content').style.padding = (getWindowHeight()<=400&&screen=='game')?"0":"1em 0";
 	document.body.style.backgroundColor = screen=='game'?'white':'#598059';
 	el('titlescreen').style.display = /title|over/.test(screen)?'block':'none';
@@ -840,9 +841,7 @@ function showScreen(screen){
 	el('resumescreen').style.display = screen=='resume'?'block':'none';
 	el('newgamemessage').style.display = screen=='loading'?'block':'none';
 	el('endgamescreen').style.display = screen=='over'?'block':'none';
-	console.log(screen + " " + haveStats());
 	el('statsarea').style.display = (!/game|loading|resume/.test(screen)&&haveStats())?'block':'none';
-	console.log(el('statsarea').style.display);
 	el('gamelinks').style.display = 'none';
 	el('instructions').style.display='none';
 	el('options').style.display='none';

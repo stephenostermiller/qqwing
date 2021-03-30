@@ -58,6 +58,27 @@ Symmetry:
 </div>
 
 <div id=newgamemessage></div>
+<div id=testcell></div>
+<div id=resumescreen>
+Game will resume in: <span id=resumecount></span>
+</div>
+
+<div id=instructions>
+### Instructions for Sudoku
+
+This Sudoku playing board will help you solve the puzzles.
+
+ 1. The goal of the game is to choose a number for each square such that no digit appears twice in any row, column, or section.</li>
+ 1. Start a new game with your desired level of difficulty.</li>
+ 1. Click on a possibility to choose that number for the square.  The possibility will be removed from other squares in the row, column, and section.</li>
+ 1. Hold down control, alt, or shift to and click on a possibility to remove the possibility from the square, but not mark the square.</li>
+ 1. Click on an assigned number to remove it from the square and put back any possibilities.</li>
+ 1. Use the colors however you wish.  You may find it helpful to switch the color whenever you guess.</li>
+
+</div>
+
+<div id=statsarea><div id=stats></div></div>
+
 <div id=entiregame>
 <div id=gamecolumns>
 <div id=playingarea>
@@ -80,24 +101,4 @@ Symmetry:
 </div>
 </div>
 </div>
-<div id=testcell></div>
-<div id=resumescreen>
-Game will resume in: <span id=resumecount></span>
-</div>
-
-<div id=instructions>
-### Instructions for Sudoku
-
-This Sudoku playing board will help you solve the puzzles.
-
- 1. The goal of the game is to choose a number for each square such that no digit appears twice in any row, column, or section.</li>
- 1. Start a new game with your desired level of difficulty.</li>
- 1. Click on a possibility to choose that number for the square.  The possibility will be removed from other squares in the row, column, and section.</li>
- 1. Hold down control, alt, or shift to and click on a possibility to remove the possibility from the square, but not mark the square.</li>
- 1. Click on an assigned number to remove it from the square and put back any possibilities.</li>
- 1. Use the colors however you wish.  You may find it helpful to switch the color whenever you guess.</li>
-
-</div>
-
-<div id=statsarea><div id=stats></div></div>
 </form>
