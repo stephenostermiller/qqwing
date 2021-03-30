@@ -1,6 +1,6 @@
 /*
  * qqwing - Sudoku solver and generator
- * Copyright (C) 2014 Stephen Ostermiller
+ * Copyright (C) 2014-2021 Stephen Ostermiller
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -413,7 +413,7 @@ function printVersion(){
 
 function printAbout(){
 	console.log("qqwing - Sudoku solver and generator");
-	console.log("Copyright (C) 2014 Stephen Ostermiller");
+	console.log("Copyright (C) 2014-2021 Stephen Ostermiller");
 	console.log("");
 	console.log("This program is free software; you can redistribute it and/or modify");
 	console.log("it under the terms of the GNU General Public License as published by");
@@ -445,14 +445,17 @@ function getMicroseconds(){
 function readPuzzleFromStdIn(puzzle){
 	var fs = require('fs');
 	var read = 0;
+	var c = Buffer.alloc(1);
 	while (read < qqwing.BOARD_SIZE){
-		var c = fs.readSync(process.stdin.fd, 1);
-		if (c[1] == 0) return false;
-		if (c[0] >= '1' && c[0] <='9'){
-			puzzle[read] = c[0]-'0';
+		var r = fs.readSync(process.stdin.fd, c, 0, 1);
+		if (r == 0) return false;
+		if (c[0] == '.'.charCodeAt()) c[0] = '0'.charCodeAt();
+		var cc = c[0]-'0'.charCodeAt();
+		if (cc >= 1 && cc <= 9){
+			puzzle[read] = cc;
 			read++;
 		}
-		if (c[0] == '.' || c[0] == '0'){
+		if (cc == 0){
 			puzzle[read] = 0;
 			read++;
 		}
