@@ -189,6 +189,10 @@ public class QQWing {
 
 	/**
 	 * Get the difficulty rating.
+	 *
+	 * This method will return Difficulty.UNKNOWN unless
+	 * a puzzle has been generated or set and then the following methods called:
+	 * setRecordHistory(true), and solve()
 	 */
 	public Difficulty getDifficulty() {
 		if (getGuessCount() > 0) return Difficulty.EXPERT;
@@ -203,6 +207,10 @@ public class QQWing {
 
 	/**
 	 * Get the difficulty rating.
+	 *
+	 * This method will return "Unknown" unless
+	 * a puzzle has been generated or set and then the following methods called:
+	 * setRecordHistory(true), and solve()
 	 */
 	public String getDifficultyAsString() {
 		return getDifficulty().getName();
