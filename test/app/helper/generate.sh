@@ -25,7 +25,7 @@ puzzle="$3"
 
 if [ "z$puzzle" == "z" ]
 then
-	puzzle=`$QQWING --generate --one-line $options`
+	puzzle=`$QQWING --generate --one-line $options || true`
 fi
 
 if ! echo "$puzzle" | grep -qE '^[0-9\.]{81}$'
@@ -68,7 +68,7 @@ then
 	exit 1
 fi
 
-solution=`echo "$puzzle" | $QQWING --solve --one-line`
+solution=`echo "$puzzle" | $QQWING --solve --one-line || true`
 
 if ! echo "$solution" | grep -q "$puzzle"
 then
