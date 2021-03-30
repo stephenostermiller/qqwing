@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #/bin/sh
 set -e
-set -x
 
 export PACKAGE=`grep AC_INIT build/configure.ac | sed 's|AC_INIT(||g' | sed 's|,.*||g'`
 export VERSION=`build/version.sh`
