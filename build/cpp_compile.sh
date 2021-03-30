@@ -33,5 +33,4 @@ cp src/cpp/*.hpp target/automake
 cd target/automake
 make
 cd ../..
-cp target/automake/qqwing target/qqwing
-ls target/qqwing
+cp -rv target/automake/.libs target/automake/qqwing target/
