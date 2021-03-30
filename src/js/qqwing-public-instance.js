@@ -498,6 +498,13 @@ this.printSolveInstructions = function(){
 	}
 };
 
+/**
+ * Get the difficulty rating.
+ *
+ * This method will return qqwing.Difficulty.UNKNOWN unless
+ * a puzzle has been generated or set and then the following methods called:
+ * setRecordHistory(true), and solve()
+ */
 this.getDifficulty = function(){
 	if (this.getGuessCount() > 0) return qqwing.Difficulty.EXPERT;
 	if (this.getBoxLineReductionCount() > 0) return qqwing.Difficulty.INTERMEDIATE;
@@ -509,6 +516,13 @@ this.getDifficulty = function(){
 	return qqwing.Difficulty.UNKNOWN;
 };
 
+/**
+ * Get the difficulty rating.
+ *
+ * This method will return "Unknown" unless
+ * a puzzle has been generated or set and then the following methods called:
+ * setRecordHistory(true), and solve()
+ */
 this.getDifficultyAsString = function(){
 	var difficulty = this.getDifficulty();
 	switch (difficulty){
