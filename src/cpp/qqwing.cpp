@@ -207,6 +207,10 @@ namespace qqwing {
 
 	/**
 	 * Get the difficulty rating.
+	 *
+	 * This method will return SudokuBoard::UNKNOWN unless
+	 * a puzzle has been generated or set and then the following methods called:
+	 * setRecordHistory(true), and solve()
 	 */
 	SudokuBoard::Difficulty SudokuBoard::getDifficulty(){
 		if (getGuessCount() > 0) return SudokuBoard::EXPERT;
@@ -221,6 +225,10 @@ namespace qqwing {
 
 	/**
 	 * Get the difficulty rating.
+	 *
+	 * This method will return "Unknown" unless
+	 * a puzzle has been generated or set and then the following methods called:
+	 * setRecordHistory(true), and solve()
 	 */
 	string SudokuBoard::getDifficultyAsString(){
 		SudokuBoard::Difficulty difficulty = getDifficulty();
