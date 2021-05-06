@@ -120,7 +120,8 @@ namespace qqwing {
 		solveHistory ( new vector<LogItem*>() ),
 		solveInstructions ( new vector<LogItem*>() ),
 		printStyle ( READABLE ),
-		lastSolveRound (0)
+		lastSolveRound (0),
+		nbGivenCells (0)
 	{
 		{for (int i=0; i<BOARD_SIZE; i++){
 			randomBoardArray[i] = i;
@@ -142,6 +143,10 @@ namespace qqwing {
 		}}
 		return count;
 	}
+
+	void SudokuBoard::setNbGivenCells(int givenCells){
+		nbGivenCells = givenCells;
+	};
 
 	/**
 	 * Set the board to the given puzzle.
@@ -352,7 +357,7 @@ namespace qqwing {
 		// Even when starting from an empty grid
 		solve();
 
-		if (symmetry == SudokuBoard::NONE){
+		if (symmetry == SudokuBoard::NONE && nbGivenCells < (BOARD_SIZE / 2)){
 			// Rollback any square for which it is obvious that
 			// the square doesn't contribute to a unique solution
 			// (ie, squares that were filled by logic rather
@@ -375,6 +380,9 @@ namespace qqwing {
 		// If it does, leave it out the point because
 		// it is not needed.
 		{for (int i=0; i<BOARD_SIZE; i++){
+			if (getGivenCount() <= nbGivenCells) {
+				break;
+			}
 			// check all the positions, but in shuffled order
 			int position = randomBoardArray[i];
 			if (puzzle[position] > 0){

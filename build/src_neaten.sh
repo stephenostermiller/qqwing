@@ -26,6 +26,6 @@ then
 	touch --date 1980-01-01 $neaten_time_file
 fi
 
-find build/ doc/ src/ test/ Makefile -type f -newer $neaten_time_file | grep -vEi 'changelog|copyright|COPYING|README|\.gif|\.png|\.jpg$' | xargs ./build/src_neaten.pl
+find build/ doc/ src/ test/ Makefile -type f -newer $neaten_time_file | grep -vEi 'changelog|copyright|COPYING|README|\.gif|\.png|\.jpg|\.gch$' | xargs ./build/src_neaten.pl
 
 touch $neaten_time_file

@@ -113,6 +113,7 @@
 				void setRecordHistory(bool recHistory);
 				void setLogHistory(bool logHist);
 				void setPrintStyle(PrintStyle ps);
+				void setNbGivenCells(int nbGivenCells);
 				bool generatePuzzle();
 				bool generatePuzzleSymmetry(SudokuBoard::Symmetry symmetry);
 				int getGivenCount();
@@ -214,6 +215,12 @@
 				 * The last round of solving
 				 */
 				int lastSolveRound;
+
+				/**
+				 * expected number of given cells
+				 */
+				int nbGivenCells;
+
 				bool reset();
 				bool singleSolveMove(int round);
 				bool onlyPossibilityForCell(int round);

@@ -26,6 +26,7 @@ Sudoku solver and generator.
   --solve              Solve all the puzzles from standard input
   --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any
   --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random
+  --given-cells <num>  Number of given cells according to sudoku games.
   --puzzle             Print the puzzle (default when generating)
   --nopuzzle           Do not print the puzzle (default when solving)
   --solution           Print the solution (default when solving)

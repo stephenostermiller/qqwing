@@ -42,6 +42,7 @@ bool readPuzzleFromStdIn(int* puzzle);
 void printHelp();
 void printVersion();
 void printAbout();
+unsigned long generateSeed(unsigned long a, unsigned long b, unsigned long c);
 
 /**
  * Main method -- the entry point into the program.
@@ -69,6 +70,7 @@ int main(int argc, char *argv[]){
 		SudokuBoard::PrintStyle printStyle = SudokuBoard::READABLE;
 		int numberToGenerate = 1;
 		bool printStats = false;
+		int givenCells = 0;
 		SudokuBoard::Difficulty difficulty = SudokuBoard::UNKNOWN;
 		SudokuBoard::Symmetry symmetry = SudokuBoard::NONE;
 
@@ -155,6 +157,17 @@ int main(int argc, char *argv[]){
 					return 1;
 				}
 				i++;
+			} else if (!strcmp(argv[i],"--given-cells")){
+				if (argc <= i+1){
+					cout << "Please specify a number of given cells between 0 and " << BOARD_SIZE << "." << endl;
+					return 1;
+				}
+				givenCells = atoi(argv[i+1]);
+				if (givenCells < 0 || givenCells > BOARD_SIZE){
+					cout << "number of given cells expected to be in range [0-" << BOARD_SIZE << "]. receive: " << givenCells << endl;
+					return 1;
+				}
+				i++;
 			} else if (!strcmp(argv[i],"--solve")){
 				action = SOLVE;
 				printSolution = true;
@@ -201,7 +214,7 @@ int main(int argc, char *argv[]){
 		}
 
 		// Initialize the random number generator
-		srand ( unsigned ( time(0) ) );
+		srand (generateSeed(clock(), time(NULL), getpid()));
 
 		// If printing out CSV, print a header
 		if (printStyle == SudokuBoard::CSV){
@@ -221,6 +234,7 @@ int main(int argc, char *argv[]){
 		ss->setRecordHistory(printHistory || printInstructions || printStats || difficulty!=SudokuBoard::UNKNOWN);
 		ss->setLogHistory(logHistory);
 		ss->setPrintStyle(printStyle);
+		ss->setNbGivenCells(givenCells);
 
 		// Solve puzzle or generate puzzles
 		// until end of input for solving, or
@@ -451,6 +465,7 @@ void printHelp(){
 	cout << "  --solve              Solve all the puzzles from standard input" << endl;
 	cout << "  --difficulty <diff>  Generate only simple, easy, intermediate, expert, or any" << endl;
 	cout << "  --symmetry <sym>     Symmetry: none, rotate90, rotate180, mirror, flip, or random" << endl;
+	cout << "  --given-cells <num>  Number of given cells according to sudoku games." << endl;
 	cout << "  --puzzle             Print the puzzle (default when generating)" << endl;
 	cout << "  --nopuzzle           Do not print the puzzle (default when solving)" << endl;
 	cout << "  --solution           Print the solution (default when solving)" << endl;
@@ -513,4 +528,18 @@ long getMicroseconds(){
 	#else
 		return 0;
 	#endif
+}
+
+// http://burtleburtle.net/bob/hash/doobs.html
+unsigned long generateSeed(unsigned long a, unsigned long b, unsigned long c){
+	a=a-b; a=a-c; a=a^(c >> 13);
+	b=b-c; b=b-a; b=b^(a << 8);
+	c=c-a; c=c-b; c=c^(b >> 13);
+	a=a-b; a=a-c; a=a^(c >> 12);
+	b=b-c; b=b-a; b=b^(a << 16);
+	c=c-a; c=c-b; c=c^(b >> 5);
+	a=a-b; a=a-c; a=a^(c >> 3);
+	b=b-c; b=b-a; b=b^(a << 10);
+	c=c-a; c=c-b; c=c^(b >> 15);
+	return c;
 }
